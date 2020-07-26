@@ -19,14 +19,14 @@ Yes, yet another tutorial with "book, author and publisher" as entity.
 ## compile
 ./gradlew clean build
 
-## quality code with checkstyle
-./gradlew check
-
 # How to execute
 Different way to run this app
 - execute using gradle: ./gradlew bootRun
 - execute using fat jar: java -jar ./build/libs/books-1.0-SNAPSHOT.jar
 - from Eclipse: import "Existing Gradle project" and "Run Application"
+
+## quality code with checkstyle
+./gradlew check
 
 # API documentation
 http://localhost:8081/books/swagger-ui.html
@@ -40,7 +40,7 @@ Basic Authentication with (user/password)
 - [Spring Boot 2.3](https://spring.io/projects/spring-boot)
 - [Spring Security](https://spring.io/projects/spring-security)
 - [Swagger OpeApi 3.0](https://swagger.io/specification/)
-- [Mapstruct 1.3] (https://mapstruct.org/)
+- [Mapstruct 1.3](https://mapstruct.org/)
 - [Spring Data JPA](https://projects.spring.io/spring-data-jpa)
 - [Mysql connector 8.0](https://www.mysql.com/products/connector/)
 - [HsqlDb](http://hsqldb.org/)
