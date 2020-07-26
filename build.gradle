@@ -1,0 +1,121 @@
+plugins {
+	id 'java'
+	id 'eclipse-wtp'
+	id 'org.springframework.boot' version '2.3.1.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+	id 'checkstyle'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+  mavenLocal()
+  mavenCentral()
+}
+
+group 'it.francescofiora'
+version '1.0-SNAPSHOT'
+
+def commons_collections_version = property('commons-collections.version')
+def commons_lang_version = property('commons-lang3.version')
+def springdoc_openapi_version = property('springdoc-openapi.version')
+def mapstruct_version = property('mapstruct.version')
+def mysql_connector_version = property('mysql_connector.version')
+def logback_version = property('logback.version')
+
+dependencies {
+
+  implementation 'org.springframework.boot:spring-boot-starter-web'
+  implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+  implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.springframework.boot:spring-boot-devtools'
+	implementation 'org.springframework.security:spring-security-test'
+
+	implementation "ch.qos.logback:logback-classic:${logback_version}"
+
+  implementation "org.apache.commons:commons-lang3:${commons_lang_version}"
+  implementation "org.apache.commons:commons-collections4:${commons_collections_version}"
+	
+	implementation "org.springdoc:springdoc-openapi-ui:${springdoc_openapi_version}"
+	implementation "org.springdoc:springdoc-openapi-data-rest:${springdoc_openapi_version}"
+	
+  implementation "org.mapstruct:mapstruct:${mapstruct_version}"
+
+	implementation "mysql:mysql-connector-java:${mysql_connector_version}"
+
+  annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
+  
+  testImplementation 'org.springframework.boot:spring-boot-starter-test'
+  testImplementation 'org.hsqldb:hsqldb'  
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs = [
+       '-Amapstruct.defaultComponentModel=spring'
+    ]
+}
+
+task cleanResources(type: Delete) {
+    delete "build/resources"
+}
+
+defaultTasks "bootRun"
+
+springBoot {
+    mainClassName = "it.francescofiora.books.Application"
+}
+
+
+sourceSets {
+  main {
+    java {
+      srcDirs 'java'
+    }
+    resources {
+      srcDirs 'resources'
+    }
+  }
+  test {
+    java {
+      srcDirs 'java'
+    }
+  }
+}
+
+eclipse {
+  sourceSets {
+     main {
+         java {
+             srcDirs += ["build/generated/sources/annotationProcessor/java/main"]
+         }
+     }
+  }
+  wtp {
+    component {
+      contextPath = 'books'
+    }
+  }
+}
+
+checkstyle {
+  toolVersion property('checkstyle.version')
+  configFile  file("config/checkstyle/checkstyle.xml")
+  checkstyleTest.enabled = false
+}
+tasks.withType(Checkstyle) {
+  reports {
+    xml.enabled = false
+    html.enabled = true
+  }
+}
+checkstyleMain {
+  source ='src/main/java'
+}
+
+
+wrapper {
+    gradleVersion = "6.3"
+}
