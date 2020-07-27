@@ -2,7 +2,9 @@ package it.francescofiora.books.service;
 
 import it.francescofiora.books.service.dto.AuthorDto;
 import it.francescofiora.books.service.dto.NewAuthorDto;
+import it.francescofiora.books.service.dto.TitleDto;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -47,4 +49,12 @@ public interface AuthorService {
    * @param id the id of the entity.
    */
   void delete(Long id);
+
+  /**
+   * Get titles by author 'id'.
+   * @param pageable Pageable
+   * @param id id
+   * @return the list of titles
+   */
+  Page<TitleDto> findTitlesByAuthorId(Pageable pageable, Long id);
 }

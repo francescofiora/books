@@ -19,9 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Service Implementation for managing {@link Title}.
- */
 @Service
 @Transactional
 public class TitleServiceImpl implements TitleService {
@@ -50,12 +47,6 @@ public class TitleServiceImpl implements TitleService {
     this.newTitleMapper = newTitleMapper;
   }
 
-  /**
-   * Create a title.
-   *
-   * @param titleDto the entity to save.
-   * @return the persisted entity.
-   */
   @Override
   public TitleDto create(NewTitleDto titleDto) {
     log.debug("Request to create Title : {}", titleDto);
@@ -64,11 +55,6 @@ public class TitleServiceImpl implements TitleService {
     return titleMapper.toDto(title);
   }
 
-  /**
-   * Update a title.
-   *
-   * @param titleDto the entity to save.
-   */
   @Override
   public void update(UpdatebleTitleDto titleDto) {
     log.debug("Request to update Title : {}", titleDto);
@@ -81,12 +67,6 @@ public class TitleServiceImpl implements TitleService {
     titleRepository.save(title);
   }
 
-  /**
-   * Get all the titles.
-   *
-   * @param pageable the pagination information.
-   * @return the list of entities.
-   */
   @Override
   @Transactional(readOnly = true)
   public Page<TitleDto> findAll(Pageable pageable) {
@@ -94,12 +74,6 @@ public class TitleServiceImpl implements TitleService {
     return titleRepository.findAll(pageable).map(titleMapper::toDto);
   }
 
-  /**
-   * Get one title by id.
-   *
-   * @param id the id of the entity.
-   * @return the entity.
-   */
   @Override
   @Transactional(readOnly = true)
   public Optional<TitleDto> findOne(Long id) {
@@ -107,11 +81,6 @@ public class TitleServiceImpl implements TitleService {
     return titleRepository.findById(id).map(titleMapper::toDto);
   }
 
-  /**
-   * Delete the title by id.
-   *
-   * @param id the id of the entity.
-   */
   @Override
   public void delete(Long id) {
     log.debug("Request to delete Title : {}", id);

@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import it.francescofiora.books.service.AuthorService;
 import it.francescofiora.books.service.dto.AuthorDto;
 import it.francescofiora.books.service.dto.NewAuthorDto;
+import it.francescofiora.books.service.dto.TitleDto;
 import it.francescofiora.books.web.errors.BadRequestAlertException;
 import it.francescofiora.books.web.util.HeaderUtil;
 import it.francescofiora.books.web.util.PaginationUtil;
@@ -162,6 +163,36 @@ public class AuthorApi {
     log.debug("REST request to get Author : {}", id);
     Optional<AuthorDto> authorDto = authorService.findOne(id);
     return ResponseUtil.wrapOrNotFound(ENTITY_NAME, authorDto);
+  }
+
+  /**
+   * {@code GET  /authors/:id/titles} : get titles the "id" author.
+   *
+   * @param id the id of the author of the TitleDto to retrieve.
+   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+   *         the list of the titleDto of author, or with status
+   *         {@code 404 (Not Found)}.
+   */
+  @Operation(
+      summary = "searches titles of the by author 'id'",
+      description = "searches titles by author 'id'", tags = { "author" })
+  @ApiResponses(
+      value = {
+          @ApiResponse(
+              responseCode = "200", description = "search results matching criteria",
+              content = @Content(
+                  array = @ArraySchema(schema = @Schema(implementation = TitleDto.class)))),
+          @ApiResponse(responseCode = "400", description = "bad input parameter"),
+          @ApiResponse(responseCode = "404", description = "not found") })
+  @GetMapping("/authors/{id}/titles")
+  public ResponseEntity<List<TitleDto>> getTitlesByAuthor(Pageable pageable, @Parameter(
+      description = "id of the author", required = true,
+      example = "1") @PathVariable("id") Long id) {
+    log.debug("REST request to get Titles of Author : {}", id);
+    Page<TitleDto> page = authorService.findTitlesByAuthorId(pageable, id);
+    HttpHeaders headers = PaginationUtil
+        .generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+    return ResponseEntity.ok().headers(headers).body(page.getContent());
   }
 
   /**

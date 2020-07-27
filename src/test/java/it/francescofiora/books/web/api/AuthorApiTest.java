@@ -14,7 +14,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +34,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import it.francescofiora.books.service.AuthorService;
 import it.francescofiora.books.service.dto.AuthorDto;
 import it.francescofiora.books.service.dto.NewAuthorDto;
+import it.francescofiora.books.service.dto.TitleDto;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(controllers = AuthorApi.class)
@@ -43,6 +43,7 @@ public class AuthorApiTest {
   private static final Long ID = 1L;
   private static final String AUTHORS_URI = "/api/authors";
   private static final String AUTHORS_ID_URI = "/api/authors/{id}";
+  private static final String AUTHORS_TITLES_URI = "/api/authors/{id}/titles";
   private static final String WRONG_URI = "/api/wrong";
 
   @Autowired
@@ -98,6 +99,7 @@ public class AuthorApiTest {
     expected.setId(ID);
     given(authorService.findAll(any(Pageable.class)))
         .willReturn(new PageImpl<AuthorDto>(Collections.singletonList(expected)));
+
     MvcResult result = mvc.perform(get(new URI(AUTHORS_URI)).contentType(APPLICATION_JSON)
         .content(mapper.writeValueAsString(pageable))).andExpect(status().isOk()).andReturn();
     List<AuthorDto> list = mapper.readValue(result.getResponse().getContentAsString(),
@@ -119,6 +121,24 @@ public class AuthorApiTest {
         });
     Assert.assertNotNull(actual);
     Assert.assertEquals(expected, actual);
+  }
+
+  @Test
+  public void testGetTitlesByAuthor() throws Exception {
+    TitleDto expected = new TitleDto();
+    expected.setId(ID);
+    given(authorService.findTitlesByAuthorId(any(Pageable.class), eq(ID)))
+        .willReturn(new PageImpl<TitleDto>(Collections.singletonList(expected)));
+
+    Pageable pageable = PageRequest.of(1, 1);
+    MvcResult result = mvc.perform(get(AUTHORS_TITLES_URI, ID).contentType(APPLICATION_JSON)
+        .content(mapper.writeValueAsString(pageable))).andExpect(status().isOk()).andReturn();
+    List<TitleDto> list = mapper.readValue(result.getResponse().getContentAsString(),
+        new TypeReference<List<TitleDto>>() {
+        });
+    Assert.assertNotNull(list);
+    Assert.assertFalse(list.isEmpty());
+    Assert.assertEquals(expected, list.get(0));
   }
 
   @Test

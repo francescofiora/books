@@ -18,9 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Service Implementation for managing {@link Publisher}.
- */
 @Service
 @Transactional
 public class PublisherServiceImpl implements PublisherService {
@@ -48,12 +45,6 @@ public class PublisherServiceImpl implements PublisherService {
     this.newPublisherMapper = newPublisherMapper;
   }
 
-  /**
-   * Create a publisher.
-   *
-   * @param publisherDto the entity to save.
-   * @return the persisted entity.
-   */
   @Override
   public PublisherDto create(NewPublisherDto publisherDto) {
     log.debug("Request to create a new Publisher : {}", publisherDto);
@@ -62,11 +53,6 @@ public class PublisherServiceImpl implements PublisherService {
     return publisherMapper.toDto(publisher);
   }
 
-  /**
-   * Update a publisher.
-   *
-   * @param publisherDto the entity to save.
-   */
   @Override
   public void update(PublisherDto publisherDto) {
     log.debug("Request to save Publisher : {}", publisherDto);
@@ -79,12 +65,6 @@ public class PublisherServiceImpl implements PublisherService {
     publisherRepository.save(publisher);
   }
 
-  /**
-   * Get all the publishers.
-   *
-   * @param pageable the pagination information.
-   * @return the list of entities.
-   */
   @Override
   @Transactional(readOnly = true)
   public Page<PublisherDto> findAll(Pageable pageable) {
@@ -92,12 +72,6 @@ public class PublisherServiceImpl implements PublisherService {
     return publisherRepository.findAll(pageable).map(publisherMapper::toDto);
   }
 
-  /**
-   * Get one publisher by id.
-   *
-   * @param id the id of the entity.
-   * @return the entity.
-   */
   @Override
   @Transactional(readOnly = true)
   public Optional<PublisherDto> findOne(Long id) {
@@ -105,11 +79,6 @@ public class PublisherServiceImpl implements PublisherService {
     return publisherRepository.findById(id).map(publisherMapper::toDto);
   }
 
-  /**
-   * Delete the publisher by id.
-   *
-   * @param id the id of the entity.
-   */
   @Override
   public void delete(Long id) {
     log.debug("Request to delete Publisher : {}", id);
