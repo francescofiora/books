@@ -1,0 +1,27 @@
+version: "3"
+services:
+  dbbooks.francescofiora.it:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+    volumes:
+      - mysql-books-data:/var/lib/mysql
+      - "./conf.d:/etc/mysql/conf.d/"
+      - "./certs:/etc/certs"
+    ports:
+      - "3306:3306"
+   
+  myadmin.francescofiora.it:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_HOST=dbbooks.francescofiora.it
+      - PMA_USER=root
+      - PMA_PASSWORD=secret
+    volumes:
+      - "./certs:/etc/certs"
+      - "./phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php"
+    ports:
+      - "8080:80"
+
+volumes:
+  mysql-books-data:
