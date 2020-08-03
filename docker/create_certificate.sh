@@ -10,6 +10,11 @@ export ENV OPENSSL_MYADMIN_CLIENT="${OPENSSL_SUBJ}/CN=myadmin.francescofiora.it"
 export ENV OPENSSL_CLIENT="${OPENSSL_SUBJ}/CN=localhost"
 
 # Generate new CA certificate ca.pem file.
+if [ ! -d ./certs ]; then
+	mkdir certs
+fi
+
+# Generate new CA certificate ca.pem file.
 if [ ! -f ./certs/ca-key.pem ]; then
 	openssl genrsa -out ./certs/ca-key.pem 2048
 fi
