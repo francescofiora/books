@@ -1,7 +1,4 @@
-#https://techsparx.com/software-development/docker/damp/mysql-ssl-connection.html
-
-#sudo docker pull nginx
-
+#!/bin/bash
 export OPENSSL_SUBJ="/C=IT/ST=Ireland/L=Cork"
 export ENV OPENSSL_CA="${OPENSSL_SUBJ}/CN=ca.francescofiora.it"
 export ENV OPENSSL_SERVER="${OPENSSL_SUBJ}/CN=dbbooks.francescofiora.it"

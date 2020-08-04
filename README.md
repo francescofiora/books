@@ -18,13 +18,13 @@ Yes, yet another tutorial with "book, author and publisher" as entity.
 - Eclipse support
 
 # Getting Started
-## Docker
+## Using Docker to simplify development
 The purpose of this tutorial is a Spring Boot tutorial, however I have inserted and a Dockerfile for MySql and phpMyAdmin. So you not need to install and configure them, with Docker that Dockerfile is sufficient.
 
- - cd docker
- - ./create_certificate.sh
- - docker-compose up -d
- - using phpMyAdmin (http://localhost:8080/) create "books" DB and tables (SQL queries available in data.sql file).
+    cd docker
+    ./create_certificate.sh
+    docker-compose up -d
+ - you can use phpMyAdmin (http://localhost:8080/) to create "books" DB and tables (SQL queries available in data.sql file).
 
 ## Useful Docker command
 
@@ -32,13 +32,13 @@ The purpose of this tutorial is a Spring Boot tutorial, however I have inserted 
  - docker exec -it docker_myadmin.francescofiora.it_1 bash
 
 ## check mysql SSL connection
-openssl s_client -connect localhost:3306 -tls1_2
+    openssl s_client -connect localhost:3306 -tls1_2
 
 ## compile
-./gradlew clean build
+    ./gradlew clean build
 
 ## quality code with checkstyle
-./gradlew check
+    ./gradlew check
 
 # How to execute
 Different way to run this app
