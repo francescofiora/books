@@ -30,9 +30,7 @@ dependencies {
   implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
   implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.springframework.boot:spring-boot-devtools'
-	implementation 'org.springframework.security:spring-security-test'
 
 	implementation "ch.qos.logback:logback-classic:${logback_version}"
 
@@ -49,7 +47,8 @@ dependencies {
   annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
   
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
-  testImplementation 'org.hsqldb:hsqldb'  
+  testImplementation 'org.springframework.security:spring-security-test'
+  testImplementation 'org.hsqldb:hsqldb'
 }
 
 tasks.withType(JavaCompile) {

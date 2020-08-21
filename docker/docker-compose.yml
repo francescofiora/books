@@ -1,18 +1,19 @@
 version: "3"
 services:
   dbbooks.francescofiora.it:
-    image: mysql
+    image: mysql:8.0.21
     environment:
       MYSQL_ROOT_PASSWORD: secret
     volumes:
       - mysql-books-data:/var/lib/mysql
       - "./conf.d:/etc/mysql/conf.d/"
       - "./certs:/etc/certs"
+      - "./data:/docker-entrypoint-initdb.d"
     ports:
       - "3306:3306"
    
   myadmin.francescofiora.it:
-    image: phpmyadmin/phpmyadmin
+    image: phpmyadmin/phpmyadmin:5.0.2
     environment:
       - PMA_HOST=dbbooks.francescofiora.it
       - PMA_USER=root

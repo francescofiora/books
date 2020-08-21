@@ -24,7 +24,7 @@ The purpose of this tutorial is a Spring Boot tutorial, however I have inserted 
     cd docker
     ./create_certificate.sh
     docker-compose up -d
- - you can use phpMyAdmin (http://localhost:8080/) to create "books" DB and tables (SQL queries available in data.sql file).
+ - you can use phpMyAdmin (http://localhost:8080/)
 
 ## Useful Docker command
 

@@ -4,7 +4,6 @@ import it.francescofiora.books.service.dto.AuthorDto;
 import it.francescofiora.books.service.dto.NewAuthorDto;
 import it.francescofiora.books.service.dto.TitleDto;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;

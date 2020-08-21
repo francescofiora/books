@@ -2,7 +2,6 @@ package it.francescofiora.books.repository;
 
 import org.junit.Assert;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.Test;
