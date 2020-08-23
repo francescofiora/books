@@ -1,19 +1,21 @@
 package it.francescofiora.books.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.Collections;
 import java.util.Optional;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import it.francescofiora.books.domain.Title;
 import it.francescofiora.books.repository.TitleRepository;
@@ -25,7 +27,7 @@ import it.francescofiora.books.service.mapper.NewTitleMapper;
 import it.francescofiora.books.service.mapper.TitleMapper;
 import it.francescofiora.books.web.errors.NotFoundAlertException;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 public class TitleServiceTest {
 
   @MockBean
@@ -39,7 +41,7 @@ public class TitleServiceTest {
 
   private TitleService titleService;
 
-  @Before
+  @BeforeEach
   public void setUp() {
     titleService = new TitleServiceImpl(titleRepository, titleMapper, newTitleMapper);
   }
@@ -55,13 +57,13 @@ public class TitleServiceTest {
 
     NewTitleDto titleDto = new NewTitleDto();
     TitleDto actual = titleService.create(titleDto);
-    Assert.assertEquals(expected, actual);
+    assertThat(actual).isEqualTo(expected);
   }
 
-  @Test(expected = NotFoundAlertException.class)
+  @Test
   public void testUpdateNotFound() throws Exception {
     UpdatebleTitleDto titleDto = new UpdatebleTitleDto();
-    titleService.update(titleDto);
+    Assertions.assertThrows(NotFoundAlertException.class, () -> titleService.update(titleDto));
   }
 
   @Test
@@ -83,13 +85,13 @@ public class TitleServiceTest {
     Mockito.when(titleMapper.toDto(Mockito.any(Title.class))).thenReturn(expected);
     Pageable pageable = PageRequest.of(1, 1);
     Page<TitleDto> page = titleService.findAll(pageable);
-    Assert.assertEquals(expected, page.getContent().get(0));
+    assertThat(page.getContent().get(0)).isEqualTo(expected);
   }
 
   @Test
   public void testFindOneNotFound() throws Exception {
     Optional<TitleDto> titleOpt = titleService.findOne(1L);
-    Assert.assertFalse(titleOpt.isPresent());
+    assertThat(titleOpt).isNotPresent();
   }
 
   @Test
@@ -102,9 +104,9 @@ public class TitleServiceTest {
     Mockito.when(titleMapper.toDto(Mockito.any(Title.class))).thenReturn(expected);
 
     Optional<TitleDto> titleOpt = titleService.findOne(1L);
-    Assert.assertTrue(titleOpt.isPresent());
+    assertThat(titleOpt).isPresent();
     TitleDto actual = titleOpt.get();
-    Assert.assertEquals(expected, actual);
+    assertThat(actual).isEqualTo(expected);
   }
 
   @Test

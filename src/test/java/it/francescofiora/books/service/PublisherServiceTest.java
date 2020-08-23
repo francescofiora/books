@@ -1,5 +1,7 @@
 package it.francescofiora.books.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import it.francescofiora.books.domain.Publisher;
 import it.francescofiora.books.repository.PublisherRepository;
 import it.francescofiora.books.service.dto.PublisherDto;
@@ -12,19 +14,19 @@ import it.francescofiora.books.web.errors.NotFoundAlertException;
 import java.util.Collections;
 import java.util.Optional;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 public class PublisherServiceTest {
 
   @MockBean
@@ -38,15 +40,17 @@ public class PublisherServiceTest {
 
   private PublisherService publisherService;
 
-  @Before
+  @BeforeEach
   public void setUp() {
-    publisherService = new PublisherServiceImpl(publisherRepository, publisherMapper, newPublisherMapper);
+    publisherService = new PublisherServiceImpl(publisherRepository, publisherMapper,
+        newPublisherMapper);
   }
 
   @Test
   public void testCreate() throws Exception {
     Publisher publisher = new Publisher();
-    Mockito.when(newPublisherMapper.toEntity(Mockito.any(NewPublisherDto.class))).thenReturn(publisher);
+    Mockito.when(newPublisherMapper.toEntity(Mockito.any(NewPublisherDto.class)))
+        .thenReturn(publisher);
     Mockito.when(publisherRepository.save(Mockito.any(Publisher.class))).thenReturn(publisher);
 
     PublisherDto expected = new PublisherDto();
@@ -54,13 +58,14 @@ public class PublisherServiceTest {
 
     NewPublisherDto publisherDto = new NewPublisherDto();
     PublisherDto actual = publisherService.create(publisherDto);
-    Assert.assertEquals(expected, actual);
+    assertThat(actual).isEqualTo(expected);
   }
 
-  @Test(expected = NotFoundAlertException.class)
+  @Test
   public void testUpdateNotFound() throws Exception {
     PublisherDto publisherDto = new PublisherDto();
-    publisherService.update(publisherDto);
+    Assertions.assertThrows(NotFoundAlertException.class,
+        () -> publisherService.update(publisherDto));
   }
 
   @Test
@@ -82,13 +87,13 @@ public class PublisherServiceTest {
     Mockito.when(publisherMapper.toDto(Mockito.any(Publisher.class))).thenReturn(expected);
     Pageable pageable = PageRequest.of(1, 1);
     Page<PublisherDto> page = publisherService.findAll(pageable);
-    Assert.assertEquals(expected, page.getContent().get(0));
+    assertThat(page.getContent().get(0)).isEqualTo(expected);
   }
 
   @Test
   public void testFindOneNotFound() throws Exception {
     Optional<PublisherDto> publisherOpt = publisherService.findOne(1L);
-    Assert.assertFalse(publisherOpt.isPresent());
+    assertThat(publisherOpt).isNotPresent();
   }
 
   @Test
@@ -101,9 +106,9 @@ public class PublisherServiceTest {
     Mockito.when(publisherMapper.toDto(Mockito.any(Publisher.class))).thenReturn(expected);
 
     Optional<PublisherDto> publisherOpt = publisherService.findOne(1L);
-    Assert.assertTrue(publisherOpt.isPresent());
+    assertThat(publisherOpt).isPresent();
     PublisherDto actual = publisherOpt.get();
-    Assert.assertEquals(expected, actual);
+    assertThat(actual).isEqualTo(expected);
   }
 
   @Test

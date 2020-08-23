@@ -74,3 +74,4 @@ https://localhost:8081/books/swagger-ui.html
 - [HsqlDb](http://hsqldb.org/)
 - [LogBack 1.2](https://logback.qos.ch/)
 - [Mockito](https://site.mockito.org/)
+- [JUnit 5](https://junit.org/junit5/)

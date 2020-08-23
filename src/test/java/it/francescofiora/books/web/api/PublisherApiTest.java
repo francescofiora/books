@@ -9,22 +9,22 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -35,7 +35,7 @@ import it.francescofiora.books.service.PublisherService;
 import it.francescofiora.books.service.dto.PublisherDto;
 import it.francescofiora.books.service.dto.NewPublisherDto;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = PublisherApi.class)
 public class PublisherApiTest {
 
@@ -65,7 +65,8 @@ public class PublisherApiTest {
         .perform(post(new URI(PUBLISHERS_URI)).contentType(APPLICATION_JSON)
             .content(mapper.writeValueAsString(newPublisherDto)))
         .andExpect(status().isCreated()).andReturn();
-    Assert.assertEquals(PUBLISHERS_URI + "/" + ID, result.getResponse().getHeaderValue("location"));
+    assertThat(result.getResponse().getHeaderValue("location"))
+        .isEqualTo(PUBLISHERS_URI + "/" + ID);
   }
 
   private void fillPublisher(NewPublisherDto publisherDto) {
@@ -102,9 +103,8 @@ public class PublisherApiTest {
     List<PublisherDto> list = mapper.readValue(result.getResponse().getContentAsString(),
         new TypeReference<List<PublisherDto>>() {
         });
-    Assert.assertNotNull(list);
-    Assert.assertFalse(list.isEmpty());
-    Assert.assertEquals(expected, list.get(0));
+    assertThat(list).isNotNull().isNotEmpty();
+    assertThat(list.get(0)).isEqualTo(expected);
   }
 
   @Test
@@ -117,8 +117,7 @@ public class PublisherApiTest {
     PublisherDto actual = mapper.readValue(result.getResponse().getContentAsString(),
         new TypeReference<PublisherDto>() {
         });
-    Assert.assertNotNull(actual);
-    Assert.assertEquals(expected, actual);
+    assertThat(actual).isNotNull().isEqualTo(expected);
   }
 
   @Test

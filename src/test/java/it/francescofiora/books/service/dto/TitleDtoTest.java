@@ -1,7 +1,8 @@
 package it.francescofiora.books.service.dto;
 
-import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.jupiter.api.Test;
 import it.francescofiora.books.TestUtil;
 
 public class TitleDtoTest {

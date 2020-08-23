@@ -1,10 +1,10 @@
 package it.francescofiora.books.repository;
 
-import org.junit.Assert;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Optional;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,12 +24,12 @@ public class AuthorRepositoryTest extends AbstractTestRepository {
     authorRepository.save(expecteted2);
 
     Page<Author> authors = authorRepository.findAll(PageRequest.of(0, 10));
-    Assert.assertNotNull(authors);
-    Assert.assertFalse(authors.isEmpty());
+    assertThat(authors).isNotNull().isNotEmpty();
+
     for (Author actual : authors) {
-      Assert.assertNotNull(actual);
-      Assert.assertTrue(UtilsRepository.assertEquals(expecteted1, actual)
-          || UtilsRepository.assertEquals(expecteted2, actual));
+      assertThat(actual).isNotNull();
+      assertThat(UtilsRepository.assertEquals(expecteted1, actual)
+          || UtilsRepository.assertEquals(expecteted2, actual)).isTrue();
     }
 
     Author expecteted3 = UtilsRepository.createAuthor3();
@@ -39,17 +39,16 @@ public class AuthorRepositoryTest extends AbstractTestRepository {
     authorRepository.save(author);
 
     Optional<Author> optional = authorRepository.findById(author.getId());
-    Assert.assertTrue(optional.isPresent());
+    assertThat(optional).isPresent();
     author = optional.get();
-    Assert.assertTrue(UtilsRepository.assertEquals(expecteted3, author));
+    assertThat(UtilsRepository.assertEquals(expecteted3, author)).isTrue();
 
     for (Author actual : authors) {
       authorRepository.delete(actual);
     }
 
     authors = authorRepository.findAll(PageRequest.of(0, 10));
-    Assert.assertNotNull(authors);
-    Assert.assertTrue(authors.isEmpty());
+    assertThat(authors).isNotNull().isEmpty();
   }
 
 }

@@ -1,8 +1,5 @@
 package it.francescofiora.books.web.api;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -12,19 +9,22 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -36,7 +36,7 @@ import it.francescofiora.books.service.dto.AuthorDto;
 import it.francescofiora.books.service.dto.NewAuthorDto;
 import it.francescofiora.books.service.dto.TitleDto;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = AuthorApi.class)
 public class AuthorApiTest {
 
@@ -67,7 +67,7 @@ public class AuthorApiTest {
         .perform(post(new URI(AUTHORS_URI)).contentType(APPLICATION_JSON)
             .content(mapper.writeValueAsString(newAuthorDto)))
         .andExpect(status().isCreated()).andReturn();
-    Assert.assertEquals(AUTHORS_URI + "/" + ID, result.getResponse().getHeaderValue("location"));
+    assertThat(result.getResponse().getHeaderValue("location")).isEqualTo(AUTHORS_URI + "/" + ID);
   }
 
   @Test
@@ -105,9 +105,8 @@ public class AuthorApiTest {
     List<AuthorDto> list = mapper.readValue(result.getResponse().getContentAsString(),
         new TypeReference<List<AuthorDto>>() {
         });
-    Assert.assertNotNull(list);
-    Assert.assertFalse(list.isEmpty());
-    Assert.assertEquals(expected, list.get(0));
+    assertThat(list).isNotNull().isNotEmpty();
+    assertThat(list.get(0)).isEqualTo(expected);
   }
 
   @Test
@@ -119,8 +118,7 @@ public class AuthorApiTest {
     AuthorDto actual = mapper.readValue(result.getResponse().getContentAsString(),
         new TypeReference<AuthorDto>() {
         });
-    Assert.assertNotNull(actual);
-    Assert.assertEquals(expected, actual);
+    assertThat(actual).isNotNull().isEqualTo(expected);
   }
 
   @Test
@@ -136,9 +134,8 @@ public class AuthorApiTest {
     List<TitleDto> list = mapper.readValue(result.getResponse().getContentAsString(),
         new TypeReference<List<TitleDto>>() {
         });
-    Assert.assertNotNull(list);
-    Assert.assertFalse(list.isEmpty());
-    Assert.assertEquals(expected, list.get(0));
+    assertThat(list).isNotNull().isNotEmpty();
+    assertThat(list.get(0)).isEqualTo(expected);
   }
 
   @Test

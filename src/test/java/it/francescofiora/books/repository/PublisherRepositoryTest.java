@@ -1,11 +1,12 @@
 package it.francescofiora.books.repository;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import it.francescofiora.books.domain.Publisher;
 
 import java.util.Optional;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,12 +24,11 @@ public class PublisherRepositoryTest extends AbstractTestRepository {
     publisherRepository.save(expecteted2);
 
     Page<Publisher> publishers = publisherRepository.findAll(PageRequest.of(0, 10));
-    Assert.assertNotNull(publishers);
-    Assert.assertFalse(publishers.isEmpty());
+    assertThat(publishers).isNotNull().isNotEmpty();
     for (Publisher actual : publishers) {
-      Assert.assertNotNull(actual);
-      Assert.assertTrue(UtilsRepository.assertEquals(expecteted1, actual)
-          || UtilsRepository.assertEquals(expecteted2, actual));
+      assertThat(actual).isNotNull();
+      assertThat(UtilsRepository.assertEquals(expecteted1, actual)
+          || UtilsRepository.assertEquals(expecteted2, actual)).isTrue();
     }
 
     Publisher expecteted3 = UtilsRepository.createPublisher3();
@@ -37,16 +37,15 @@ public class PublisherRepositoryTest extends AbstractTestRepository {
     publisherRepository.save(publisher);
 
     Optional<Publisher> optional = publisherRepository.findById(publisher.getId());
-    Assert.assertTrue(optional.isPresent());
+    assertThat(optional).isPresent();
     publisher = optional.get();
-    Assert.assertTrue(UtilsRepository.assertEquals(expecteted3, publisher));
+    assertThat(UtilsRepository.assertEquals(expecteted3, publisher)).isTrue();
 
     for (Publisher actual : publishers) {
       publisherRepository.delete(actual);
     }
 
     publishers = publisherRepository.findAll(PageRequest.of(0, 10));
-    Assert.assertNotNull(publishers);
-    Assert.assertTrue(publishers.isEmpty());
+    assertThat(publishers).isNotNull().isEmpty();
   }
 }

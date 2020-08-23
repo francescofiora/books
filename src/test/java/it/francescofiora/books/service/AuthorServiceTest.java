@@ -1,5 +1,7 @@
 package it.francescofiora.books.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import it.francescofiora.books.domain.Author;
 import it.francescofiora.books.domain.Title;
 import it.francescofiora.books.repository.AuthorRepository;
@@ -15,19 +17,19 @@ import it.francescofiora.books.web.errors.NotFoundAlertException;
 import java.util.Collections;
 import java.util.Optional;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 public class AuthorServiceTest {
 
   static final Long ID = 1L;
@@ -46,7 +48,7 @@ public class AuthorServiceTest {
 
   private AuthorService authorService;
 
-  @Before
+  @BeforeEach
   public void setUp() {
     authorService = new AuthorServiceImpl(authorRepository, authorMapper, newAuthorMapper,
         titleMapper);
@@ -63,13 +65,13 @@ public class AuthorServiceTest {
 
     NewAuthorDto authorDto = new NewAuthorDto();
     AuthorDto actual = authorService.create(authorDto);
-    Assert.assertEquals(expected, actual);
+    assertThat(actual).isEqualTo(expected);
   }
 
-  @Test(expected = NotFoundAlertException.class)
+  @Test
   public void testUpdateNotFound() throws Exception {
     AuthorDto authorDto = new AuthorDto();
-    authorService.update(authorDto);
+    Assertions.assertThrows(NotFoundAlertException.class, () -> authorService.update(authorDto));
   }
 
   @Test
@@ -91,13 +93,13 @@ public class AuthorServiceTest {
     Mockito.when(authorMapper.toDto(Mockito.any(Author.class))).thenReturn(expected);
     Pageable pageable = PageRequest.of(1, 1);
     Page<AuthorDto> page = authorService.findAll(pageable);
-    Assert.assertEquals(expected, page.getContent().get(0));
+    assertThat(page.getContent().get(0)).isEqualTo(expected);
   }
 
   @Test
   public void testFindOneNotFound() throws Exception {
     Optional<AuthorDto> authorOpt = authorService.findOne(ID);
-    Assert.assertFalse(authorOpt.isPresent());
+    assertThat(authorOpt).isNotPresent();
   }
 
   @Test
@@ -110,9 +112,9 @@ public class AuthorServiceTest {
     Mockito.when(authorMapper.toDto(Mockito.any(Author.class))).thenReturn(expected);
 
     Optional<AuthorDto> authorOpt = authorService.findOne(ID);
-    Assert.assertTrue(authorOpt.isPresent());
+    assertThat(authorOpt).isPresent();
     AuthorDto actual = authorOpt.get();
-    Assert.assertEquals(expected, actual);
+    assertThat(actual).isEqualTo(expected);
   }
 
   @Test
@@ -128,7 +130,7 @@ public class AuthorServiceTest {
         .thenReturn(Collections.singletonList(expected));
     Pageable pageable = PageRequest.of(1, 1);
     Page<TitleDto> page = authorService.findTitlesByAuthorId(pageable, ID);
-    Assert.assertEquals(expected, page.getContent().get(0));
+    assertThat(page.getContent().get(0)).isEqualTo(expected);
   }
 
   @Test

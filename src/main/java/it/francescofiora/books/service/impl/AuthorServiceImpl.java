@@ -94,6 +94,7 @@ public class AuthorServiceImpl implements AuthorService {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public Page<TitleDto> findTitlesByAuthorId(Pageable pageable, Long id) {
     log.debug("Request to get Ttitles by Author id: {}", id);
     Optional<Author> authorOpt = authorRepository.findById(id);

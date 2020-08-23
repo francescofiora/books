@@ -114,6 +114,9 @@ checkstyleMain {
   source ='src/main/java'
 }
 
+test {
+  useJUnitPlatform()
+}
 
 wrapper {
     gradleVersion = "6.3"

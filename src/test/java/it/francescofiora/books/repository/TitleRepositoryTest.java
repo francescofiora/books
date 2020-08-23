@@ -1,11 +1,12 @@
 package it.francescofiora.books.repository;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import it.francescofiora.books.domain.Title;
 
 import java.util.Optional;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,12 +29,11 @@ public class TitleRepositoryTest extends AbstractTestRepository {
     titleRepository.save(expecteted2);
 
     Page<Title> titles = titleRepository.findAll(PageRequest.of(0, 10));
-    Assert.assertNotNull(titles);
-    Assert.assertFalse(titles.isEmpty());
+    assertThat(titles).isNotNull().isNotNull();
     for (Title actual : titles) {
-      Assert.assertNotNull(actual);
-      Assert.assertTrue(UtilsRepository.assertEquals(expecteted1, actual)
-          || UtilsRepository.assertEquals(expecteted2, actual));
+      assertThat(actual).isNotNull();
+      assertThat(UtilsRepository.assertEquals(expecteted1, actual)
+          || UtilsRepository.assertEquals(expecteted2, actual)).isTrue();
     }
 
     Title expecteted3 = UtilsRepository.createTitle3();
@@ -47,22 +47,15 @@ public class TitleRepositoryTest extends AbstractTestRepository {
     titleRepository.save(title);
 
     Optional<Title> optional = titleRepository.findById(title.getId());
-    Assert.assertTrue(optional.isPresent());
+    assertThat(optional).isPresent();
     title = optional.get();
-    Assert.assertTrue(UtilsRepository.assertEquals(expecteted3, title));
+    assertThat(UtilsRepository.assertEquals(expecteted3, title)).isTrue();
 
     for (Title actual : titles) {
       titleRepository.delete(actual);
     }
 
     titles = titleRepository.findAll(PageRequest.of(0, 10));
-    Assert.assertNotNull(titles);
-    Assert.assertTrue(titles.isEmpty());
+    assertThat(titles).isNotNull().isEmpty();
   }
-
-  @Test
-  public void testTitles() throws Exception {
-
-  }
-
 }
