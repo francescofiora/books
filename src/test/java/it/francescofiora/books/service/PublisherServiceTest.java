@@ -29,6 +29,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 public class PublisherServiceTest {
 
+  private static final Long ID = 1L;
+  
   @MockBean
   private PublisherRepository publisherRepository;
 
@@ -71,10 +73,10 @@ public class PublisherServiceTest {
   @Test
   public void testUpdate() throws Exception {
     Publisher publisher = new Publisher();
-    Mockito.when(publisherRepository.findById(Mockito.eq(1L))).thenReturn(Optional.of(publisher));
+    Mockito.when(publisherRepository.findById(Mockito.eq(ID))).thenReturn(Optional.of(publisher));
 
     PublisherDto publisherDto = new PublisherDto();
-    publisherDto.setId(1L);
+    publisherDto.setId(ID);
     publisherService.update(publisherDto);
   }
 
@@ -92,20 +94,20 @@ public class PublisherServiceTest {
 
   @Test
   public void testFindOneNotFound() throws Exception {
-    Optional<PublisherDto> publisherOpt = publisherService.findOne(1L);
+    Optional<PublisherDto> publisherOpt = publisherService.findOne(ID);
     assertThat(publisherOpt).isNotPresent();
   }
 
   @Test
   public void testFindOne() throws Exception {
     Publisher publisher = new Publisher();
-    publisher.setId(1L);
+    publisher.setId(ID);
     Mockito.when(publisherRepository.findById(Mockito.eq(publisher.getId())))
         .thenReturn(Optional.of(publisher));
     PublisherDto expected = new PublisherDto();
     Mockito.when(publisherMapper.toDto(Mockito.any(Publisher.class))).thenReturn(expected);
 
-    Optional<PublisherDto> publisherOpt = publisherService.findOne(1L);
+    Optional<PublisherDto> publisherOpt = publisherService.findOne(ID);
     assertThat(publisherOpt).isPresent();
     PublisherDto actual = publisherOpt.get();
     assertThat(actual).isEqualTo(expected);
@@ -113,6 +115,6 @@ public class PublisherServiceTest {
 
   @Test
   public void testDelete() throws Exception {
-    publisherService.delete(1L);
+    publisherService.delete(ID);
   }
 }

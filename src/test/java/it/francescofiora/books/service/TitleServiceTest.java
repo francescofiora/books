@@ -30,6 +30,8 @@ import it.francescofiora.books.web.errors.NotFoundAlertException;
 @ExtendWith(SpringExtension.class)
 public class TitleServiceTest {
 
+  private static final Long ID = 1L;
+  
   @MockBean
   private TitleRepository titleRepository;
 
@@ -69,10 +71,10 @@ public class TitleServiceTest {
   @Test
   public void testUpdate() throws Exception {
     Title title = new Title();
-    Mockito.when(titleRepository.findById(Mockito.eq(1L))).thenReturn(Optional.of(title));
+    Mockito.when(titleRepository.findById(Mockito.eq(ID))).thenReturn(Optional.of(title));
 
     UpdatebleTitleDto titleDto = new UpdatebleTitleDto();
-    titleDto.setId(1L);
+    titleDto.setId(ID);
     titleService.update(titleDto);
   }
 
@@ -90,20 +92,20 @@ public class TitleServiceTest {
 
   @Test
   public void testFindOneNotFound() throws Exception {
-    Optional<TitleDto> titleOpt = titleService.findOne(1L);
+    Optional<TitleDto> titleOpt = titleService.findOne(ID);
     assertThat(titleOpt).isNotPresent();
   }
 
   @Test
   public void testFindOne() throws Exception {
     Title title = new Title();
-    title.setId(1L);
+    title.setId(ID);
     Mockito.when(titleRepository.findById(Mockito.eq(title.getId())))
         .thenReturn(Optional.of(title));
     TitleDto expected = new TitleDto();
     Mockito.when(titleMapper.toDto(Mockito.any(Title.class))).thenReturn(expected);
 
-    Optional<TitleDto> titleOpt = titleService.findOne(1L);
+    Optional<TitleDto> titleOpt = titleService.findOne(ID);
     assertThat(titleOpt).isPresent();
     TitleDto actual = titleOpt.get();
     assertThat(actual).isEqualTo(expected);
@@ -111,7 +113,7 @@ public class TitleServiceTest {
 
   @Test
   public void testDelete() throws Exception {
-    titleService.delete(1L);
+    titleService.delete(ID);
   }
 
 }

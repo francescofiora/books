@@ -32,7 +32,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 public class AuthorServiceTest {
 
-  static final Long ID = 1L;
+  private static final Long ID = 1L;
 
   @MockBean
   private AuthorRepository authorRepository;
@@ -135,6 +135,6 @@ public class AuthorServiceTest {
 
   @Test
   public void testDelete() throws Exception {
-    authorService.delete(1L);
+    authorService.delete(ID);
   }
 }

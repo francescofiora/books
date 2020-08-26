@@ -67,11 +67,11 @@ public class UpdatebleTitleDto extends BaseTitleDto implements Serializable {
       return false;
     }
 
-    TitleDto titleDto = (TitleDto) o;
-    if (titleDto.getId() == null || getId() == null) {
+    UpdatebleTitleDto updatebleTitleDto = (UpdatebleTitleDto) o;
+    if (updatebleTitleDto.getId() == null || getId() == null) {
       return false;
     }
-    return Objects.equals(getId(), titleDto.getId());
+    return Objects.equals(getId(), updatebleTitleDto.getId());
   }
 
   @Override
@@ -81,9 +81,9 @@ public class UpdatebleTitleDto extends BaseTitleDto implements Serializable {
 
   @Override
   public String toString() {
-    return "TitleDto{" + "id=" + getId() + ", title='" + getTitle() + "'" + ", editionNumber="
-        + getEditionNumber() + ", language='" + getLanguage() + "'" + ", copyright="
-        + getCopyright() + ", imageFile='" + getImageFile() + "'" + ", price=" + getPrice()
-        + ", publisher=" + getPublisher() + ", authors='" + getAuthors() + "'" + "}";
+    return "UpdatebleTitleDto{" + "id=" + getId() + ", title='" + getTitle() + "'"
+        + ", editionNumber=" + getEditionNumber() + ", language='" + getLanguage() + "'"
+        + ", copyright=" + getCopyright() + ", imageFile='" + getImageFile() + "'" + ", price="
+        + getPrice() + ", publisher=" + getPublisher() + ", authors='" + getAuthors() + "'" + "}";
   }
 }
