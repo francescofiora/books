@@ -8,6 +8,7 @@ import it.francescofiora.books.domain.enumeration.Language;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
 public abstract class BaseTitleDto {
@@ -82,6 +83,7 @@ public abstract class BaseTitleDto {
   }
 
   @NotNull
+  @Positive
   public Long getPrice() {
     return price;
   }

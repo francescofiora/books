@@ -29,7 +29,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.francescofiora.books.service.AuthorService;
 import it.francescofiora.books.service.dto.AuthorDto;
@@ -38,7 +37,7 @@ import it.francescofiora.books.service.dto.TitleDto;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = AuthorApi.class)
-public class AuthorApiTest {
+public class AuthorApiTest extends AbstractApiTest {
 
   private static final Long ID = 1L;
   private static final String AUTHORS_URI = "/api/authors";
@@ -52,9 +51,6 @@ public class AuthorApiTest {
   @MockBean
   private AuthorService authorService;
 
-  @Autowired
-  private ObjectMapper mapper;
-
   @Test
   public void testCreateAuthor() throws Exception {
     NewAuthorDto newAuthorDto = new NewAuthorDto();
@@ -63,30 +59,66 @@ public class AuthorApiTest {
     AuthorDto authorDto = new AuthorDto();
     authorDto.setId(ID);
     given(authorService.create(any(NewAuthorDto.class))).willReturn(authorDto);
-    MvcResult result = mvc
-        .perform(post(new URI(AUTHORS_URI)).contentType(APPLICATION_JSON)
-            .content(mapper.writeValueAsString(newAuthorDto)))
-        .andExpect(status().isCreated()).andReturn();
+    MvcResult result = mvc.perform(post(new URI(AUTHORS_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(newAuthorDto))).andExpect(status().isCreated()).andReturn();
     assertThat(result.getResponse().getHeaderValue("location")).isEqualTo(AUTHORS_URI + "/" + ID);
   }
 
   @Test
   public void testUpdateAuthorBadRequest() throws Exception {
-    AuthorDto authorDto = new AuthorDto();
-    fillAuthor(authorDto);
+    // id
+    AuthorDto authorDto = updateAuthorDto();
+    authorDto.setId(null);
     mvc.perform(put(new URI(AUTHORS_URI)).contentType(APPLICATION_JSON)
-        .content(mapper.writeValueAsString(authorDto))).andExpect(status().isBadRequest());
+        .content(writeValueAsString(authorDto))).andExpect(status().isBadRequest());
+
+    // firstName
+    authorDto = updateAuthorDto();
+    authorDto.setFirstName(null);
+    mvc.perform(put(new URI(AUTHORS_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(authorDto))).andExpect(status().isBadRequest());
+
+    authorDto = updateAuthorDto();
+    authorDto.setFirstName("");
+    mvc.perform(put(new URI(AUTHORS_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(authorDto))).andExpect(status().isBadRequest());
+
+    authorDto = updateAuthorDto();
+    authorDto.setFirstName("  ");
+    mvc.perform(put(new URI(AUTHORS_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(authorDto))).andExpect(status().isBadRequest());
+
+    // lastName
+    authorDto = updateAuthorDto();
+    authorDto.setLastName(null);
+    mvc.perform(put(new URI(AUTHORS_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(authorDto))).andExpect(status().isBadRequest());
+
+    authorDto = updateAuthorDto();
+    authorDto.setLastName("");
+    mvc.perform(put(new URI(AUTHORS_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(authorDto))).andExpect(status().isBadRequest());
+
+    authorDto = updateAuthorDto();
+    authorDto.setLastName("  ");
+    mvc.perform(put(new URI(AUTHORS_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(authorDto))).andExpect(status().isBadRequest());
   }
 
   @Test
   public void testUpdateAuthor() throws Exception {
+    AuthorDto authorDto = updateAuthorDto();
+    mvc.perform(put(new URI(AUTHORS_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(authorDto))).andExpect(status().isOk());
+  }
+
+  private AuthorDto updateAuthorDto() {
     AuthorDto authorDto = new AuthorDto();
     fillAuthor(authorDto);
     authorDto.setId(ID);
-    mvc.perform(put(new URI(AUTHORS_URI)).contentType(APPLICATION_JSON)
-        .content(mapper.writeValueAsString(authorDto))).andExpect(status().isOk());
+    return authorDto;
   }
-
+  
   private void fillAuthor(NewAuthorDto authorDto) {
     authorDto.setFirstName("John");
     authorDto.setLastName("Smith");
@@ -101,10 +133,8 @@ public class AuthorApiTest {
         .willReturn(new PageImpl<AuthorDto>(Collections.singletonList(expected)));
 
     MvcResult result = mvc.perform(get(new URI(AUTHORS_URI)).contentType(APPLICATION_JSON)
-        .content(mapper.writeValueAsString(pageable))).andExpect(status().isOk()).andReturn();
-    List<AuthorDto> list = mapper.readValue(result.getResponse().getContentAsString(),
-        new TypeReference<List<AuthorDto>>() {
-        });
+        .content(writeValueAsString(pageable))).andExpect(status().isOk()).andReturn();
+    List<AuthorDto> list = readValue(result, new TypeReference<List<AuthorDto>>() {});
     assertThat(list).isNotNull().isNotEmpty();
     assertThat(list.get(0)).isEqualTo(expected);
   }
@@ -115,9 +145,7 @@ public class AuthorApiTest {
     expected.setId(ID);
     given(authorService.findOne(eq(ID))).willReturn(Optional.of(expected));
     MvcResult result = mvc.perform(get(AUTHORS_ID_URI, ID)).andExpect(status().isOk()).andReturn();
-    AuthorDto actual = mapper.readValue(result.getResponse().getContentAsString(),
-        new TypeReference<AuthorDto>() {
-        });
+    AuthorDto actual = readValue(result, new TypeReference<AuthorDto>() {});
     assertThat(actual).isNotNull().isEqualTo(expected);
   }
 
@@ -130,10 +158,8 @@ public class AuthorApiTest {
 
     Pageable pageable = PageRequest.of(1, 1);
     MvcResult result = mvc.perform(get(AUTHORS_TITLES_URI, ID).contentType(APPLICATION_JSON)
-        .content(mapper.writeValueAsString(pageable))).andExpect(status().isOk()).andReturn();
-    List<TitleDto> list = mapper.readValue(result.getResponse().getContentAsString(),
-        new TypeReference<List<TitleDto>>() {
-        });
+        .content(writeValueAsString(pageable))).andExpect(status().isOk()).andReturn();
+    List<TitleDto> list = readValue(result, new TypeReference<List<TitleDto>>() {});
     assertThat(list).isNotNull().isNotEmpty();
     assertThat(list.get(0)).isEqualTo(expected);
   }

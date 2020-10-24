@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.validation.annotation.Validated;
@@ -21,6 +22,7 @@ public class UpdatebleTitleDto extends BaseTitleDto implements Serializable {
 
   private Long id;
 
+  @NotNull
   public Long getId() {
     return id;
   }
@@ -48,7 +50,7 @@ public class UpdatebleTitleDto extends BaseTitleDto implements Serializable {
     this.publisher = publisher;
   }
 
-  @NotNull
+  @NotEmpty
   @Valid
   public List<RefAuthorDto> getAuthors() {
     return authors;

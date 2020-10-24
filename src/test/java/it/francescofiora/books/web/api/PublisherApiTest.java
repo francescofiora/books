@@ -29,7 +29,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.francescofiora.books.service.PublisherService;
 import it.francescofiora.books.service.dto.PublisherDto;
@@ -37,7 +36,7 @@ import it.francescofiora.books.service.dto.NewPublisherDto;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = PublisherApi.class)
-public class PublisherApiTest {
+public class PublisherApiTest extends AbstractApiTest {
 
   private static final Long ID = 1L;
   private static final String PUBLISHERS_URI = "/api/publishers";
@@ -50,9 +49,6 @@ public class PublisherApiTest {
   @MockBean
   private PublisherService publisherService;
 
-  @Autowired
-  private ObjectMapper mapper;
-
   @Test
   public void testCreatePublisher() throws Exception {
     NewPublisherDto newPublisherDto = new NewPublisherDto();
@@ -63,7 +59,7 @@ public class PublisherApiTest {
     given(publisherService.create(any(NewPublisherDto.class))).willReturn(publisherDto);
     MvcResult result = mvc
         .perform(post(new URI(PUBLISHERS_URI)).contentType(APPLICATION_JSON)
-            .content(mapper.writeValueAsString(newPublisherDto)))
+            .content(writeValueAsString(newPublisherDto)))
         .andExpect(status().isCreated()).andReturn();
     assertThat(result.getResponse().getHeaderValue("location"))
         .isEqualTo(PUBLISHERS_URI + "/" + ID);
@@ -71,24 +67,43 @@ public class PublisherApiTest {
 
   private void fillPublisher(NewPublisherDto publisherDto) {
     publisherDto.setPublisherName("Publisher Ltd");
+  }
 
+  private PublisherDto updatePublisherDto() {
+    PublisherDto publisherDto = new PublisherDto();
+    fillPublisher(publisherDto);
+    publisherDto.setId(ID);
+    return publisherDto;
   }
 
   @Test
   public void testUpdatePublisherBadRequest() throws Exception {
-    PublisherDto publisherDto = new PublisherDto();
-    fillPublisher(publisherDto);
+    PublisherDto publisherDto = updatePublisherDto();
+    publisherDto.setId(null);
     mvc.perform(put(new URI(PUBLISHERS_URI)).contentType(APPLICATION_JSON)
-        .content(mapper.writeValueAsString(publisherDto))).andExpect(status().isBadRequest());
+        .content(writeValueAsString(publisherDto))).andExpect(status().isBadRequest());
+
+    publisherDto = updatePublisherDto();
+    publisherDto.setPublisherName(null);
+    mvc.perform(put(new URI(PUBLISHERS_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(publisherDto))).andExpect(status().isBadRequest());
+
+    publisherDto = updatePublisherDto();
+    publisherDto.setPublisherName("");
+    mvc.perform(put(new URI(PUBLISHERS_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(publisherDto))).andExpect(status().isBadRequest());
+
+    publisherDto = updatePublisherDto();
+    publisherDto.setPublisherName("  ");
+    mvc.perform(put(new URI(PUBLISHERS_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(publisherDto))).andExpect(status().isBadRequest());
   }
 
   @Test
   public void testUpdatePublisher() throws Exception {
-    PublisherDto publisherDto = new PublisherDto();
-    fillPublisher(publisherDto);
-    publisherDto.setId(ID);
+    PublisherDto publisherDto = updatePublisherDto();
     mvc.perform(put(new URI(PUBLISHERS_URI)).contentType(APPLICATION_JSON)
-        .content(mapper.writeValueAsString(publisherDto))).andExpect(status().isOk());
+        .content(writeValueAsString(publisherDto))).andExpect(status().isOk());
   }
 
   @Test
@@ -99,10 +114,8 @@ public class PublisherApiTest {
     given(publisherService.findAll(any(Pageable.class)))
         .willReturn(new PageImpl<PublisherDto>(Collections.singletonList(expected)));
     MvcResult result = mvc.perform(get(new URI(PUBLISHERS_URI)).contentType(APPLICATION_JSON)
-        .content(mapper.writeValueAsString(pageable))).andExpect(status().isOk()).andReturn();
-    List<PublisherDto> list = mapper.readValue(result.getResponse().getContentAsString(),
-        new TypeReference<List<PublisherDto>>() {
-        });
+        .content(writeValueAsString(pageable))).andExpect(status().isOk()).andReturn();
+    List<PublisherDto> list = readValue(result, new TypeReference<List<PublisherDto>>() {});
     assertThat(list).isNotNull().isNotEmpty();
     assertThat(list.get(0)).isEqualTo(expected);
   }
@@ -112,11 +125,9 @@ public class PublisherApiTest {
     PublisherDto expected = new PublisherDto();
     expected.setId(ID);
     given(publisherService.findOne(eq(ID))).willReturn(Optional.of(expected));
-    MvcResult result = mvc.perform(get(PUBLISHERS_ID_URI, ID)).andExpect(status().isOk())
-        .andReturn();
-    PublisherDto actual = mapper.readValue(result.getResponse().getContentAsString(),
-        new TypeReference<PublisherDto>() {
-        });
+    MvcResult result =
+        mvc.perform(get(PUBLISHERS_ID_URI, ID)).andExpect(status().isOk()).andReturn();
+    PublisherDto actual = readValue(result, new TypeReference<PublisherDto>() {});
     assertThat(actual).isNotNull().isEqualTo(expected);
   }
 

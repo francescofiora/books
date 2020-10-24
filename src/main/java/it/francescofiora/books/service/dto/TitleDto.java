@@ -39,6 +39,7 @@ public class TitleDto extends BaseTitleDto implements Serializable {
   @Valid
   private List<AuthorDto> authors = new ArrayList<>();
 
+  @NotNull
   public PublisherDto getPublisher() {
     return publisher;
   }

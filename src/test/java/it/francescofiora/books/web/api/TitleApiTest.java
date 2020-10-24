@@ -29,19 +29,19 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.francescofiora.books.domain.enumeration.Language;
 import it.francescofiora.books.service.TitleService;
 import it.francescofiora.books.service.dto.TitleDto;
 import it.francescofiora.books.service.dto.BaseTitleDto;
 import it.francescofiora.books.service.dto.NewTitleDto;
+import it.francescofiora.books.service.dto.RefAuthorDto;
 import it.francescofiora.books.service.dto.RefPublisherDto;
 import it.francescofiora.books.service.dto.UpdatebleTitleDto;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = TitleApi.class)
-public class TitleApiTest {
+public class TitleApiTest extends AbstractApiTest {
 
   private static final Long ID = 1L;
   private static final String TITLES_URI = "/api/titles";
@@ -54,22 +54,19 @@ public class TitleApiTest {
   @MockBean
   private TitleService titleService;
 
-  @Autowired
-  private ObjectMapper mapper;
-
   @Test
   public void testCreateTitle() throws Exception {
     NewTitleDto newTitleDto = new NewTitleDto();
     fillTitle(newTitleDto);
     newTitleDto.setPublisher(new RefPublisherDto());
     newTitleDto.getPublisher().setId(1L);
+    newTitleDto.getAuthors().add(new RefAuthorDto());
+    newTitleDto.getAuthors().get(0).setId(ID);
     TitleDto titleDto = new TitleDto();
     titleDto.setId(ID);
     given(titleService.create(any(NewTitleDto.class))).willReturn(titleDto);
-    MvcResult result = mvc
-        .perform(post(new URI(TITLES_URI)).contentType(APPLICATION_JSON)
-            .content(mapper.writeValueAsString(newTitleDto)))
-        .andExpect(status().isCreated()).andReturn();
+    MvcResult result = mvc.perform(post(new URI(TITLES_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(newTitleDto))).andExpect(status().isCreated()).andReturn();
 
     assertThat(result.getResponse().getHeaderValue("location")).isEqualTo(TITLES_URI + "/" + ID);
   }
@@ -82,25 +79,99 @@ public class TitleApiTest {
     titleDto.setPrice(10L);
   }
 
-  @Test
-  public void testUpdateTitleBadRequest() throws Exception {
+  private UpdatebleTitleDto getUpdatebleTitleDto() {
     UpdatebleTitleDto titleDto = new UpdatebleTitleDto();
     fillTitle(titleDto);
     titleDto.setPublisher(new RefPublisherDto());
     titleDto.getPublisher().setId(1L);
+    titleDto.getAuthors().add(new RefAuthorDto());
+    titleDto.getAuthors().get(0).setId(ID);
+    titleDto.setId(ID);
+    
+    return titleDto;
+  }
+  
+  @Test
+  public void testUpdateTitleBadRequest() throws Exception {
+    // Authors
+    UpdatebleTitleDto titleDto = getUpdatebleTitleDto();
+    titleDto.getAuthors().get(0).setId(null);
     mvc.perform(put(new URI(TITLES_URI)).contentType(APPLICATION_JSON)
-        .content(mapper.writeValueAsString(titleDto))).andExpect(status().isBadRequest());
+        .content(writeValueAsString(titleDto))).andExpect(status().isBadRequest());
+
+    titleDto = getUpdatebleTitleDto();
+    titleDto.getAuthors().clear();
+    mvc.perform(put(new URI(TITLES_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(titleDto))).andExpect(status().isBadRequest());
+
+    titleDto = getUpdatebleTitleDto();
+    titleDto.setAuthors(null);
+    mvc.perform(put(new URI(TITLES_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(titleDto))).andExpect(status().isBadRequest());
+
+    // Publisher
+    titleDto = getUpdatebleTitleDto();
+    titleDto.getPublisher().setId(null);
+    mvc.perform(put(new URI(TITLES_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(titleDto))).andExpect(status().isBadRequest());
+
+    titleDto = getUpdatebleTitleDto();
+    titleDto.setPublisher(null);
+    mvc.perform(put(new URI(TITLES_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(titleDto))).andExpect(status().isBadRequest());
+
+    // copyright
+    titleDto = getUpdatebleTitleDto();
+    titleDto.setCopyright(null);
+    mvc.perform(put(new URI(TITLES_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(titleDto))).andExpect(status().isBadRequest());
+
+    // editionNumber
+    titleDto = getUpdatebleTitleDto();
+    titleDto.setEditionNumber(null);
+    mvc.perform(put(new URI(TITLES_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(titleDto))).andExpect(status().isBadRequest());
+
+    // id
+    titleDto = getUpdatebleTitleDto();
+    titleDto.setId(null);
+    mvc.perform(put(new URI(TITLES_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(titleDto))).andExpect(status().isBadRequest());
+
+    // language
+    titleDto = getUpdatebleTitleDto();
+    titleDto.setLanguage(null);
+    mvc.perform(put(new URI(TITLES_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(titleDto))).andExpect(status().isBadRequest());
+
+    // price
+    titleDto = getUpdatebleTitleDto();
+    titleDto.setPrice(null);
+    mvc.perform(put(new URI(TITLES_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(titleDto))).andExpect(status().isBadRequest());
+
+    titleDto = getUpdatebleTitleDto();
+    titleDto.setPrice(0L);
+    mvc.perform(put(new URI(TITLES_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(titleDto))).andExpect(status().isBadRequest());
+
+    // title
+    titleDto = getUpdatebleTitleDto();
+    titleDto.setTitle(null);
+    mvc.perform(put(new URI(TITLES_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(titleDto))).andExpect(status().isBadRequest());
+
+    titleDto = getUpdatebleTitleDto();
+    titleDto.setTitle("  ");
+    mvc.perform(put(new URI(TITLES_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(titleDto))).andExpect(status().isBadRequest());
   }
 
   @Test
   public void testUpdateTitle() throws Exception {
-    UpdatebleTitleDto titleDto = new UpdatebleTitleDto();
-    fillTitle(titleDto);
-    titleDto.setPublisher(new RefPublisherDto());
-    titleDto.getPublisher().setId(1L);
-    titleDto.setId(ID);
+    UpdatebleTitleDto titleDto = getUpdatebleTitleDto();
     mvc.perform(put(new URI(TITLES_URI)).contentType(APPLICATION_JSON)
-        .content(mapper.writeValueAsString(titleDto))).andExpect(status().isOk());
+        .content(writeValueAsString(titleDto))).andExpect(status().isOk());
   }
 
   @Test
@@ -111,10 +182,8 @@ public class TitleApiTest {
     given(titleService.findAll(any(Pageable.class)))
         .willReturn(new PageImpl<TitleDto>(Collections.singletonList(expected)));
     MvcResult result = mvc.perform(get(new URI(TITLES_URI)).contentType(APPLICATION_JSON)
-        .content(mapper.writeValueAsString(pageable))).andExpect(status().isOk()).andReturn();
-    List<TitleDto> list = mapper.readValue(result.getResponse().getContentAsString(),
-        new TypeReference<List<TitleDto>>() {
-        });
+        .content(writeValueAsString(pageable))).andExpect(status().isOk()).andReturn();
+    List<TitleDto> list = readValue(result, new TypeReference<List<TitleDto>>() {});
     assertThat(list).isNotNull().isNotEmpty();
     assertThat(list.get(0)).isEqualTo(expected);
   }
@@ -125,9 +194,7 @@ public class TitleApiTest {
     expected.setId(ID);
     given(titleService.findOne(eq(ID))).willReturn(Optional.of(expected));
     MvcResult result = mvc.perform(get(TITLES_ID_URI, ID)).andExpect(status().isOk()).andReturn();
-    TitleDto actual = mapper.readValue(result.getResponse().getContentAsString(),
-        new TypeReference<TitleDto>() {
-        });
+    TitleDto actual = readValue(result, new TypeReference<TitleDto>() {});
     assertThat(actual).isNotNull().isEqualTo(expected);
   }
 

@@ -5,10 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.io.Serializable;
-
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import org.springframework.validation.annotation.Validated;
 
 @Validated
@@ -21,7 +20,7 @@ public class NewPublisherDto implements Serializable {
   private String publisherName;
 
   @NotBlank
-  @Valid
+  @Size(min = 2)
   public String getPublisherName() {
     return publisherName;
   }
