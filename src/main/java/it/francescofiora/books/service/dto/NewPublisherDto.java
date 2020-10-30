@@ -7,9 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import org.springframework.validation.annotation.Validated;
 
-@Validated
 public class NewPublisherDto implements Serializable {
 
   private static final long serialVersionUID = 1L;

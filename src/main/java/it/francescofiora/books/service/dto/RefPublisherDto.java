@@ -8,9 +8,6 @@ import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
 
-import org.springframework.validation.annotation.Validated;
-
-@Validated
 public class RefPublisherDto {
 
   @Schema(description = "Unique Publisher identifier", example = "1", required = true)

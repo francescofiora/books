@@ -8,9 +8,6 @@ import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
 
-import org.springframework.validation.annotation.Validated;
-
-@Validated
 public class PublisherDto extends NewPublisherDto {
 
   private static final long serialVersionUID = 1L;
