@@ -87,10 +87,90 @@ public class TitleApiTest extends AbstractApiTest {
     titleDto.getAuthors().add(new RefAuthorDto());
     titleDto.getAuthors().get(0).setId(ID);
     titleDto.setId(ID);
-    
+
     return titleDto;
   }
-  
+
+  @Test
+  public void testCreateTitleBadRequest() throws Exception {
+    // Authors
+    NewTitleDto titleDto = getNewTitleDto();
+    titleDto.getAuthors().get(0).setId(null);
+    mvc.perform(post(new URI(TITLES_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(titleDto))).andExpect(status().isBadRequest());
+
+    titleDto = getNewTitleDto();
+    titleDto.getAuthors().clear();
+    mvc.perform(post(new URI(TITLES_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(titleDto))).andExpect(status().isBadRequest());
+
+    titleDto = getNewTitleDto();
+    titleDto.setAuthors(null);
+    mvc.perform(post(new URI(TITLES_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(titleDto))).andExpect(status().isBadRequest());
+
+    // Publisher
+    titleDto = getNewTitleDto();
+    titleDto.getPublisher().setId(null);
+    mvc.perform(post(new URI(TITLES_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(titleDto))).andExpect(status().isBadRequest());
+
+    titleDto = getNewTitleDto();
+    titleDto.setPublisher(null);
+    mvc.perform(post(new URI(TITLES_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(titleDto))).andExpect(status().isBadRequest());
+
+    // copyright
+    titleDto = getNewTitleDto();
+    titleDto.setCopyright(null);
+    mvc.perform(post(new URI(TITLES_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(titleDto))).andExpect(status().isBadRequest());
+
+    // editionNumber
+    titleDto = getNewTitleDto();
+    titleDto.setEditionNumber(null);
+    mvc.perform(post(new URI(TITLES_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(titleDto))).andExpect(status().isBadRequest());
+
+    // language
+    titleDto = getNewTitleDto();
+    titleDto.setLanguage(null);
+    mvc.perform(post(new URI(TITLES_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(titleDto))).andExpect(status().isBadRequest());
+
+    // price
+    titleDto = getNewTitleDto();
+    titleDto.setPrice(null);
+    mvc.perform(post(new URI(TITLES_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(titleDto))).andExpect(status().isBadRequest());
+
+    titleDto = getNewTitleDto();
+    titleDto.setPrice(0L);
+    mvc.perform(post(new URI(TITLES_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(titleDto))).andExpect(status().isBadRequest());
+
+    // title
+    titleDto = getNewTitleDto();
+    titleDto.setTitle(null);
+    mvc.perform(post(new URI(TITLES_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(titleDto))).andExpect(status().isBadRequest());
+
+    titleDto = getNewTitleDto();
+    titleDto.setTitle("  ");
+    mvc.perform(post(new URI(TITLES_URI)).contentType(APPLICATION_JSON)
+        .content(writeValueAsString(titleDto))).andExpect(status().isBadRequest());
+  }
+
+  private NewTitleDto getNewTitleDto() {
+    NewTitleDto newTitleDto = new NewTitleDto();
+    fillTitle(newTitleDto);
+    newTitleDto.setPublisher(new RefPublisherDto());
+    newTitleDto.getPublisher().setId(1L);
+    newTitleDto.getAuthors().add(new RefAuthorDto());
+    newTitleDto.getAuthors().get(0).setId(ID);
+    return newTitleDto;
+  }
+
   @Test
   public void testUpdateTitleBadRequest() throws Exception {
     // Authors

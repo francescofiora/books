@@ -20,6 +20,8 @@ public class UpdatebleTitleDto extends BaseTitleDto implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
+  @Schema(description = "Unique Title identifier", example = "1", required = true)
+  @JsonProperty("id")
   private Long id;
 
   @NotNull
@@ -33,15 +35,14 @@ public class UpdatebleTitleDto extends BaseTitleDto implements Serializable {
 
   @Schema(required = true)
   @JsonProperty("publisher")
-  @Valid
   private RefPublisherDto publisher = new RefPublisherDto();
 
   @Schema(required = true)
   @JsonProperty("authors")
-  @Valid
   private List<RefAuthorDto> authors = new ArrayList<>();
 
   @NotNull
+  @Valid
   public RefPublisherDto getPublisher() {
     return publisher;
   }

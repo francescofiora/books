@@ -26,10 +26,10 @@ public class NewTitleDto extends BaseTitleDto implements Serializable {
 
   @Schema(required = true)
   @JsonProperty("authors")
-  @Valid
   private List<RefAuthorDto> authors = new ArrayList<>();
 
   @NotNull
+  @Valid
   public RefPublisherDto getPublisher() {
     return publisher;
   }

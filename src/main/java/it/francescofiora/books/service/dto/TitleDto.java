@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.validation.annotation.Validated;
@@ -19,8 +20,11 @@ public class TitleDto extends BaseTitleDto implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
+  @Schema(description = "Unique Title identifier", example = "1", required = true)
+  @JsonProperty("id")
   private Long id;
 
+  @NotNull
   public Long getId() {
     return id;
   }
@@ -31,15 +35,14 @@ public class TitleDto extends BaseTitleDto implements Serializable {
 
   @Schema(required = true)
   @JsonProperty("publisher")
-  @Valid
   private PublisherDto publisher = new PublisherDto();
 
   @Schema(required = true)
   @JsonProperty("authors")
-  @Valid
   private List<AuthorDto> authors = new ArrayList<>();
 
   @NotNull
+  @Valid
   public PublisherDto getPublisher() {
     return publisher;
   }
@@ -48,7 +51,7 @@ public class TitleDto extends BaseTitleDto implements Serializable {
     this.publisher = publisher;
   }
 
-  @NotNull
+  @NotEmpty
   @Valid
   public List<AuthorDto> getAuthors() {
     return authors;
