@@ -1,7 +1,6 @@
 package it.francescofiora.books.domain;
 
 import it.francescofiora.books.domain.enumeration.Language;
-
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,12 +18,17 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * Title Entity.
  */
+@Getter
+@Setter
 @Entity
 @Table(name = "title")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -67,29 +71,9 @@ public class Title implements Serializable {
       inverseJoinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"))
   private Set<Author> authors = new HashSet<>();
 
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getTitle() {
-    return title;
-  }
-
   public Title title(String title) {
     this.title = title;
     return this;
-  }
-
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
-  public Long getEditionNumber() {
-    return editionNumber;
   }
 
   public Title editionNumber(Long editionNumber) {
@@ -97,25 +81,9 @@ public class Title implements Serializable {
     return this;
   }
 
-  public void setEditionNumber(Long editionNumber) {
-    this.editionNumber = editionNumber;
-  }
-
-  public Language getLanguage() {
-    return language;
-  }
-
   public Title language(Language language) {
     this.language = language;
     return this;
-  }
-
-  public void setLanguage(Language language) {
-    this.language = language;
-  }
-
-  public Integer getCopyright() {
-    return copyright;
   }
 
   public Title copyright(Integer copyright) {
@@ -123,25 +91,9 @@ public class Title implements Serializable {
     return this;
   }
 
-  public void setCopyright(Integer copyright) {
-    this.copyright = copyright;
-  }
-
-  public String getImageFile() {
-    return imageFile;
-  }
-
   public Title imageFile(String imageFile) {
     this.imageFile = imageFile;
     return this;
-  }
-
-  public void setImageFile(String imageFile) {
-    this.imageFile = imageFile;
-  }
-
-  public Long getPrice() {
-    return price;
   }
 
   public Title price(Long price) {
@@ -149,25 +101,9 @@ public class Title implements Serializable {
     return this;
   }
 
-  public void setPrice(Long price) {
-    this.price = price;
-  }
-
-  public Publisher getPublisher() {
-    return publisher;
-  }
-
   public Title publisher(Publisher publisher) {
     this.publisher = publisher;
     return this;
-  }
-
-  public void setPublisher(Publisher publisher) {
-    this.publisher = publisher;
-  }
-
-  public Set<Author> getAuthors() {
-    return authors;
   }
 
   public Title authors(Set<Author> authors) {
@@ -195,10 +131,6 @@ public class Title implements Serializable {
     this.authors.remove(author);
     author.getTitles().remove(this);
     return this;
-  }
-
-  public void setAuthors(Set<Author> authors) {
-    this.authors = authors;
   }
 
   @Override

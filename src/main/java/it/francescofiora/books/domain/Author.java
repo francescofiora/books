@@ -12,12 +12,17 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * Author Entity.
  */
+@Getter
+@Setter
 @Entity
 @Table(name = "author")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -39,42 +44,14 @@ public class Author implements Serializable {
   @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
   private Set<Title> titles = new HashSet<>();
 
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getFirstName() {
-    return firstName;
-  }
-
   public Author firstName(String firstName) {
     this.firstName = firstName;
     return this;
   }
 
-  public void setFirstName(String firstName) {
-    this.firstName = firstName;
-  }
-
-  public String getLastName() {
-    return lastName;
-  }
-
   public Author lastName(String lastName) {
     this.lastName = lastName;
     return this;
-  }
-
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
-  }
-
-  public Set<Title> getTitles() {
-    return titles;
   }
 
   public Author titles(Set<Title> titles) {
@@ -102,10 +79,6 @@ public class Author implements Serializable {
     this.titles.remove(title);
     title.getAuthors().remove(this);
     return this;
-  }
-
-  public void setTitles(Set<Title> titles) {
-    this.titles = titles;
   }
 
   @Override

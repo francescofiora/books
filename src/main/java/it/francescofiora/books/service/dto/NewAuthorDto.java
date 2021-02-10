@@ -1,45 +1,30 @@
 package it.francescofiora.books.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import io.swagger.v3.oas.annotations.media.Schema;
-
 import java.io.Serializable;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class NewAuthorDto implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
   @Schema(description = "First Name", example = "John", required = true)
   @JsonProperty("firstName")
+  @NotBlank
+  @Size(min = 2)
   private String firstName;
 
   @Schema(description = "Last Name", example = "Smith", required = true)
   @JsonProperty("lastName")
+  @NotBlank
+  @Size(min = 2)
   private String lastName;
-
-  @NotBlank
-  @Size(min = 2)
-  public String getFirstName() {
-    return firstName;
-  }
-
-  public void setFirstName(String firstName) {
-    this.firstName = firstName;
-  }
-
-  @NotBlank
-  @Size(min = 2)
-  public String getLastName() {
-    return lastName;
-  }
-
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
-  }
 
   @Override
   public int hashCode() {

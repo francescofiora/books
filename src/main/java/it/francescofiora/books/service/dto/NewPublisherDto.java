@@ -1,30 +1,24 @@
 package it.francescofiora.books.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import io.swagger.v3.oas.annotations.media.Schema;
-
 import java.io.Serializable;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class NewPublisherDto implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
   @Schema(description = "Publisher Name", example = "Publisher Ltd", required = true)
   @JsonProperty("publisherName")
-  private String publisherName;
-
   @NotBlank
   @Size(min = 2)
-  public String getPublisherName() {
-    return publisherName;
-  }
-
-  public void setPublisherName(String publisherName) {
-    this.publisherName = publisherName;
-  }
+  private String publisherName;
 
   @Override
   public int hashCode() {

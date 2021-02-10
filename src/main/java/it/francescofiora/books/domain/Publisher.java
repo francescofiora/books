@@ -1,7 +1,6 @@
 package it.francescofiora.books.domain;
 
 import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,12 +8,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * Publisher Entity.
  */
+@Getter
+@Setter
 @Entity
 @Table(name = "publisher")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -29,25 +33,9 @@ public class Publisher implements Serializable {
   @Column(name = "publisher_name")
   private String publisherName;
 
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getPublisherName() {
-    return publisherName;
-  }
-
   public Publisher publisherName(String publisherName) {
     this.publisherName = publisherName;
     return this;
-  }
-
-  public void setPublisherName(String publisherName) {
-    this.publisherName = publisherName;
   }
 
   @Override

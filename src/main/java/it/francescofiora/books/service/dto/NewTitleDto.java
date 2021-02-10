@@ -1,17 +1,18 @@
 package it.francescofiora.books.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import io.swagger.v3.oas.annotations.media.Schema;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class NewTitleDto extends BaseTitleDto implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -19,31 +20,14 @@ public class NewTitleDto extends BaseTitleDto implements Serializable {
   @Schema(required = true)
   @JsonProperty("publisher")
   @Valid
+  @NotNull
   private RefPublisherDto publisher = new RefPublisherDto();
 
   @Schema(required = true)
   @JsonProperty("authors")
-  private List<RefAuthorDto> authors = new ArrayList<>();
-
-  @NotNull
-  @Valid
-  public RefPublisherDto getPublisher() {
-    return publisher;
-  }
-
-  public void setPublisher(RefPublisherDto publisher) {
-    this.publisher = publisher;
-  }
-
   @NotEmpty
   @Valid
-  public List<RefAuthorDto> getAuthors() {
-    return authors;
-  }
-
-  public void setAuthors(List<RefAuthorDto> authors) {
-    this.authors = authors;
-  }
+  private List<RefAuthorDto> authors = new ArrayList<>();
 
   @Override
   public int hashCode() {

@@ -14,6 +14,7 @@ Yes, yet another tutorial with "book, author and publisher" as entity.
     - Repositories using DataJpaTest
     - Services using Mockito
     - EndPoints using WebMvcTest
+    - Pojos and Dtos using OpenPojo
 - JMX
 - Eclipse support
 
@@ -65,13 +66,15 @@ https://localhost:8081/books/swagger-ui.html
 # Technologies used
 - [Gradle 6.3](https://gradle.org/)
 - [Java 8](http://www.oracle.com/technetwork/java/javaee/overview/index.html)
-- [Spring Boot 2.3](https://spring.io/projects/spring-boot)
+- [Spring Boot 2.4](https://spring.io/projects/spring-boot)
 - [Spring Security](https://spring.io/projects/spring-security)
 - [Swagger OpeApi 3.0](https://swagger.io/specification/)
 - [Mapstruct 1.3](https://mapstruct.org/)
+- [Lombok 1.18](https://projectlombok.org/)
 - [Spring Data JPA](https://projects.spring.io/spring-data-jpa)
 - [Mysql connector 8.0](https://www.mysql.com/products/connector/)
 - [HsqlDb](http://hsqldb.org/)
 - [LogBack 1.2](https://logback.qos.ch/)
 - [Mockito](https://site.mockito.org/)
 - [JUnit 5](https://junit.org/junit5/)
+- [OpenPojo 0.8](https://github.com/OpenPojo)
