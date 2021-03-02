@@ -4,12 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
-import it.francescofiora.books.TestUtil;
-
 public class RefAuthorDtoTest {
   @Test
   public void dtoEqualsVerifier() throws Exception {
-    TestUtil.equalsVerifier(AuthorDto.class);
     RefAuthorDto refAuthorDto1 = new RefAuthorDto();
     refAuthorDto1.setId(1L);
     RefAuthorDto refAuthorDto2 = new RefAuthorDto();

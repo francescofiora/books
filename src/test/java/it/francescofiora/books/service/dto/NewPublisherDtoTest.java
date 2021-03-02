@@ -1,22 +1,19 @@
 package it.francescofiora.books.service.dto;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.jupiter.api.Test;
 
-public class PublisherDtoTest {
+public class NewPublisherDtoTest {
 
   @Test
   public void dtoEqualsVerifier() throws Exception {
-    PublisherDto publisherDto1 = new PublisherDto();
-    publisherDto1.setId(1L);
-    PublisherDto publisherDto2 = new PublisherDto();
+    NewPublisherDto publisherDto1 = new NewPublisherDto();
+    publisherDto1.setPublisherName("Name");
+    NewPublisherDto publisherDto2 = new NewPublisherDto();
     assertThat(publisherDto1).isNotEqualTo(publisherDto2);
-    publisherDto2.setId(publisherDto1.getId());
+    publisherDto2.setPublisherName(publisherDto1.getPublisherName());
     assertThat(publisherDto1).isEqualTo(publisherDto2);
-    publisherDto2.setId(2L);
-    assertThat(publisherDto1).isNotEqualTo(publisherDto2);
-    publisherDto1.setId(null);
+    publisherDto1.setPublisherName(null);
     assertThat(publisherDto1).isNotEqualTo(publisherDto2);
   }
 }

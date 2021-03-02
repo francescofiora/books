@@ -1,4 +1,4 @@
-package it.francescofiora.books;
+package it.francescofiora.books.util;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,12 +21,10 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 /**
  * Utility class for testing REST controllers.
  */
-public final class TestUtil {
+public final class TestUtils {
 
   private static final ObjectMapper mapper = createObjectMapper();
 
@@ -110,25 +108,6 @@ public final class TestUtil {
   }
 
   /**
-   * Verifies the equals/hashcode contract on the domain object.
-   */
-  public static <T> void equalsVerifier(Class<T> clazz) throws Exception {
-    T domainObject1 = clazz.getConstructor().newInstance();
-    assertThat(domainObject1.toString()).isNotNull();
-    assertThat(domainObject1).isEqualTo(domainObject1);
-    assertThat(domainObject1.hashCode()).isEqualTo(domainObject1.hashCode());
-    // Test with an instance of another class
-    Object testOtherObject = new Object();
-    assertThat(domainObject1).isNotEqualTo(testOtherObject);
-    assertThat(domainObject1).isNotEqualTo(null);
-    // Test with an instance of the same class
-    T domainObject2 = clazz.getConstructor().newInstance();
-    assertThat(domainObject1).isNotEqualTo(domainObject2);
-    // HashCodes are equals because the objects are not persisted yet
-    assertThat(domainObject1.hashCode()).isEqualTo(domainObject2.hashCode());
-  }
-
-  /**
    * Create a {@link FormattingConversionService} which use ISO date format,
    * instead of the localized one.
    * 
@@ -159,6 +138,6 @@ public final class TestUtil {
     return allQuery.getResultList();
   }
 
-  private TestUtil() {
+  private TestUtils() {
   }
 }

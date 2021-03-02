@@ -2,13 +2,11 @@ package it.francescofiora.books.domain;
 
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
-import it.francescofiora.books.TestUtil;
 
 public class TitleTest {
 
   @Test
   public void equalsVerifier() throws Exception {
-    TestUtil.equalsVerifier(Title.class);
     Title title1 = new Title();
     title1.setId(1L);
     Title title2 = new Title();

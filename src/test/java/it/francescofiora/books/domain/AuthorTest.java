@@ -2,13 +2,11 @@ package it.francescofiora.books.domain;
 
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
-import it.francescofiora.books.TestUtil;
 
 public class AuthorTest {
 
   @Test
   public void equalsVerifier() throws Exception {
-    TestUtil.equalsVerifier(Author.class);
     Author author1 = new Author();
     author1.setId(1L);
     Author author2 = new Author();

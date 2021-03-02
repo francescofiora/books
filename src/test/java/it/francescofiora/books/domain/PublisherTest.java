@@ -2,13 +2,11 @@ package it.francescofiora.books.domain;
 
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
-import it.francescofiora.books.TestUtil;
 
 public class PublisherTest {
 
   @Test
   public void equalsVerifier() throws Exception {
-    TestUtil.equalsVerifier(Publisher.class);
     Publisher publisher1 = new Publisher();
     publisher1.setId(1L);
     Publisher publisher2 = new Publisher();
