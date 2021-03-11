@@ -3,6 +3,7 @@ package it.francescofiora.books.service.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
+import java.util.Objects;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import lombok.Getter;
@@ -22,10 +23,7 @@ public class NewPublisherDto implements Serializable {
 
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((publisherName == null) ? 0 : publisherName.hashCode());
-    return result;
+    return Objects.hashCode(getPublisherName());
   }
 
   @Override

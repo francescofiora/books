@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -31,17 +32,8 @@ public class NewTitleDto extends BaseTitleDto implements Serializable {
 
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((authors == null) ? 0 : authors.hashCode());
-    result = prime * result + ((getCopyright() == null) ? 0 : getCopyright().hashCode());
-    result = prime * result + ((getEditionNumber() == null) ? 0 : getEditionNumber().hashCode());
-    result = prime * result + ((getImageFile() == null) ? 0 : getImageFile().hashCode());
-    result = prime * result + ((getLanguage() == null) ? 0 : getLanguage().hashCode());
-    result = prime * result + ((getPrice() == null) ? 0 : getPrice().hashCode());
-    result = prime * result + ((getPublisher() == null) ? 0 : getPublisher().hashCode());
-    result = prime * result + ((getTitle() == null) ? 0 : getTitle().hashCode());
-    return result;
+    return Objects.hash(getAuthors(), getCopyright(), getEditionNumber(), getImageFile(),
+        getLanguage(), getPrice(), getPublisher(), getTitle());
   }
 
   @Override

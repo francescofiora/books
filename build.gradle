@@ -1,9 +1,10 @@
 plugins {
-	id 'java'
-	id 'eclipse-wtp'
-	id 'org.springframework.boot' version '2.4.2'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'checkstyle'
+  id 'java'
+  id 'eclipse-wtp'
+  id 'org.springframework.boot' version '2.4.2'
+  id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+  id 'checkstyle'
+  id 'jacoco'
 }
 
 sourceCompatibility = 1.8
@@ -31,21 +32,21 @@ dependencies {
   implementation 'org.springframework.boot:spring-boot-starter-web'
   implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
   implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-devtools'
+  implementation 'org.springframework.boot:spring-boot-starter-security'
+  implementation 'org.springframework.boot:spring-boot-devtools'
 
-	implementation "ch.qos.logback:logback-classic:${logback_version}"
+  implementation "ch.qos.logback:logback-classic:${logback_version}"
 
   implementation "org.apache.commons:commons-lang3:${commons_lang_version}"
   implementation "org.apache.commons:commons-collections4:${commons_collections_version}"
-	
-	implementation "org.springdoc:springdoc-openapi-ui:${springdoc_openapi_version}"
-	implementation "org.springdoc:springdoc-openapi-data-rest:${springdoc_openapi_version}"
-	
+
+  implementation "org.springdoc:springdoc-openapi-ui:${springdoc_openapi_version}"
+  implementation "org.springdoc:springdoc-openapi-data-rest:${springdoc_openapi_version}"
+
   implementation "org.projectlombok:lombok:${lombok_version}"
   implementation "org.mapstruct:mapstruct:${mapstruct_version}"
 
-	implementation "mysql:mysql-connector-java:${mysql_connector_version}"
+  implementation "mysql:mysql-connector-java:${mysql_connector_version}"
 
   annotationProcessor "org.projectlombok:lombok:${lombok_version}"
   annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
@@ -123,6 +124,11 @@ checkstyleMain {
 
 test {
   useJUnitPlatform()
+  finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+  dependsOn test
 }
 
 wrapper {
