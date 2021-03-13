@@ -8,9 +8,7 @@ import it.francescofiora.books.service.dto.PublisherDto;
 import it.francescofiora.books.service.mapper.NewPublisherMapper;
 import it.francescofiora.books.service.mapper.PublisherMapper;
 import it.francescofiora.books.web.errors.NotFoundAlertException;
-
 import java.util.Optional;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;

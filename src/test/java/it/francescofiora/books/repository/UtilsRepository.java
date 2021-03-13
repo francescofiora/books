@@ -4,65 +4,101 @@ import it.francescofiora.books.domain.Author;
 import it.francescofiora.books.domain.Publisher;
 import it.francescofiora.books.domain.Title;
 import it.francescofiora.books.domain.enumeration.Language;
+import java.util.Objects;
 
 public class UtilsRepository {
 
   public static Author createAuthor1() {
-    return new Author().firstName("John").lastName("Smith");
+    Author author = new Author();
+    author.setFirstName("John");
+    author.setLastName("Smith");
+    return author;
   }
 
   public static Author createAuthor2() {
-    return new Author().firstName("Sophia").lastName("Brown");
+    Author author = new Author();
+    author.setFirstName("Sophia");
+    author.setLastName("Brown");
+    return author;
   }
 
   public static Author createAuthor3() {
-    return new Author().firstName("William").lastName("Wilson");
+    Author author = new Author();
+    author.setFirstName("William");
+    author.setLastName("Wilson");
+    return author;
   }
 
   public static boolean assertEquals(Author expected, Author actual) {
-    return expected.getFirstName().equals(actual.getFirstName())
-        && expected.getLastName().equals(actual.getLastName());
+    return Objects.equals(expected.getFirstName(), actual.getFirstName())
+        && Objects.equals(expected.getLastName(), actual.getLastName());
   }
 
   public static Publisher createPublisher1() {
-    return new Publisher().publisherName("Small Publisher Ltd");
+    Publisher publisher = new Publisher();
+    publisher.setPublisherName("Small Publisher Ltd");
+    return publisher;
   }
 
   public static Publisher createPublisher2() {
-    return new Publisher().publisherName("Publisher Ltd");
+    Publisher publisher = new Publisher();
+    publisher.setPublisherName("Publisher Ltd");
+    return publisher;
   }
 
   public static Publisher createPublisher3() {
-    return new Publisher().publisherName("Big Publisher Ltd");
+    Publisher publisher = new Publisher();
+    publisher.setPublisherName("Big Publisher Ltd");
+    return publisher;
   }
 
   public static boolean assertEquals(Publisher expected, Publisher actual) {
-    return expected.getPublisherName().equals(actual.getPublisherName());
+    return Objects.equals(expected.getPublisherName(), actual.getPublisherName());
   }
 
   public static Title createTitle1() {
-    return new Title().addAuthor(createAuthor1()).copyright(2020).editionNumber(1L)
-        .imageFile("image.jpg").language(Language.ENGLISH).price(10L).publisher(createPublisher1())
-        .title("The Book");
+    Title title = new Title();
+    title.getAuthors().add(createAuthor1());
+    title.setCopyright(2020);
+    title.setEditionNumber(1L);
+    title.setImageFile("image.jpg");
+    title.setLanguage(Language.ENGLISH);
+    title.setPrice(10L);
+    title.setPublisher(createPublisher1());
+    title.setTitle("The Book");
+    return title;
   }
 
   public static Title createTitle2() {
-    return new Title().addAuthor(createAuthor2()).copyright(2019).editionNumber(2L)
-        .imageFile("image.gif").language(Language.ITALIAN).price(12L).publisher(createPublisher2())
-        .title("The Big Book");
+    Title title = new Title();
+    title.getAuthors().add(createAuthor2());
+    title.setCopyright(2019);
+    title.setEditionNumber(2L);
+    title.setImageFile("image.gif");
+    title.setLanguage(Language.ITALIAN);
+    title.setPrice(12L);
+    title.setPublisher(createPublisher2());
+    title.setTitle("The Big Book");
+    return title;
   }
 
   public static Title createTitle3() {
-    return new Title().copyright(2018).editionNumber(3L).imageFile("image00.gif")
-        .language(Language.SPANISH).price(12L).title("The Small Book");
+    Title title = new Title();
+    title.setCopyright(2018);
+    title.setEditionNumber(3L);
+    title.setImageFile("image00.gif");
+    title.setLanguage(Language.SPANISH);
+    title.setPrice(12L);
+    title.setTitle("The Small Book");
+    return title;
   }
 
   public static boolean assertEquals(Title expecteted, Title actual) {
-    return expecteted.getCopyright().equals(actual.getCopyright())
-        && expecteted.getEditionNumber().equals(actual.getEditionNumber())
-        && expecteted.getImageFile().equals(actual.getImageFile())
-        && expecteted.getLanguage().equals(actual.getLanguage())
-        && expecteted.getPrice().equals(actual.getPrice())
-        && expecteted.getTitle().equals(actual.getTitle());
+    return Objects.equals(expecteted.getCopyright(), actual.getCopyright())
+        && Objects.equals(expecteted.getEditionNumber(), actual.getEditionNumber())
+        && Objects.equals(expecteted.getImageFile(), actual.getImageFile())
+        && Objects.equals(expecteted.getLanguage(), actual.getLanguage())
+        && Objects.equals(expecteted.getPrice(), actual.getPrice())
+        && Objects.equals(expecteted.getTitle(), actual.getTitle());
   }
 }

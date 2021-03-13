@@ -41,66 +41,18 @@ public class NewTitleDto extends BaseTitleDto implements Serializable {
     if (this == obj) {
       return true;
     }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
+    if (obj == null || getClass() != obj.getClass()) {
       return false;
     }
     NewTitleDto other = (NewTitleDto) obj;
-    if (authors == null) {
-      if (other.authors != null) {
-        return false;
-      }
-    } else if (!authors.equals(other.authors)) {
-      return false;
-    }
-    if (getCopyright() == null) {
-      if (other.getCopyright() != null) {
-        return false;
-      }
-    } else if (!getCopyright().equals(other.getCopyright())) {
-      return false;
-    }
-    if (getEditionNumber() == null) {
-      if (other.getEditionNumber() != null) {
-        return false;
-      }
-    } else if (!getEditionNumber().equals(other.getEditionNumber())) {
-      return false;
-    }
-    if (getImageFile() == null) {
-      if (other.getImageFile() != null) {
-        return false;
-      }
-    } else if (!getImageFile().equals(other.getImageFile())) {
-      return false;
-    }
-    if (getLanguage() != other.getLanguage()) {
-      return false;
-    }
-    if (getPrice() == null) {
-      if (other.getPrice() != null) {
-        return false;
-      }
-    } else if (!getPrice().equals(other.getPrice())) {
-      return false;
-    }
-    if (getPublisher() == null) {
-      if (other.getPublisher() != null) {
-        return false;
-      }
-    } else if (!getPublisher().equals(other.getPublisher())) {
-      return false;
-    }
-    if (getTitle() == null) {
-      if (other.getTitle() != null) {
-        return false;
-      }
-    } else if (!getTitle().equals(other.getTitle())) {
-      return false;
-    }
-    return true;
+    return Objects.equals(getAuthors(), other.getAuthors())
+        && Objects.equals(getCopyright(), other.getCopyright())
+        && Objects.equals(getEditionNumber(), other.getEditionNumber())
+        && Objects.equals(getImageFile(), other.getImageFile())
+        && Objects.equals(getLanguage(), other.getLanguage())
+        && Objects.equals(getPrice(), other.getPrice())
+        && Objects.equals(getPublisher(), other.getPublisher())
+        && Objects.equals(getTitle(), other.getTitle());
   }
 
   @Override

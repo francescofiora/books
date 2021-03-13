@@ -1,13 +1,9 @@
 package it.francescofiora.books.web.errors;
 
 import io.swagger.v3.oas.annotations.Hidden;
-
 import it.francescofiora.books.web.util.HeaderUtil;
-
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.boot.autoconfigure.web.servlet.error.AbstractErrorController;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;

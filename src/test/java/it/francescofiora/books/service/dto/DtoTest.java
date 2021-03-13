@@ -16,7 +16,7 @@ import it.francescofiora.books.util.FilterPackageInfo;
 
 public class DtoTest {
   // Configured for expectation, so we know when a class gets added or removed.
-  private static final int EXPECTED_CLASS_COUNT = 10;
+  private static final int EXPECTED_CLASS_COUNT = 9;
 
   // The package to test
   private static final String DTO_PACKAGE = "it.francescofiora.books.service.dto";
@@ -30,12 +30,14 @@ public class DtoTest {
 
   @Test
   public void testPojoStructureAndBehavior() {
+    // @formatter:off
     Validator validator = ValidatorBuilder.create()
         .with(new GetterMustExistRule())
         .with(new SetterMustExistRule())
         .with(new SetterTester())
         .with(new GetterTester())
         .with(new DtoEqualsTester()).build();
+    // @formatter:on
 
     validator.validate(DTO_PACKAGE, new FilterPackageInfo());
   }

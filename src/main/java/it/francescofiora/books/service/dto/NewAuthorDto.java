@@ -37,28 +37,12 @@ public class NewAuthorDto implements Serializable {
     if (this == obj) {
       return true;
     }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
+    if (obj == null || getClass() != obj.getClass()) {
       return false;
     }
     NewAuthorDto other = (NewAuthorDto) obj;
-    if (firstName == null) {
-      if (other.firstName != null) {
-        return false;
-      }
-    } else if (!firstName.equals(other.firstName)) {
-      return false;
-    }
-    if (lastName == null) {
-      if (other.lastName != null) {
-        return false;
-      }
-    } else if (!lastName.equals(other.lastName)) {
-      return false;
-    }
-    return true;
+    return Objects.equals(getFirstName(), other.getFirstName())
+        && Objects.equals(getLastName(), other.getLastName());
   }
 
   @Override

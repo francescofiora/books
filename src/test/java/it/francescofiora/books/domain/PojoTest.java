@@ -30,12 +30,14 @@ public class PojoTest {
 
   @Test
   public void testPojoStructureAndBehavior() {
+    // @formatter:off
     Validator validator = ValidatorBuilder.create()
         .with(new GetterMustExistRule())
         .with(new SetterMustExistRule())
         .with(new SetterTester())
         .with(new GetterTester())
         .with(new PojoEqualsTester()).build();
+    // @formatter:on
 
     validator.validate(POJO_PACKAGE, new FilterPackageInfo());
   }

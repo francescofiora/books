@@ -3,9 +3,7 @@ package it.francescofiora.books.domain;
 import it.francescofiora.books.domain.enumeration.Language;
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -18,10 +16,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
 import lombok.Getter;
 import lombok.Setter;
-
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -33,7 +29,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "title")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Title implements Serializable {
+public class Title extends AbstractDomain implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
@@ -71,84 +67,6 @@ public class Title implements Serializable {
       joinColumns = @JoinColumn(name = "title_id", referencedColumnName = "id"),
       inverseJoinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"))
   private Set<Author> authors = new HashSet<>();
-
-  public Title title(String title) {
-    this.title = title;
-    return this;
-  }
-
-  public Title editionNumber(Long editionNumber) {
-    this.editionNumber = editionNumber;
-    return this;
-  }
-
-  public Title language(Language language) {
-    this.language = language;
-    return this;
-  }
-
-  public Title copyright(Integer copyright) {
-    this.copyright = copyright;
-    return this;
-  }
-
-  public Title imageFile(String imageFile) {
-    this.imageFile = imageFile;
-    return this;
-  }
-
-  public Title price(Long price) {
-    this.price = price;
-    return this;
-  }
-
-  public Title publisher(Publisher publisher) {
-    this.publisher = publisher;
-    return this;
-  }
-
-  public Title authors(Set<Author> authors) {
-    this.authors = authors;
-    return this;
-  }
-
-  /**
-   * add a new Author.
-   * @param author Author
-   * @return Author
-   */
-  public Title addAuthor(Author author) {
-    this.authors.add(author);
-    author.getTitles().add(this);
-    return this;
-  }
-
-  /**
-   * remove an Author.
-   * @param author Author
-   * @return Author
-   */
-  public Title removeAuthor(Author author) {
-    this.authors.remove(author);
-    author.getTitles().remove(this);
-    return this;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (!(o instanceof Title)) {
-      return false;
-    }
-    return id != null && id.equals(((Title) o).id);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hashCode(id);
-  }
 
   @Override
   public String toString() {

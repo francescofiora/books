@@ -32,6 +32,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 import it.francescofiora.books.service.PublisherService;
 import it.francescofiora.books.service.dto.PublisherDto;
+import it.francescofiora.books.util.TestUtils;
 import it.francescofiora.books.service.dto.NewPublisherDto;
 
 @ExtendWith(SpringExtension.class)
@@ -51,11 +52,8 @@ public class PublisherApiTest extends AbstractApiTest {
 
   @Test
   public void testCreatePublisher() throws Exception {
-    NewPublisherDto newPublisherDto = new NewPublisherDto();
-    fillPublisher(newPublisherDto);
-
-    PublisherDto publisherDto = new PublisherDto();
-    publisherDto.setId(ID);
+    NewPublisherDto newPublisherDto = TestUtils.createNewPublisherDto();
+    PublisherDto publisherDto = TestUtils.createPublisherDto(ID);
     given(publisherService.create(any(NewPublisherDto.class))).willReturn(publisherDto);
     MvcResult result = mvc
         .perform(post(new URI(PUBLISHERS_URI)).contentType(APPLICATION_JSON)
@@ -65,35 +63,23 @@ public class PublisherApiTest extends AbstractApiTest {
         .isEqualTo(PUBLISHERS_URI + "/" + ID);
   }
 
-  private void fillPublisher(NewPublisherDto publisherDto) {
-    publisherDto.setPublisherName("Publisher Ltd");
-  }
-
-  private PublisherDto updatePublisherDto() {
-    PublisherDto publisherDto = new PublisherDto();
-    fillPublisher(publisherDto);
-    publisherDto.setId(ID);
-    return publisherDto;
-  }
-
   @Test
   public void testUpdatePublisherBadRequest() throws Exception {
-    PublisherDto publisherDto = updatePublisherDto();
-    publisherDto.setId(null);
+    PublisherDto publisherDto = TestUtils.createPublisherDto(null);
     mvc.perform(put(new URI(PUBLISHERS_URI)).contentType(APPLICATION_JSON)
         .content(writeValueAsString(publisherDto))).andExpect(status().isBadRequest());
 
-    publisherDto = updatePublisherDto();
+    publisherDto = TestUtils.createPublisherDto(ID);
     publisherDto.setPublisherName(null);
     mvc.perform(put(new URI(PUBLISHERS_URI)).contentType(APPLICATION_JSON)
         .content(writeValueAsString(publisherDto))).andExpect(status().isBadRequest());
 
-    publisherDto = updatePublisherDto();
+    publisherDto = TestUtils.createPublisherDto(ID);
     publisherDto.setPublisherName("");
     mvc.perform(put(new URI(PUBLISHERS_URI)).contentType(APPLICATION_JSON)
         .content(writeValueAsString(publisherDto))).andExpect(status().isBadRequest());
 
-    publisherDto = updatePublisherDto();
+    publisherDto = TestUtils.createPublisherDto(ID);
     publisherDto.setPublisherName("  ");
     mvc.perform(put(new URI(PUBLISHERS_URI)).contentType(APPLICATION_JSON)
         .content(writeValueAsString(publisherDto))).andExpect(status().isBadRequest());
@@ -101,7 +87,7 @@ public class PublisherApiTest extends AbstractApiTest {
 
   @Test
   public void testUpdatePublisher() throws Exception {
-    PublisherDto publisherDto = updatePublisherDto();
+    PublisherDto publisherDto = TestUtils.createPublisherDto(ID);
     mvc.perform(put(new URI(PUBLISHERS_URI)).contentType(APPLICATION_JSON)
         .content(writeValueAsString(publisherDto))).andExpect(status().isOk());
   }
@@ -109,8 +95,7 @@ public class PublisherApiTest extends AbstractApiTest {
   @Test
   public void testGetAllPublishers() throws Exception {
     Pageable pageable = PageRequest.of(1, 1);
-    PublisherDto expected = new PublisherDto();
-    expected.setId(ID);
+    PublisherDto expected = TestUtils.createPublisherDto(ID);
     given(publisherService.findAll(any(Pageable.class)))
         .willReturn(new PageImpl<PublisherDto>(Collections.singletonList(expected)));
     MvcResult result = mvc.perform(get(new URI(PUBLISHERS_URI)).contentType(APPLICATION_JSON)
@@ -122,8 +107,7 @@ public class PublisherApiTest extends AbstractApiTest {
 
   @Test
   public void testGetPublisher() throws Exception {
-    PublisherDto expected = new PublisherDto();
-    expected.setId(ID);
+    PublisherDto expected = TestUtils.createPublisherDto(ID);
     given(publisherService.findOne(eq(ID))).willReturn(Optional.of(expected));
     MvcResult result =
         mvc.perform(get(PUBLISHERS_ID_URI, ID)).andExpect(status().isOk()).andReturn();

@@ -1,7 +1,6 @@
 package it.francescofiora.books.web.errors;
 
 import it.francescofiora.books.web.util.HeaderUtil;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

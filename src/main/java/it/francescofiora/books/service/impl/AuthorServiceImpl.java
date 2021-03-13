@@ -10,10 +10,8 @@ import it.francescofiora.books.service.mapper.AuthorMapper;
 import it.francescofiora.books.service.mapper.NewAuthorMapper;
 import it.francescofiora.books.service.mapper.TitleMapper;
 import it.francescofiora.books.web.errors.NotFoundAlertException;
-
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;

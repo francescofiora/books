@@ -31,21 +31,10 @@ public class NewPublisherDto implements Serializable {
     if (this == obj) {
       return true;
     }
-    if (obj == null) { 
+    if (obj == null || getClass() != obj.getClass()) {
       return false;
     }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    NewPublisherDto other = (NewPublisherDto) obj;
-    if (publisherName == null) {
-      if (other.publisherName != null) {
-        return false;
-      }
-    } else if (!publisherName.equals(other.publisherName)) {
-      return false;
-    }
-    return true;
+    return Objects.equals(getPublisherName(), ((NewPublisherDto) obj).getPublisherName());
   }
 
   @Override

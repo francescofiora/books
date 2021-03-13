@@ -9,9 +9,7 @@ import it.francescofiora.books.service.dto.UpdatebleTitleDto;
 import it.francescofiora.books.service.mapper.NewTitleMapper;
 import it.francescofiora.books.service.mapper.TitleMapper;
 import it.francescofiora.books.web.errors.NotFoundAlertException;
-
 import java.util.Optional;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;

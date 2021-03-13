@@ -2,7 +2,6 @@ package it.francescofiora.books.service.mapper;
 
 import it.francescofiora.books.domain.Publisher;
 import it.francescofiora.books.service.dto.RefPublisherDto;
-
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -10,13 +9,14 @@ import org.mapstruct.Mapping;
  * Mapper for the entity {@link Publisher} and its DTO {@link RefPublisherDto}.
  */
 @Mapper(componentModel = "spring", uses = {})
-public interface RefPublisherMapper extends EntityMapper<RefPublisherDto, Publisher> {
+public interface RefPublisherMapper {
 
   @Mapping(target = "publisherName", ignore = true)
   Publisher toEntity(RefPublisherDto dto);
 
   /**
    * create Publisher from id.
+   *
    * @param id id
    * @return Publisher
    */

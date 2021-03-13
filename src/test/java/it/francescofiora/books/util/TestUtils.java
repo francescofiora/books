@@ -1,143 +1,101 @@
 package it.francescofiora.books.util;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.hamcrest.Description;
-import org.hamcrest.TypeSafeDiagnosingMatcher;
-import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
-import org.springframework.format.support.DefaultFormattingConversionService;
-import org.springframework.format.support.FormattingConversionService;
-
-import java.io.IOException;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeParseException;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import it.francescofiora.books.domain.enumeration.Language;
+import it.francescofiora.books.service.dto.AuthorDto;
+import it.francescofiora.books.service.dto.NewAuthorDto;
+import it.francescofiora.books.service.dto.NewPublisherDto;
+import it.francescofiora.books.service.dto.NewTitleDto;
+import it.francescofiora.books.service.dto.PublisherDto;
+import it.francescofiora.books.service.dto.RefAuthorDto;
+import it.francescofiora.books.service.dto.RefPublisherDto;
+import it.francescofiora.books.service.dto.TitleDto;
+import it.francescofiora.books.service.dto.UpdatebleTitleDto;
 
 /**
- * Utility class for testing REST controllers.
+ * Utility class for testing.
  */
 public final class TestUtils {
 
-  private static final ObjectMapper mapper = createObjectMapper();
-
-  private static ObjectMapper createObjectMapper() {
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.configure(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS, false);
-    mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-    mapper.registerModule(new JavaTimeModule());
-    return mapper;
+  public static AuthorDto createAuthorDto(final Long id) {
+    AuthorDto authorDto = new AuthorDto();
+    authorDto.setId(id);
+    authorDto.setFirstName("John");
+    authorDto.setLastName("Smith");
+    return authorDto;
   }
 
-  /**
-   * Convert an object to JSON byte array.
-   *
-   * @param object the object to convert.
-   * @return the JSON byte array.
-   * @throws IOException
-   */
-  public static byte[] convertObjectToJsonBytes(Object object) throws IOException {
-    return mapper.writeValueAsBytes(object);
+  public static PublisherDto createPublisherDto(final Long id) {
+    PublisherDto publisherDto = new PublisherDto();
+    publisherDto.setId(id);
+    publisherDto.setPublisherName("Peter");
+    return publisherDto;
   }
 
-  /**
-   * Create a byte array with a specific size filled with specified data.
-   *
-   * @param size the size of the byte array.
-   * @param data the data to put in the byte array.
-   * @return the JSON byte array.
-   */
-  public static byte[] createByteArray(int size, String data) {
-    byte[] byteArray = new byte[size];
-    for (int i = 0; i < size; i++) {
-      byteArray[i] = Byte.parseByte(data, 2);
-    }
-    return byteArray;
+  public static NewAuthorDto createNewAuthorDto() {
+    NewAuthorDto authorDto = new NewAuthorDto();
+    authorDto.setFirstName("John");
+    authorDto.setLastName("Smith");
+    return authorDto;
   }
 
-  /**
-   * A matcher that tests that the examined string represents the same instant as
-   * the reference datetime.
-   */
-  public static class ZonedDateTimeMatcher extends TypeSafeDiagnosingMatcher<String> {
-
-    private final ZonedDateTime date;
-
-    public ZonedDateTimeMatcher(ZonedDateTime date) {
-      this.date = date;
-    }
-
-    @Override
-    protected boolean matchesSafely(String item, Description mismatchDescription) {
-      try {
-        if (!date.isEqual(ZonedDateTime.parse(item))) {
-          mismatchDescription.appendText("was ").appendValue(item);
-          return false;
-        }
-        return true;
-      } catch (DateTimeParseException e) {
-        mismatchDescription.appendText("was ").appendValue(item)
-            .appendText(", which could not be parsed as a ZonedDateTime");
-        return false;
-      }
-
-    }
-
-    @Override
-    public void describeTo(Description description) {
-      description.appendText("a String representing the same Instant as ").appendValue(date);
-    }
+  public static NewPublisherDto createNewPublisherDto() {
+    NewPublisherDto publisherDto = new NewPublisherDto();
+    publisherDto.setPublisherName("Name");
+    return publisherDto;
   }
 
-  /**
-   * Creates a matcher that matches when the examined string represents the same
-   * instant as the reference datetime.
-   *
-   * @param date the reference datetime against which the examined string is
-   *             checked.
-   */
-  public static ZonedDateTimeMatcher sameInstant(ZonedDateTime date) {
-    return new ZonedDateTimeMatcher(date);
+  public static NewTitleDto createNewTitleDto() {
+    NewTitleDto titleDto = new NewTitleDto();
+    titleDto.setTitle("Title");
+    titleDto.setCopyright(2020);
+    titleDto.setEditionNumber(10L);
+    titleDto.setImageFile("path_image");
+    titleDto.setLanguage(Language.ENGLISH);
+    titleDto.setPrice(10L);
+    titleDto.setPublisher(createRefPublisherDto(1L));
+    titleDto.getAuthors().add(createRefAuthorDto(1L));
+    return titleDto;
+  }
+  
+  public static RefAuthorDto createRefAuthorDto(final Long id) {
+    RefAuthorDto authorDto = new RefAuthorDto();
+    authorDto.setId(id);
+    return authorDto;
   }
 
-  /**
-   * Create a {@link FormattingConversionService} which use ISO date format,
-   * instead of the localized one.
-   * 
-   * @return the {@link FormattingConversionService}.
-   */
-  public static FormattingConversionService createFormattingConversionService() {
-    DefaultFormattingConversionService dfcs = new DefaultFormattingConversionService();
-    DateTimeFormatterRegistrar registrar = new DateTimeFormatterRegistrar();
-    registrar.setUseIsoFormat(true);
-    registrar.registerFormatters(dfcs);
-    return dfcs;
+  public static RefPublisherDto createRefPublisherDto(final Long id) {
+    RefPublisherDto publisherDto = new RefPublisherDto();
+    publisherDto.setId(id);
+    return publisherDto;
   }
 
-  /**
-   * Makes a an executes a query to the EntityManager finding all stored objects.
-   * 
-   * @param <T>  The type of objects to be searched
-   * @param em   The instance of the EntityManager
-   * @param clss The class type to be searched
-   * @return A list of all found objects
-   */
-  public static <T> List<T> findAll(EntityManager em, Class<T> clss) {
-    CriteriaBuilder cb = em.getCriteriaBuilder();
-    CriteriaQuery<T> cq = cb.createQuery(clss);
-    Root<T> rootEntry = cq.from(clss);
-    CriteriaQuery<T> all = cq.select(rootEntry);
-    TypedQuery<T> allQuery = em.createQuery(all);
-    return allQuery.getResultList();
+  public static TitleDto createTitleDto(final Long id) {
+    TitleDto titleDto = new TitleDto();
+    titleDto.setId(id);
+    titleDto.setTitle("Title");
+    titleDto.setCopyright(2020);
+    titleDto.setEditionNumber(10L);
+    titleDto.setImageFile("path_image");
+    titleDto.setLanguage(Language.ENGLISH);
+    titleDto.setPrice(10L);
+    titleDto.setPublisher(createPublisherDto(1L));
+    titleDto.getAuthors().add(createAuthorDto(1L));
+    return titleDto;
   }
 
-  private TestUtils() {
+  public static UpdatebleTitleDto createUpdatebleTitleDto(final Long id) {
+    UpdatebleTitleDto titleDto = new UpdatebleTitleDto();
+    titleDto.setId(id);
+    titleDto.setTitle("Title");
+    titleDto.setCopyright(2020);
+    titleDto.setEditionNumber(10L);
+    titleDto.setImageFile("path_image");
+    titleDto.setLanguage(Language.ENGLISH);
+    titleDto.setPrice(10L);
+    titleDto.setPublisher(createRefPublisherDto(1L));
+    titleDto.getAuthors().add(createRefAuthorDto(1L));
+    return titleDto;
   }
+
+  private TestUtils() {}
 }

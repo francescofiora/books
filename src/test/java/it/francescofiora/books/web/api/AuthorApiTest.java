@@ -34,6 +34,7 @@ import it.francescofiora.books.service.AuthorService;
 import it.francescofiora.books.service.dto.AuthorDto;
 import it.francescofiora.books.service.dto.NewAuthorDto;
 import it.francescofiora.books.service.dto.TitleDto;
+import it.francescofiora.books.util.TestUtils;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = AuthorApi.class)
@@ -53,11 +54,9 @@ public class AuthorApiTest extends AbstractApiTest {
 
   @Test
   public void testCreateAuthor() throws Exception {
-    NewAuthorDto newAuthorDto = new NewAuthorDto();
-    fillAuthor(newAuthorDto);
+    NewAuthorDto newAuthorDto = TestUtils.createNewAuthorDto();
 
-    AuthorDto authorDto = new AuthorDto();
-    authorDto.setId(ID);
+    AuthorDto authorDto = TestUtils.createAuthorDto(ID);
     given(authorService.create(any(NewAuthorDto.class))).willReturn(authorDto);
     MvcResult result = mvc.perform(post(new URI(AUTHORS_URI)).contentType(APPLICATION_JSON)
         .content(writeValueAsString(newAuthorDto))).andExpect(status().isCreated()).andReturn();
@@ -67,39 +66,38 @@ public class AuthorApiTest extends AbstractApiTest {
   @Test
   public void testUpdateAuthorBadRequest() throws Exception {
     // id
-    AuthorDto authorDto = updateAuthorDto();
-    authorDto.setId(null);
+    AuthorDto authorDto = TestUtils.createAuthorDto(null);
     mvc.perform(put(new URI(AUTHORS_URI)).contentType(APPLICATION_JSON)
         .content(writeValueAsString(authorDto))).andExpect(status().isBadRequest());
 
     // firstName
-    authorDto = updateAuthorDto();
+    authorDto = TestUtils.createAuthorDto(ID);
     authorDto.setFirstName(null);
     mvc.perform(put(new URI(AUTHORS_URI)).contentType(APPLICATION_JSON)
         .content(writeValueAsString(authorDto))).andExpect(status().isBadRequest());
 
-    authorDto = updateAuthorDto();
+    authorDto = TestUtils.createAuthorDto(ID);
     authorDto.setFirstName("");
     mvc.perform(put(new URI(AUTHORS_URI)).contentType(APPLICATION_JSON)
         .content(writeValueAsString(authorDto))).andExpect(status().isBadRequest());
 
-    authorDto = updateAuthorDto();
+    authorDto = TestUtils.createAuthorDto(ID);
     authorDto.setFirstName("  ");
     mvc.perform(put(new URI(AUTHORS_URI)).contentType(APPLICATION_JSON)
         .content(writeValueAsString(authorDto))).andExpect(status().isBadRequest());
 
     // lastName
-    authorDto = updateAuthorDto();
+    authorDto = TestUtils.createAuthorDto(ID);
     authorDto.setLastName(null);
     mvc.perform(put(new URI(AUTHORS_URI)).contentType(APPLICATION_JSON)
         .content(writeValueAsString(authorDto))).andExpect(status().isBadRequest());
 
-    authorDto = updateAuthorDto();
+    authorDto = TestUtils.createAuthorDto(ID);
     authorDto.setLastName("");
     mvc.perform(put(new URI(AUTHORS_URI)).contentType(APPLICATION_JSON)
         .content(writeValueAsString(authorDto))).andExpect(status().isBadRequest());
 
-    authorDto = updateAuthorDto();
+    authorDto = TestUtils.createAuthorDto(ID);
     authorDto.setLastName("  ");
     mvc.perform(put(new URI(AUTHORS_URI)).contentType(APPLICATION_JSON)
         .content(writeValueAsString(authorDto))).andExpect(status().isBadRequest());
@@ -107,28 +105,15 @@ public class AuthorApiTest extends AbstractApiTest {
 
   @Test
   public void testUpdateAuthor() throws Exception {
-    AuthorDto authorDto = updateAuthorDto();
+    AuthorDto authorDto = TestUtils.createAuthorDto(ID);
     mvc.perform(put(new URI(AUTHORS_URI)).contentType(APPLICATION_JSON)
         .content(writeValueAsString(authorDto))).andExpect(status().isOk());
-  }
-
-  private AuthorDto updateAuthorDto() {
-    AuthorDto authorDto = new AuthorDto();
-    fillAuthor(authorDto);
-    authorDto.setId(ID);
-    return authorDto;
-  }
-  
-  private void fillAuthor(NewAuthorDto authorDto) {
-    authorDto.setFirstName("John");
-    authorDto.setLastName("Smith");
   }
 
   @Test
   public void testGetAllAuthors() throws Exception {
     Pageable pageable = PageRequest.of(1, 1);
-    AuthorDto expected = new AuthorDto();
-    expected.setId(ID);
+    AuthorDto expected = TestUtils.createAuthorDto(ID);
     given(authorService.findAll(any(Pageable.class)))
         .willReturn(new PageImpl<AuthorDto>(Collections.singletonList(expected)));
 
@@ -141,8 +126,7 @@ public class AuthorApiTest extends AbstractApiTest {
 
   @Test
   public void testGetAuthor() throws Exception {
-    AuthorDto expected = new AuthorDto();
-    expected.setId(ID);
+    AuthorDto expected = TestUtils.createAuthorDto(ID);
     given(authorService.findOne(eq(ID))).willReturn(Optional.of(expected));
     MvcResult result = mvc.perform(get(AUTHORS_ID_URI, ID)).andExpect(status().isOk()).andReturn();
     AuthorDto actual = readValue(result, new TypeReference<AuthorDto>() {});
@@ -151,8 +135,7 @@ public class AuthorApiTest extends AbstractApiTest {
 
   @Test
   public void testGetTitlesByAuthor() throws Exception {
-    TitleDto expected = new TitleDto();
-    expected.setId(ID);
+    TitleDto expected = TestUtils.createTitleDto(ID);
     given(authorService.findTitlesByAuthorId(any(Pageable.class), eq(ID)))
         .willReturn(new PageImpl<TitleDto>(Collections.singletonList(expected)));
 
