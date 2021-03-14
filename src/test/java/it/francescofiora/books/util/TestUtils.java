@@ -16,6 +16,12 @@ import it.francescofiora.books.service.dto.UpdatebleTitleDto;
  */
 public final class TestUtils {
 
+  /**
+   * Create an example of AuthorDto.
+   *
+   * @param id ID
+   * @return AuthorDto
+   */
   public static AuthorDto createAuthorDto(final Long id) {
     AuthorDto authorDto = new AuthorDto();
     authorDto.setId(id);
@@ -24,6 +30,12 @@ public final class TestUtils {
     return authorDto;
   }
 
+  /**
+   * Create an example of PublisherDto.
+   *
+   * @param id ID
+   * @return PublisherDto
+   */
   public static PublisherDto createPublisherDto(final Long id) {
     PublisherDto publisherDto = new PublisherDto();
     publisherDto.setId(id);
@@ -31,6 +43,11 @@ public final class TestUtils {
     return publisherDto;
   }
 
+  /**
+   * Create an example of NewAuthorDto.
+   *
+   * @return NewAuthorDto
+   */
   public static NewAuthorDto createNewAuthorDto() {
     NewAuthorDto authorDto = new NewAuthorDto();
     authorDto.setFirstName("John");
@@ -38,12 +55,22 @@ public final class TestUtils {
     return authorDto;
   }
 
+  /**
+   * Create an example of NewPublisherDto.
+   *
+   * @return NewPublisherDto
+   */
   public static NewPublisherDto createNewPublisherDto() {
     NewPublisherDto publisherDto = new NewPublisherDto();
     publisherDto.setPublisherName("Name");
     return publisherDto;
   }
 
+  /**
+   * Create an example of NewTitleDto.
+   *
+   * @return NewTitleDto
+   */
   public static NewTitleDto createNewTitleDto() {
     NewTitleDto titleDto = new NewTitleDto();
     titleDto.setTitle("Title");
@@ -57,18 +84,36 @@ public final class TestUtils {
     return titleDto;
   }
   
+  /**
+   * Create an example of RefAuthorDto.
+   *
+   * @param id ID
+   * @return RefAuthorDto
+   */
   public static RefAuthorDto createRefAuthorDto(final Long id) {
     RefAuthorDto authorDto = new RefAuthorDto();
     authorDto.setId(id);
     return authorDto;
   }
 
+  /**
+   * Create an example of RefPublisherDto.
+   *
+   * @param id ID
+   * @return RefPublisherDto
+   */
   public static RefPublisherDto createRefPublisherDto(final Long id) {
     RefPublisherDto publisherDto = new RefPublisherDto();
     publisherDto.setId(id);
     return publisherDto;
   }
 
+  /**
+   * Create an example of TitleDto.
+   *
+   * @param id ID
+   * @return TitleDto
+   */
   public static TitleDto createTitleDto(final Long id) {
     TitleDto titleDto = new TitleDto();
     titleDto.setId(id);
@@ -83,6 +128,12 @@ public final class TestUtils {
     return titleDto;
   }
 
+  /**
+   * Create an example of UpdatebleTitleDto.
+   *
+   * @param id ID
+   * @return UpdatebleTitleDto
+   */
   public static UpdatebleTitleDto createUpdatebleTitleDto(final Long id) {
     UpdatebleTitleDto titleDto = new UpdatebleTitleDto();
     titleDto.setId(id);

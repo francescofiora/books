@@ -2,9 +2,17 @@ package it.francescofiora.books.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import it.francescofiora.books.domain.Title;
+import it.francescofiora.books.repository.TitleRepository;
+import it.francescofiora.books.service.dto.NewTitleDto;
+import it.francescofiora.books.service.dto.TitleDto;
+import it.francescofiora.books.service.dto.UpdatebleTitleDto;
+import it.francescofiora.books.service.impl.TitleServiceImpl;
+import it.francescofiora.books.service.mapper.NewTitleMapper;
+import it.francescofiora.books.service.mapper.TitleMapper;
+import it.francescofiora.books.web.errors.NotFoundAlertException;
 import java.util.Collections;
 import java.util.Optional;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,16 +24,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import it.francescofiora.books.domain.Title;
-import it.francescofiora.books.repository.TitleRepository;
-import it.francescofiora.books.service.dto.NewTitleDto;
-import it.francescofiora.books.service.dto.TitleDto;
-import it.francescofiora.books.service.dto.UpdatebleTitleDto;
-import it.francescofiora.books.service.impl.TitleServiceImpl;
-import it.francescofiora.books.service.mapper.NewTitleMapper;
-import it.francescofiora.books.service.mapper.TitleMapper;
-import it.francescofiora.books.web.errors.NotFoundAlertException;
 
 @ExtendWith(SpringExtension.class)
 public class TitleServiceTest {

@@ -1,5 +1,6 @@
 package it.francescofiora.books.web.api;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -9,13 +10,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.assertj.core.api.Assertions.assertThat;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import it.francescofiora.books.service.AuthorService;
+import it.francescofiora.books.service.dto.AuthorDto;
+import it.francescofiora.books.service.dto.NewAuthorDto;
+import it.francescofiora.books.service.dto.TitleDto;
+import it.francescofiora.books.util.TestUtils;
 import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,14 +32,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-
-import it.francescofiora.books.service.AuthorService;
-import it.francescofiora.books.service.dto.AuthorDto;
-import it.francescofiora.books.service.dto.NewAuthorDto;
-import it.francescofiora.books.service.dto.TitleDto;
-import it.francescofiora.books.util.TestUtils;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = AuthorApi.class)

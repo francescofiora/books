@@ -1,6 +1,7 @@
 package it.francescofiora.books.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 import com.openpojo.reflection.PojoClass;
 import com.openpojo.validation.rule.Rule;
 import it.francescofiora.books.service.dto.DtoIdentifier;
@@ -22,7 +23,7 @@ public class DtoEqualsTester implements Rule {
     }
   }
 
-  public <T> void equalsVerifier(Class<T> clazz) throws Exception {
+  private <T> void equalsVerifier(Class<T> clazz) throws Exception {
     T dtoObj1 = clazz.getConstructor().newInstance();
     T dtoObj2 = clazz.getConstructor().newInstance();
 
@@ -39,22 +40,22 @@ public class DtoEqualsTester implements Rule {
     assertThat(dtoObj1.hashCode()).isEqualTo(dtoObj2.hashCode());
   }
 
-  public <T> void dtoIdentifierVerifier(Class<T> clazz) throws Exception {
-    DtoIdentifier domainObj1 = (DtoIdentifier) clazz.getConstructor().newInstance();
-    domainObj1.setId(1L);
-    assertThat(domainObj1.equals(null)).isFalse();
-    assertThat(domainObj1.equals(new Object())).isFalse();
+  private <T> void dtoIdentifierVerifier(Class<T> clazz) throws Exception {
+    DtoIdentifier dtoObj1 = (DtoIdentifier) clazz.getConstructor().newInstance();
+    dtoObj1.setId(1L);
+    assertThat(dtoObj1.equals(null)).isFalse();
+    assertThat(dtoObj1.equals(new Object())).isFalse();
 
-    DtoIdentifier domainObj2 = (DtoIdentifier) clazz.getConstructor().newInstance();
-    assertThat(domainObj1.equals(domainObj2)).isFalse();
+    DtoIdentifier dtoObj2 = (DtoIdentifier) clazz.getConstructor().newInstance();
+    assertThat(dtoObj1.equals(dtoObj2)).isFalse();
 
-    domainObj2.setId(2L);
-    assertThat(domainObj1.equals(domainObj2)).isFalse();
+    dtoObj2.setId(2L);
+    assertThat(dtoObj1.equals(dtoObj2)).isFalse();
 
-    domainObj2.setId(domainObj1.getId());
-    assertThat(domainObj1.equals(domainObj2)).isTrue();
+    dtoObj2.setId(dtoObj1.getId());
+    assertThat(dtoObj1.equals(dtoObj2)).isTrue();
 
-    domainObj1.setId(null);
-    assertThat(domainObj1.equals(domainObj2)).isFalse();
+    dtoObj1.setId(null);
+    assertThat(dtoObj1.equals(dtoObj2)).isFalse();
   }
 }

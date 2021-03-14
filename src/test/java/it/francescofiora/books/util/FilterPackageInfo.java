@@ -6,6 +6,7 @@ import com.openpojo.reflection.java.Java;
 
 public class FilterPackageInfo implements PojoClassFilter {
 
+  @Override
   public boolean include(final PojoClass pojoClass) {
     return !pojoClass.getName().endsWith(Java.PACKAGE_DELIMITER + Java.PACKAGE_INFO)
         && !pojoClass.getName().endsWith("Test")

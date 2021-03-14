@@ -110,7 +110,6 @@ eclipse {
 checkstyle {
   toolVersion property('checkstyle.version')
   configFile  file("config/checkstyle/checkstyle.xml")
-  checkstyleTest.enabled = false
 }
 tasks.withType(Checkstyle) {
   reports {

@@ -1,10 +1,11 @@
 package it.francescofiora.books.service.dto;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import java.util.Collections;
-import org.junit.jupiter.api.Test;
+
 import it.francescofiora.books.domain.enumeration.Language;
 import it.francescofiora.books.util.TestUtils;
+import java.util.Collections;
+import org.junit.jupiter.api.Test;
 
 public class NewTitleDtoTest {
 

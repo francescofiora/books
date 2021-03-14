@@ -13,10 +13,8 @@ import it.francescofiora.books.service.mapper.AuthorMapper;
 import it.francescofiora.books.service.mapper.NewAuthorMapper;
 import it.francescofiora.books.service.mapper.TitleMapper;
 import it.francescofiora.books.web.errors.NotFoundAlertException;
-
 import java.util.Collections;
 import java.util.Optional;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,7 @@
 package it.francescofiora.books.service.dto;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 import it.francescofiora.books.util.TestUtils;
 import org.junit.jupiter.api.Test;
 

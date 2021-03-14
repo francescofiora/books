@@ -1,6 +1,7 @@
 package it.francescofiora.books.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 import com.openpojo.reflection.PojoClass;
 import com.openpojo.validation.rule.Rule;
 import it.francescofiora.books.domain.DomainIdentifier;
@@ -22,7 +23,7 @@ public class PojoEqualsTester implements Rule {
     }
   }
 
-  public <T> void equalsVerifier(Class<T> clazz) throws Exception {
+  private <T> void equalsVerifier(Class<T> clazz) throws Exception {
     T domainObj1 = clazz.getConstructor().newInstance();
     T domainObj2 = clazz.getConstructor().newInstance();
 
@@ -39,7 +40,7 @@ public class PojoEqualsTester implements Rule {
     assertThat(domainObj1.hashCode()).isEqualTo(domainObj2.hashCode());
   }
 
-  public <T> void domainIdentifierVerifier(Class<T> clazz) throws Exception {
+  private <T> void domainIdentifierVerifier(Class<T> clazz) throws Exception {
     DomainIdentifier domainObj1 = (DomainIdentifier) clazz.getConstructor().newInstance();
     domainObj1.setId(1L);
     assertThat(domainObj1.equals(null)).isFalse();
