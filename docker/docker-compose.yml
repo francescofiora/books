@@ -1,7 +1,7 @@
 version: "3"
 services:
   dbbooks.francescofiora.it:
-    image: mysql:8.0.21
+    image: mysql:8.0.23
     environment:
       MYSQL_ROOT_PASSWORD: secret
     volumes:
@@ -13,7 +13,7 @@ services:
       - "3306:3306"
    
   myadmin.francescofiora.it:
-    image: phpmyadmin/phpmyadmin:5.0.2
+    image: phpmyadmin/phpmyadmin:5.1.0
     environment:
       - PMA_HOST=dbbooks.francescofiora.it
       - PMA_USER=root
