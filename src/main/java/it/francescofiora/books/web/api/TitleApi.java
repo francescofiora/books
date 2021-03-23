@@ -60,14 +60,14 @@ public class TitleApi {
    * @throws URISyntaxException if the Location URI syntax is incorrect.
    */
   @Operation(
-      summary = "add new Title", description = "add a new Title to the system", tags = { "title" })
+      summary = "Add new Title", description = "Add a new Title to the system", tags = { "title" })
   @ApiResponses(
       value = { @ApiResponse(responseCode = "201", description = "Title created"),
-          @ApiResponse(responseCode = "400", description = "invalid input, object invalid"),
-          @ApiResponse(responseCode = "409", description = "an existing Title already exists") })
+          @ApiResponse(responseCode = "400", description = "Invalid input, object invalid"),
+          @ApiResponse(responseCode = "409", description = "An existing Title already exists") })
   @PostMapping("/titles")
   public ResponseEntity<Void> createTitle(
-      @Parameter(description = "add new Title") @Valid @RequestBody NewTitleDto titleDto)
+      @Parameter(description = "Add new Title") @Valid @RequestBody NewTitleDto titleDto)
       throws URISyntaxException {
     log.debug("REST request to save Title : {}", titleDto);
     TitleDto result = titleService.create(titleDto);
@@ -87,14 +87,14 @@ public class TitleApi {
    * @throws URISyntaxException if the Location URI syntax is incorrect.
    */
   @Operation(
-      summary = "update Title", description = "update an Title to the system", tags = { "title" })
+      summary = "Update Title", description = "Update an Title to the system", tags = { "title" })
   @ApiResponses(
       value = { @ApiResponse(responseCode = "200", description = "Title updated"),
-          @ApiResponse(responseCode = "400", description = "invalid input, object invalid"),
-          @ApiResponse(responseCode = "404", description = "not found") })
+          @ApiResponse(responseCode = "400", description = "Invalid input, object invalid"),
+          @ApiResponse(responseCode = "404", description = "Not found") })
   @PutMapping("/titles")
   public ResponseEntity<Void> updateTitle(
-      @Parameter(description = "title to update") @Valid @RequestBody UpdatebleTitleDto titleDto)
+      @Parameter(description = "Title to update") @Valid @RequestBody UpdatebleTitleDto titleDto)
       throws URISyntaxException {
     log.debug("REST request to update Title : {}", titleDto);
     if (titleDto.getId() == null) {
@@ -114,16 +114,16 @@ public class TitleApi {
    *         of titles in body.
    */
   @Operation(
-      summary = "searches titles", description = "By passing in the appropriate options, "
+      summary = "Searches titles", description = "By passing in the appropriate options, "
           + "you can search for available titles in the system",
       tags = { "title" })
   @ApiResponses(
       value = {
           @ApiResponse(
-              responseCode = "200", description = "search results matching criteria",
+              responseCode = "200", description = "Search results matching criteria",
               content = @Content(
                   array = @ArraySchema(schema = @Schema(implementation = TitleDto.class)))),
-          @ApiResponse(responseCode = "400", description = "bad input parameter") })
+          @ApiResponse(responseCode = "400", description = "Bad input parameter") })
   @GetMapping("/titles")
   public ResponseEntity<List<TitleDto>> getAllTitles(Pageable pageable) {
     log.debug("REST request to get a page of Titles");
@@ -141,15 +141,15 @@ public class TitleApi {
    *         the titleDto, or with status {@code 404 (Not Found)}.
    */
   @Operation(
-      summary = "searches title by 'id'", description = "searches title by 'id'",
+      summary = "Searches title by 'id'", description = "Searches title by 'id'",
       tags = { "title" })
   @ApiResponses(
       value = {
           @ApiResponse(
-              responseCode = "200", description = "search results matching criteria",
+              responseCode = "200", description = "Search results matching criteria",
               content = @Content(schema = @Schema(implementation = TitleDto.class))),
-          @ApiResponse(responseCode = "400", description = "bad input parameter"),
-          @ApiResponse(responseCode = "404", description = "not found") })
+          @ApiResponse(responseCode = "400", description = "Bad input parameter"),
+          @ApiResponse(responseCode = "404", description = "Not found") })
   @GetMapping("/titles/{id}")
   public ResponseEntity<TitleDto> getTitle(@PathVariable Long id) {
     log.debug("REST request to get Title : {}", id);
@@ -164,10 +164,10 @@ public class TitleApi {
    * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
    */
   @Operation(
-      summary = "delete title by 'id'", description = "delete an title by 'id'", tags = { "title" })
+      summary = "Delete title by 'id'", description = "Delete an title by 'id'", tags = { "title" })
   @ApiResponses(
       value = { @ApiResponse(responseCode = "204", description = "Title deleted"),
-          @ApiResponse(responseCode = "400", description = "bad input parameter") })
+          @ApiResponse(responseCode = "400", description = "Bad input parameter") })
   @DeleteMapping("/titles/{id}")
   public ResponseEntity<Void> deleteTitle(@PathVariable Long id) {
     log.debug("REST request to delete Title : {}", id);
