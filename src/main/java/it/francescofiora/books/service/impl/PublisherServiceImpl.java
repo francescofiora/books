@@ -1,12 +1,15 @@
 package it.francescofiora.books.service.impl;
 
 import it.francescofiora.books.domain.Publisher;
+import it.francescofiora.books.domain.Title;
 import it.francescofiora.books.repository.PublisherRepository;
+import it.francescofiora.books.repository.TitleRepository;
 import it.francescofiora.books.service.PublisherService;
 import it.francescofiora.books.service.dto.NewPublisherDto;
 import it.francescofiora.books.service.dto.PublisherDto;
 import it.francescofiora.books.service.mapper.NewPublisherMapper;
 import it.francescofiora.books.service.mapper.PublisherMapper;
+import it.francescofiora.books.web.errors.BadRequestAlertException;
 import it.francescofiora.books.web.errors.NotFoundAlertException;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -26,21 +29,27 @@ public class PublisherServiceImpl implements PublisherService {
 
   private final PublisherRepository publisherRepository;
 
+  private final TitleRepository titleRepository;
+
   private final PublisherMapper publisherMapper;
 
   private final NewPublisherMapper newPublisherMapper;
 
   /**
    * Constructor.
+   *
    * @param publisherRepository PublisherRepository
    * @param publisherMapper PublisherMapper
    * @param newPublisherMapper NewPublisherMapper
+   * @param titleRepository TitleRepository
    */
   public PublisherServiceImpl(PublisherRepository publisherRepository,
-      PublisherMapper publisherMapper, NewPublisherMapper newPublisherMapper) {
+      PublisherMapper publisherMapper, NewPublisherMapper newPublisherMapper,
+      TitleRepository titleRepository) {
     this.publisherRepository = publisherRepository;
     this.publisherMapper = publisherMapper;
     this.newPublisherMapper = newPublisherMapper;
+    this.titleRepository = titleRepository;
   }
 
   @Override
@@ -80,6 +89,10 @@ public class PublisherServiceImpl implements PublisherService {
   @Override
   public void delete(Long id) {
     log.debug("Request to delete Publisher : {}", id);
+    Optional<Title> titleOpt = titleRepository.findOneWithPublisherRelationships(id);
+    if (titleOpt.isPresent()) {
+      throw new BadRequestAlertException(ENTITY_NAME, "Almost a Title is using this publisher");
+    }
     publisherRepository.deleteById(id);
   }
 }

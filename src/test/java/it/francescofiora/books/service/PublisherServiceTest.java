@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import it.francescofiora.books.domain.Publisher;
 import it.francescofiora.books.repository.PublisherRepository;
+import it.francescofiora.books.repository.TitleRepository;
 import it.francescofiora.books.service.dto.NewPublisherDto;
 import it.francescofiora.books.service.dto.PublisherDto;
 import it.francescofiora.books.service.impl.PublisherServiceImpl;
@@ -33,6 +34,9 @@ public class PublisherServiceTest {
   private PublisherRepository publisherRepository;
 
   @MockBean
+  private TitleRepository titleRepository;
+
+  @MockBean
   private PublisherMapper publisherMapper;
 
   @MockBean
@@ -43,7 +47,7 @@ public class PublisherServiceTest {
   @BeforeEach
   public void setUp() {
     publisherService = new PublisherServiceImpl(publisherRepository, publisherMapper,
-        newPublisherMapper);
+        newPublisherMapper, titleRepository);
   }
 
   @Test
