@@ -55,7 +55,7 @@ public class TitleApi {
   /**
    * {@code POST  /titles} : Create a new title.
    *
-   * @param titleDto the titleDto to create.
+   * @param titleDto the title to create.
    * @return the {@link ResponseEntity} with status {@code 201 (Created)}.
    * @throws URISyntaxException if the Location URI syntax is incorrect.
    */
@@ -77,12 +77,13 @@ public class TitleApi {
   }
 
   /**
-   * {@code PUT  /titles} : Updates an existing title.
+   * {@code PUT  /titles:id} : Updates an existing title.
    *
-   * @param titleDto the titleDto to update.
+   * @param titleDto the title to update.
+   * @param id the id of the publisher to update.
    * @return the {@link ResponseEntity} with status {@code 200 (OK)}, or with
-   *         status {@code 400 (Bad Request)} if the titleDto is not valid, or
-   *         with status {@code 500 (Internal Server Error)} if the titleDto
+   *         status {@code 400 (Bad Request)} if the title is not valid, or
+   *         with status {@code 500 (Internal Server Error)} if the title
    *         couldn't be updated.
    * @throws URISyntaxException if the Location URI syntax is incorrect.
    */
@@ -92,13 +93,15 @@ public class TitleApi {
       value = { @ApiResponse(responseCode = "200", description = "Title updated"),
           @ApiResponse(responseCode = "400", description = "Invalid input, object invalid"),
           @ApiResponse(responseCode = "404", description = "Not found") })
-  @PutMapping("/titles")
+  @PutMapping("/titles/{id}")
   public ResponseEntity<Void> updateTitle(
-      @Parameter(description = "Title to update") @Valid @RequestBody UpdatebleTitleDto titleDto)
+      @Parameter(description = "Title to update") @Valid @RequestBody UpdatebleTitleDto titleDto,
+      @Parameter(description = "The id of the title to update", required = true,
+      example = "1") @PathVariable("id") Long id)
       throws URISyntaxException {
     log.debug("REST request to update Title : {}", titleDto);
-    if (titleDto.getId() == null) {
-      throw new BadRequestAlertException(ENTITY_NAME, "idnull", "Invalid id");
+    if (!id.equals(titleDto.getId())) {
+      throw new BadRequestAlertException(ENTITY_NAME, "idNotValid", "Invalid id");
     }
     titleService.update(titleDto);
     return ResponseEntity.ok()
@@ -136,9 +139,9 @@ public class TitleApi {
   /**
    * {@code GET  /titles/:id} : get the "id" title.
    *
-   * @param id the id of the titleDto to retrieve.
+   * @param id the id of the title to retrieve.
    * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
-   *         the titleDto, or with status {@code 404 (Not Found)}.
+   *         the title, or with status {@code 404 (Not Found)}.
    */
   @Operation(
       summary = "Searches title by 'id'", description = "Searches title by 'id'",
@@ -160,7 +163,7 @@ public class TitleApi {
   /**
    * {@code DELETE  /titles/:id} : delete the "id" title.
    *
-   * @param id the id of the titleDto to delete.
+   * @param id the id of the title to delete.
    * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
    */
   @Operation(

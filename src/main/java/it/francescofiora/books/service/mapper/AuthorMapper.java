@@ -15,9 +15,6 @@ public interface AuthorMapper {
   AuthorDto toDto(Author entity);
 
   @Mapping(target = "titles", ignore = true)
-  Author toEntity(AuthorDto authorDto);
-
-  @Mapping(target = "titles", ignore = true)
   @Mapping(target = "id", ignore = true)
   void updateEntityFromDto(AuthorDto authorDto, @MappingTarget Author author);
 

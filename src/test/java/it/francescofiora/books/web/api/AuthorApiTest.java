@@ -57,39 +57,39 @@ public class AuthorApiTest extends AbstractTestApi {
   public void testUpdateAuthorBadRequest() throws Exception {
     // id
     AuthorDto authorDto = TestUtils.createAuthorDto(null);
-    performPut(AUTHORS_URI, authorDto).andExpect(status().isBadRequest());
+    performPut(AUTHORS_ID_URI, ID, authorDto).andExpect(status().isBadRequest());
 
     // firstName
     authorDto = TestUtils.createAuthorDto(ID);
     authorDto.setFirstName(null);
-    performPut(AUTHORS_URI, authorDto).andExpect(status().isBadRequest());
+    performPut(AUTHORS_ID_URI, ID, authorDto).andExpect(status().isBadRequest());
 
     authorDto = TestUtils.createAuthorDto(ID);
     authorDto.setFirstName("");
-    performPut(AUTHORS_URI, authorDto).andExpect(status().isBadRequest());
+    performPut(AUTHORS_ID_URI, ID, authorDto).andExpect(status().isBadRequest());
 
     authorDto = TestUtils.createAuthorDto(ID);
     authorDto.setFirstName("  ");
-    performPut(AUTHORS_URI, authorDto).andExpect(status().isBadRequest());
+    performPut(AUTHORS_ID_URI, ID, authorDto).andExpect(status().isBadRequest());
 
     // lastName
     authorDto = TestUtils.createAuthorDto(ID);
     authorDto.setLastName(null);
-    performPut(AUTHORS_URI, authorDto).andExpect(status().isBadRequest());
+    performPut(AUTHORS_ID_URI, ID, authorDto).andExpect(status().isBadRequest());
 
     authorDto = TestUtils.createAuthorDto(ID);
     authorDto.setLastName("");
-    performPut(AUTHORS_URI, authorDto).andExpect(status().isBadRequest());
+    performPut(AUTHORS_ID_URI, ID, authorDto).andExpect(status().isBadRequest());
 
     authorDto = TestUtils.createAuthorDto(ID);
     authorDto.setLastName("  ");
-    performPut(AUTHORS_URI, authorDto).andExpect(status().isBadRequest());
+    performPut(AUTHORS_ID_URI, ID, authorDto).andExpect(status().isBadRequest());
   }
 
   @Test
   public void testUpdateAuthor() throws Exception {
     AuthorDto authorDto = TestUtils.createAuthorDto(ID);
-    performPut(AUTHORS_URI, authorDto).andExpect(status().isOk());
+    performPut(AUTHORS_ID_URI, ID, authorDto).andExpect(status().isOk());
   }
 
   @Test

@@ -52,9 +52,9 @@ public abstract class AbstractTestApi {
     // @formatter:on
   }
 
-  protected ResultActions performPut(String path, Object content) throws Exception {
+  protected ResultActions performPut(String path, Long id, Object content) throws Exception {
     // @formatter:off
-    return mvc.perform(put(new URI(path))
+    return mvc.perform(put(path, id)
         .contentType(APPLICATION_JSON)
         .headers(createHttpHeaders())
         .content(writeValueAsString(content)));

@@ -114,68 +114,68 @@ public class TitleApiTest extends AbstractTestApi {
     // Authors
     UpdatebleTitleDto titleDto = TestUtils.createUpdatebleTitleDto(ID);
     titleDto.getAuthors().get(0).setId(null);
-    performPut(TITLES_URI, titleDto).andExpect(status().isBadRequest());
+    performPut(TITLES_ID_URI, ID, titleDto).andExpect(status().isBadRequest());
 
     titleDto = TestUtils.createUpdatebleTitleDto(ID);
     titleDto.getAuthors().clear();
-    performPut(TITLES_URI, titleDto).andExpect(status().isBadRequest());
+    performPut(TITLES_ID_URI, ID, titleDto).andExpect(status().isBadRequest());
 
     titleDto = TestUtils.createUpdatebleTitleDto(ID);
     titleDto.setAuthors(null);
-    performPut(TITLES_URI, titleDto).andExpect(status().isBadRequest());
+    performPut(TITLES_ID_URI, ID, titleDto).andExpect(status().isBadRequest());
 
     // Publisher
     titleDto = TestUtils.createUpdatebleTitleDto(ID);
     titleDto.getPublisher().setId(null);
-    performPut(TITLES_URI, titleDto).andExpect(status().isBadRequest());
+    performPut(TITLES_ID_URI, ID, titleDto).andExpect(status().isBadRequest());
 
     titleDto = TestUtils.createUpdatebleTitleDto(ID);
     titleDto.setPublisher(null);
-    performPut(TITLES_URI, titleDto).andExpect(status().isBadRequest());
+    performPut(TITLES_ID_URI, ID, titleDto).andExpect(status().isBadRequest());
 
     // copyright
     titleDto = TestUtils.createUpdatebleTitleDto(ID);
     titleDto.setCopyright(null);
-    performPut(TITLES_URI, titleDto).andExpect(status().isBadRequest());
+    performPut(TITLES_ID_URI, ID, titleDto).andExpect(status().isBadRequest());
 
     // editionNumber
     titleDto = TestUtils.createUpdatebleTitleDto(ID);
     titleDto.setEditionNumber(null);
-    performPut(TITLES_URI, titleDto).andExpect(status().isBadRequest());
+    performPut(TITLES_ID_URI, ID, titleDto).andExpect(status().isBadRequest());
 
     // id
     titleDto = TestUtils.createUpdatebleTitleDto(ID);
     titleDto.setId(null);
-    performPut(TITLES_URI, titleDto).andExpect(status().isBadRequest());
+    performPut(TITLES_ID_URI, ID, titleDto).andExpect(status().isBadRequest());
 
     // language
     titleDto = TestUtils.createUpdatebleTitleDto(ID);
     titleDto.setLanguage(null);
-    performPut(TITLES_URI, titleDto).andExpect(status().isBadRequest());
+    performPut(TITLES_ID_URI, ID, titleDto).andExpect(status().isBadRequest());
 
     // price
     titleDto = TestUtils.createUpdatebleTitleDto(ID);
     titleDto.setPrice(null);
-    performPut(TITLES_URI, titleDto).andExpect(status().isBadRequest());
+    performPut(TITLES_ID_URI, ID, titleDto).andExpect(status().isBadRequest());
 
     titleDto = TestUtils.createUpdatebleTitleDto(ID);
     titleDto.setPrice(0L);
-    performPut(TITLES_URI, titleDto).andExpect(status().isBadRequest());
+    performPut(TITLES_ID_URI, ID, titleDto).andExpect(status().isBadRequest());
 
     // title
     titleDto = TestUtils.createUpdatebleTitleDto(ID);
     titleDto.setTitle(null);
-    performPut(TITLES_URI, titleDto).andExpect(status().isBadRequest());
+    performPut(TITLES_ID_URI, ID, titleDto).andExpect(status().isBadRequest());
 
     titleDto = TestUtils.createUpdatebleTitleDto(ID);
     titleDto.setTitle("  ");
-    performPut(TITLES_URI, titleDto).andExpect(status().isBadRequest());
+    performPut(TITLES_ID_URI, ID, titleDto).andExpect(status().isBadRequest());
   }
 
   @Test
   public void testUpdateTitle() throws Exception {
     UpdatebleTitleDto titleDto = TestUtils.createUpdatebleTitleDto(ID);
-    performPut(TITLES_URI, titleDto).andExpect(status().isOk());
+    performPut(TITLES_ID_URI, ID, titleDto).andExpect(status().isOk());
   }
 
   @Test

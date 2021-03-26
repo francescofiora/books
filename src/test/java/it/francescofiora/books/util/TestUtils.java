@@ -67,11 +67,23 @@ public final class TestUtils {
   }
 
   /**
-   * Create an example of NewTitleDto.
+   * Create an example of NewTitleDto with Publisher and Author.
    *
    * @return NewTitleDto
    */
   public static NewTitleDto createNewTitleDto() {
+    NewTitleDto titleDto = createNewSimpleTitleDto();
+    titleDto.setPublisher(createRefPublisherDto(1L));
+    titleDto.getAuthors().add(createRefAuthorDto(1L));
+    return titleDto;
+  }
+
+  /**
+   * Create an example of NewTitleDto with no Publisher and no Author.
+   *
+   * @return NewTitleDto
+   */
+  public static NewTitleDto createNewSimpleTitleDto() {
     NewTitleDto titleDto = new NewTitleDto();
     titleDto.setTitle("Title");
     titleDto.setCopyright(2020);
@@ -79,11 +91,9 @@ public final class TestUtils {
     titleDto.setImageFile("path_image");
     titleDto.setLanguage(Language.ENGLISH);
     titleDto.setPrice(10L);
-    titleDto.setPublisher(createRefPublisherDto(1L));
-    titleDto.getAuthors().add(createRefAuthorDto(1L));
     return titleDto;
   }
-  
+
   /**
    * Create an example of RefAuthorDto.
    *
@@ -109,7 +119,7 @@ public final class TestUtils {
   }
 
   /**
-   * Create an example of TitleDto.
+   * Create an example of TitleDto with no Publisher and no Author.
    *
    * @param id ID
    * @return TitleDto
@@ -129,12 +139,25 @@ public final class TestUtils {
   }
 
   /**
-   * Create an example of UpdatebleTitleDto.
+   * Create an example of UpdatebleTitleDto with Publisher and Author.
    *
    * @param id ID
    * @return UpdatebleTitleDto
    */
   public static UpdatebleTitleDto createUpdatebleTitleDto(final Long id) {
+    UpdatebleTitleDto titleDto = createSimpleUpdatebleTitleDto(id);
+    titleDto.setPublisher(createRefPublisherDto(1L));
+    titleDto.getAuthors().add(createRefAuthorDto(1L));
+    return titleDto;
+  }
+
+  /**
+   * Create an example of UpdatebleTitleDto.
+   *
+   * @param id ID
+   * @return UpdatebleTitleDto
+   */
+  public static UpdatebleTitleDto createSimpleUpdatebleTitleDto(final Long id) {
     UpdatebleTitleDto titleDto = new UpdatebleTitleDto();
     titleDto.setId(id);
     titleDto.setTitle("Title");
@@ -143,8 +166,6 @@ public final class TestUtils {
     titleDto.setImageFile("path_image");
     titleDto.setLanguage(Language.ENGLISH);
     titleDto.setPrice(10L);
-    titleDto.setPublisher(createRefPublisherDto(1L));
-    titleDto.getAuthors().add(createRefAuthorDto(1L));
     return titleDto;
   }
 

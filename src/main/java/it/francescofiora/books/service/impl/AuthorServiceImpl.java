@@ -9,6 +9,7 @@ import it.francescofiora.books.service.dto.TitleDto;
 import it.francescofiora.books.service.mapper.AuthorMapper;
 import it.francescofiora.books.service.mapper.NewAuthorMapper;
 import it.francescofiora.books.service.mapper.TitleMapper;
+import it.francescofiora.books.web.errors.BadRequestAlertException;
 import it.francescofiora.books.web.errors.NotFoundAlertException;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -88,6 +89,10 @@ public class AuthorServiceImpl implements AuthorService {
   @Override
   public void delete(Long id) {
     log.debug("Request to delete Author : {}", id);
+    Optional<Author> authorOpt = authorRepository.findById(id);
+    if (authorOpt.isPresent() && !authorOpt.get().getTitles().isEmpty()) {
+      throw new BadRequestAlertException(ENTITY_NAME, "Almost a Title is using this author");
+    }
     authorRepository.deleteById(id);
   }
 

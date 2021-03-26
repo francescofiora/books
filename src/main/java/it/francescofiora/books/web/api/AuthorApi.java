@@ -55,17 +55,15 @@ public class AuthorApi {
   /**
    * {@code POST  /authors} : Create a new author.
    *
-   * @param authorDto the authorDto to create.
+   * @param authorDto the author to create.
    * @return the {@link ResponseEntity} with status {@code 201 (Created)}.
    * @throws URISyntaxException if the Location URI syntax is incorrect.
    */
-  @Operation(
-      summary = "Add new Author", description = "Add a new Author to the system",
-      tags = { "author" })
-  @ApiResponses(
-      value = { @ApiResponse(responseCode = "201", description = "Author created"),
-          @ApiResponse(responseCode = "400", description = "Invalid input, object invalid"),
-          @ApiResponse(responseCode = "409", description = "An existing Author already exists") })
+  @Operation(summary = "Add new Author", description = "Add a new Author to the system",
+      tags = {"author"})
+  @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Author created"),
+      @ApiResponse(responseCode = "400", description = "Invalid input, object invalid"),
+      @ApiResponse(responseCode = "409", description = "An existing Author already exists")})
   @PostMapping("/authors")
   public ResponseEntity<Void> createAuthor(
       @Parameter(description = "Add new Author") @Valid @RequestBody NewAuthorDto authorDto)
@@ -78,54 +76,51 @@ public class AuthorApi {
   }
 
   /**
-   * {@code PUT  /authors} : Updates an existing author.
+   * {@code PUT  /authors:id} : Updates an existing author.
    *
-   * @param authorDto the authorDto to update.
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)}, or with
-   *         status {@code 400 (Bad Request)} if the authorDto is not valid, or
-   *         with status {@code 500 (Internal Server Error)} if the authorDto
-   *         couldn't be updated.
+   * @param authorDto the author to update.
+   * @param id the id of the author to update.
+   * @return the {@link ResponseEntity} with status {@code 200 (OK)}, or with status
+   *         {@code 400 (Bad Request)} if the author is not valid, or with status
+   *         {@code 500 (Internal Server Error)} if the author couldn't be updated.
    * @throws URISyntaxException if the Location URI syntax is incorrect.
    */
-  @Operation(
-      summary = "update Author", description = "Update an Author to the system",
-      tags = { "author" })
-  @ApiResponses(
-      value = { @ApiResponse(responseCode = "200", description = "Author updated"),
-          @ApiResponse(responseCode = "400", description = "Invalid input, object invalid"),
-          @ApiResponse(responseCode = "404", description = "Not found") })
-  @PutMapping("/authors")
+  @Operation(summary = "update Author", description = "Update an Author to the system",
+      tags = {"author"})
+  @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Author updated"),
+      @ApiResponse(responseCode = "400", description = "Invalid input, object invalid"),
+      @ApiResponse(responseCode = "404", description = "Not found")})
+  @PutMapping("/authors/{id}")
   public ResponseEntity<Void> updateAuthor(
-      @Parameter(description = "Author to update") @Valid @RequestBody AuthorDto authorDto)
+      @Parameter(description = "Author to update") @Valid @RequestBody AuthorDto authorDto,
+      @Parameter(description = "The id of the author to update", required = true,
+          example = "1") @PathVariable("id") Long id)
       throws URISyntaxException {
     log.debug("REST request to update Author : {}", authorDto);
-    if (authorDto.getId() == null) {
-      throw new BadRequestAlertException(ENTITY_NAME, "idnull", "Invalid id");
+    if (!id.equals(authorDto.getId())) {
+      throw new BadRequestAlertException(ENTITY_NAME, "idNotValid", "Invalid id");
     }
     authorService.update(authorDto);
     return ResponseEntity.ok()
-        .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, authorDto.getId().toString()))
-        .build();
+        .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, id.toString())).build();
   }
 
   /**
    * {@code GET  /authors} : get all the authors.
    *
    * @param pageable the pagination information.
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
-   *         of authors in body.
+   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of authors in
+   *         body.
    */
-  @Operation(
-      summary = "Searches authors", description = "By passing in the appropriate options, "
+  @Operation(summary = "Searches authors",
+      description = "By passing in the appropriate options, "
           + "you can search for available authors in the system",
-      tags = { "author" })
-  @ApiResponses(
-      value = {
-          @ApiResponse(
-              responseCode = "200", description = "Search results matching criteria",
-              content = @Content(
-                  array = @ArraySchema(schema = @Schema(implementation = AuthorDto.class)))),
-          @ApiResponse(responseCode = "400", description = "Bad input parameter") })
+      tags = {"author"})
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Search results matching criteria",
+          content = @Content(
+              array = @ArraySchema(schema = @Schema(implementation = AuthorDto.class)))),
+      @ApiResponse(responseCode = "400", description = "Bad input parameter")})
   @GetMapping("/authors")
   public ResponseEntity<List<AuthorDto>> getAllAuthors(Pageable pageable) {
     log.debug("REST request to get a page of Authors");
@@ -138,24 +133,20 @@ public class AuthorApi {
   /**
    * {@code GET  /authors/:id} : get the "id" author.
    *
-   * @param id the id of the authorDto to retrieve.
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
-   *         the authorDto, or with status {@code 404 (Not Found)}.
+   * @param id the id of the author to retrieve.
+   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the author, or
+   *         with status {@code 404 (Not Found)}.
    */
-  @Operation(
-      summary = "Searches author by 'id'", description = "Searches author by 'id'",
-      tags = { "author" })
-  @ApiResponses(
-      value = {
-          @ApiResponse(
-              responseCode = "200", description = "Search results matching criteria",
-              content = @Content(schema = @Schema(implementation = AuthorDto.class))),
-          @ApiResponse(responseCode = "400", description = "Bad input parameter"),
-          @ApiResponse(responseCode = "404", description = "Not found") })
+  @Operation(summary = "Searches author by 'id'", description = "Searches author by 'id'",
+      tags = {"author"})
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Search results matching criteria",
+          content = @Content(schema = @Schema(implementation = AuthorDto.class))),
+      @ApiResponse(responseCode = "400", description = "Bad input parameter"),
+      @ApiResponse(responseCode = "404", description = "Not found")})
   @GetMapping("/authors/{id}")
-  public ResponseEntity<AuthorDto> getAuthor(@Parameter(
-      description = "The id of the author to get", required = true,
-      example = "1") @PathVariable("id") Long id) {
+  public ResponseEntity<AuthorDto> getAuthor(@Parameter(description = "The id of the author to get",
+      required = true, example = "1") @PathVariable("id") Long id) {
     log.debug("REST request to get Author : {}", id);
     Optional<AuthorDto> authorDto = authorService.findOne(id);
     return ResponseUtil.wrapOrNotFound(ENTITY_NAME, authorDto);
@@ -165,25 +156,21 @@ public class AuthorApi {
    * {@code GET  /authors/:id/titles} : get titles the "id" author.
    *
    * @param id the id of the author of the TitleDto to retrieve.
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
-   *         the list of the titleDto of author, or with status
-   *         {@code 404 (Not Found)}.
+   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the list of the
+   *         titleDto of author, or with status {@code 404 (Not Found)}.
    */
-  @Operation(
-      summary = "Searches titles of the by author 'id'",
-      description = "Searches titles by author 'id'", tags = { "author" })
-  @ApiResponses(
-      value = {
-          @ApiResponse(
-              responseCode = "200", description = "Search results matching criteria",
-              content = @Content(
-                  array = @ArraySchema(schema = @Schema(implementation = TitleDto.class)))),
-          @ApiResponse(responseCode = "400", description = "Bad input parameter"),
-          @ApiResponse(responseCode = "404", description = "Not found") })
+  @Operation(summary = "Searches titles of the by author 'id'",
+      description = "Searches titles by author 'id'", tags = {"author"})
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Search results matching criteria",
+          content = @Content(
+              array = @ArraySchema(schema = @Schema(implementation = TitleDto.class)))),
+      @ApiResponse(responseCode = "400", description = "Bad input parameter"),
+      @ApiResponse(responseCode = "404", description = "Not found")})
   @GetMapping("/authors/{id}/titles")
-  public ResponseEntity<List<TitleDto>> getTitlesByAuthor(Pageable pageable, @Parameter(
-      description = "The id of the author", required = true,
-      example = "1") @PathVariable("id") Long id) {
+  public ResponseEntity<List<TitleDto>> getTitlesByAuthor(Pageable pageable,
+      @Parameter(description = "The id of the author", required = true,
+          example = "1") @PathVariable("id") Long id) {
     log.debug("REST request to get Titles of Author : {}", id);
     Page<TitleDto> page = authorService.findTitlesByAuthorId(pageable, id);
     HttpHeaders headers = PaginationUtil
@@ -197,16 +184,14 @@ public class AuthorApi {
    * @param id the id of the authorDto to delete.
    * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
    */
-  @Operation(
-      summary = "Delete author by 'id'", description = "Delete an author by 'id'",
-      tags = { "author" })
-  @ApiResponses(
-      value = { @ApiResponse(responseCode = "204", description = "Author deleted"),
-          @ApiResponse(responseCode = "400", description = "Bad input parameter") })
+  @Operation(summary = "Delete author by 'id'", description = "Delete an author by 'id'",
+      tags = {"author"})
+  @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "Author deleted"),
+      @ApiResponse(responseCode = "400", description = "Bad input parameter")})
   @DeleteMapping("/authors/{id}")
-  public ResponseEntity<Void> deleteAuthor(@Parameter(
-      description = "The id of the author to delete", required = true,
-      example = "1") @PathVariable Long id) {
+  public ResponseEntity<Void> deleteAuthor(
+      @Parameter(description = "The id of the author to delete", required = true,
+          example = "1") @PathVariable Long id) {
     log.debug("REST request to delete Author : {}", id);
     authorService.delete(id);
     return ResponseEntity.noContent()

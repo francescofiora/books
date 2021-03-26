@@ -54,18 +54,15 @@ public class PublisherApi {
   /**
    * {@code POST  /publishers} : Create a new publisher.
    *
-   * @param publisherDto the publisherDto to create.
+   * @param publisherDto the publisher to create.
    * @return the {@link ResponseEntity} with status {@code 201 (Created)}.
    * @throws URISyntaxException if the Location URI syntax is incorrect.
    */
-  @Operation(
-      summary = "Add new Publisher", description = "Add a new Publisher to the system",
-      tags = { "publisher" })
-  @ApiResponses(
-      value = { @ApiResponse(responseCode = "201", description = "Publisher created"),
-          @ApiResponse(responseCode = "400", description = "Invalid input, object invalid"),
-          @ApiResponse(
-              responseCode = "409", description = "An existing Publisher already exists") })
+  @Operation(summary = "Add new Publisher", description = "Add a new Publisher to the system",
+      tags = {"publisher"})
+  @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Publisher created"),
+      @ApiResponse(responseCode = "400", description = "Invalid input, object invalid"),
+      @ApiResponse(responseCode = "409", description = "An existing Publisher already exists")})
   @PostMapping("/publishers")
   public ResponseEntity<Void> createPublisher(
       @Parameter(
@@ -79,54 +76,51 @@ public class PublisherApi {
   }
 
   /**
-   * {@code PUT  /publishers} : Updates an existing publisher.
+   * {@code PUT  /publishers:id} : Updates an existing publisher.
    *
-   * @param publisherDto the publisherDto to update.
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)}, or with
-   *         status {@code 400 (Bad Request)} if the publisherDto is not valid, or
-   *         with status {@code 500 (Internal Server Error)} if the publisherDto
-   *         couldn't be updated.
+   * @param publisherDto the publisher to update.
+   * @param id the id of the publisher to update.
+   * @return the {@link ResponseEntity} with status {@code 200 (OK)}, or with status
+   *         {@code 400 (Bad Request)} if the publisher is not valid, or with status
+   *         {@code 500 (Internal Server Error)} if the publisher couldn't be updated.
    * @throws URISyntaxException if the Location URI syntax is incorrect.
    */
-  @Operation(
-      summary = "Update Publisher", description = "Update an Publisher to the system",
-      tags = { "publisher" })
-  @ApiResponses(
-      value = { @ApiResponse(responseCode = "200", description = "Publisher updated"),
-          @ApiResponse(responseCode = "400", description = "Invalid input, object invalid"),
-          @ApiResponse(responseCode = "404", description = "Not found") })
-  @PutMapping("/publishers")
+  @Operation(summary = "Update Publisher", description = "Update an Publisher to the system",
+      tags = {"publisher"})
+  @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Publisher updated"),
+      @ApiResponse(responseCode = "400", description = "Invalid input, object invalid"),
+      @ApiResponse(responseCode = "404", description = "Not found")})
+  @PutMapping("/publishers/{id}")
   public ResponseEntity<Void> updatePublisher(
-      @Parameter(description = "Publisher to update") @Valid @RequestBody PublisherDto publisherDto)
+      @Parameter(description = "Publisher to update") @Valid @RequestBody PublisherDto publisherDto,
+      @Parameter(description = "The id of the publisher to update", required = true,
+          example = "1") @PathVariable("id") Long id)
       throws URISyntaxException {
     log.debug("REST request to update Publisher : {}", publisherDto);
-    if (publisherDto.getId() == null) {
-      throw new BadRequestAlertException(ENTITY_NAME, "idnull", "Invalid id");
+    if (!id.equals(publisherDto.getId())) {
+      throw new BadRequestAlertException(ENTITY_NAME, "idNotValid", "Invalid id");
     }
     publisherService.update(publisherDto);
     return ResponseEntity.ok()
-        .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, publisherDto.getId().toString()))
-        .build();
+        .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, id.toString())).build();
   }
 
   /**
    * {@code GET  /publishers} : get all the publishers.
    *
    * @param pageable the pagination information.
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
-   *         of publishers in body.
+   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of publishers in
+   *         body.
    */
-  @Operation(
-      summary = "Searches publishers", description = "By passing in the appropriate options, "
+  @Operation(summary = "Searches publishers",
+      description = "By passing in the appropriate options, "
           + "you can search for available publishers in the system",
-      tags = { "publisher" })
-  @ApiResponses(
-      value = {
-          @ApiResponse(
-              responseCode = "200", description = "Search results matching criteria",
-              content = @Content(
-                  array = @ArraySchema(schema = @Schema(implementation = PublisherDto.class)))),
-          @ApiResponse(responseCode = "400", description = "Bad input parameter") })
+      tags = {"publisher"})
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Search results matching criteria",
+          content = @Content(
+              array = @ArraySchema(schema = @Schema(implementation = PublisherDto.class)))),
+      @ApiResponse(responseCode = "400", description = "Bad input parameter")})
   @GetMapping("/publishers")
   public ResponseEntity<List<PublisherDto>> getAllPublishers(Pageable pageable) {
     log.debug("REST request to get a page of Publishers");
@@ -140,23 +134,20 @@ public class PublisherApi {
    * {@code GET  /publishers/:id} : get the "id" publisher.
    *
    * @param id the id of the publisherDto to retrieve.
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
-   *         the publisherDto, or with status {@code 404 (Not Found)}.
+   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the publisherDto,
+   *         or with status {@code 404 (Not Found)}.
    */
-  @Operation(
-      summary = "Searches publisher by 'id'", description = "Searches publisher by 'id'",
-      tags = { "publisher" })
-  @ApiResponses(
-      value = {
-          @ApiResponse(
-              responseCode = "200", description = "Search results matching criteria",
-              content = @Content(schema = @Schema(implementation = PublisherDto.class))),
-          @ApiResponse(responseCode = "400", description = "Bad input parameter"),
-          @ApiResponse(responseCode = "404", description = "not found") })
+  @Operation(summary = "Searches publisher by 'id'", description = "Searches publisher by 'id'",
+      tags = {"publisher"})
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Search results matching criteria",
+          content = @Content(schema = @Schema(implementation = PublisherDto.class))),
+      @ApiResponse(responseCode = "400", description = "Bad input parameter"),
+      @ApiResponse(responseCode = "404", description = "not found")})
   @GetMapping("/publishers/{id}")
-  public ResponseEntity<PublisherDto> getPublisher(@Parameter(
-      description = "The id of the publisher to get", required = true,
-      example = "1") @PathVariable("id") Long id) {
+  public ResponseEntity<PublisherDto> getPublisher(
+      @Parameter(description = "The id of the publisher to get", required = true,
+          example = "1") @PathVariable("id") Long id) {
     log.debug("REST request to get Publisher : {}", id);
     Optional<PublisherDto> publisherDto = publisherService.findOne(id);
     return ResponseUtil.wrapOrNotFound(ENTITY_NAME, publisherDto);
@@ -168,16 +159,14 @@ public class PublisherApi {
    * @param id the id of the publisherDto to delete.
    * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
    */
-  @Operation(
-      summary = "Delete publisher by 'id'", description = "Delete an publisher by 'id'",
-      tags = { "publisher" })
-  @ApiResponses(
-      value = { @ApiResponse(responseCode = "204", description = "Publisher deleted"),
-          @ApiResponse(responseCode = "400", description = "Bad input parameter") })
+  @Operation(summary = "Delete publisher by 'id'", description = "Delete an publisher by 'id'",
+      tags = {"publisher"})
+  @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "Publisher deleted"),
+      @ApiResponse(responseCode = "400", description = "Bad input parameter")})
   @DeleteMapping("/publishers/{id}")
-  public ResponseEntity<Void> deletePublisher(@Parameter(
-      description = "The id of the publisher to delete", required = true,
-      example = "1") @PathVariable Long id) {
+  public ResponseEntity<Void> deletePublisher(
+      @Parameter(description = "The id of the publisher to delete", required = true,
+          example = "1") @PathVariable Long id) {
     log.debug("REST request to delete Publisher : {}", id);
     publisherService.delete(id);
     return ResponseEntity.noContent()

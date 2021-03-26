@@ -52,25 +52,25 @@ public class PublisherApiTest extends AbstractTestApi {
   @Test
   public void testUpdatePublisherBadRequest() throws Exception {
     PublisherDto publisherDto = TestUtils.createPublisherDto(null);
-    performPut(PUBLISHERS_URI, publisherDto).andExpect(status().isBadRequest());
+    performPut(PUBLISHERS_ID_URI, ID, publisherDto).andExpect(status().isBadRequest());
 
     publisherDto = TestUtils.createPublisherDto(ID);
     publisherDto.setPublisherName(null);
-    performPut(PUBLISHERS_URI, publisherDto).andExpect(status().isBadRequest());
+    performPut(PUBLISHERS_ID_URI, ID, publisherDto).andExpect(status().isBadRequest());
 
     publisherDto = TestUtils.createPublisherDto(ID);
     publisherDto.setPublisherName("");
-    performPut(PUBLISHERS_URI, publisherDto).andExpect(status().isBadRequest());
+    performPut(PUBLISHERS_ID_URI, ID, publisherDto).andExpect(status().isBadRequest());
 
     publisherDto = TestUtils.createPublisherDto(ID);
     publisherDto.setPublisherName("  ");
-    performPut(PUBLISHERS_URI, publisherDto).andExpect(status().isBadRequest());
+    performPut(PUBLISHERS_ID_URI, ID, publisherDto).andExpect(status().isBadRequest());
   }
 
   @Test
   public void testUpdatePublisher() throws Exception {
     PublisherDto publisherDto = TestUtils.createPublisherDto(ID);
-    performPut(PUBLISHERS_URI, publisherDto).andExpect(status().isOk());
+    performPut(PUBLISHERS_ID_URI, ID, publisherDto).andExpect(status().isOk());
   }
 
   @Test
