@@ -30,23 +30,23 @@ public class NewTitleDtoTest {
     assertThat(titleDto1).isNotEqualTo(titleDto2);
 
     titleDto2 = TestUtils.createNewTitleDto();
-    titleDto1.setLanguage(Language.ITALIAN);
+    titleDto2.setLanguage(Language.ITALIAN);
     assertThat(titleDto1).isNotEqualTo(titleDto2);
 
     titleDto2 = TestUtils.createNewTitleDto();
-    titleDto1.setPrice(11L);
+    titleDto2.setPrice(11L);
     assertThat(titleDto1).isNotEqualTo(titleDto2);
 
     titleDto2 = TestUtils.createNewTitleDto();
-    titleDto1.setPublisher(new RefPublisherDto());
+    titleDto2.setPublisher(new RefPublisherDto());
     assertThat(titleDto1).isNotEqualTo(titleDto2);
 
     titleDto2 = TestUtils.createNewTitleDto();
-    titleDto1.setTitle("TitleDiff");
+    titleDto2.setTitle("TitleDiff");
     assertThat(titleDto1).isNotEqualTo(titleDto2);
 
     titleDto2 = TestUtils.createNewTitleDto();
-    titleDto1.setAuthors(Collections.singletonList(new RefAuthorDto()));
+    titleDto2.setAuthors(Collections.singletonList(new RefAuthorDto()));
     assertThat(titleDto1).isNotEqualTo(titleDto2);
   }
 }
