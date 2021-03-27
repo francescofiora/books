@@ -1,6 +1,6 @@
 # books
 SpringBoot Rest Api tutorial with OpenApi 3.0 and Mysql.
-Yes, yet another tutorial with "book, author and publisher" as entity.
+Yes, yet another tutorial with "book, author and publisher" as entities.
 
 # Topics covered
 - Spring Boot Rest Api
@@ -15,6 +15,7 @@ Yes, yet another tutorial with "book, author and publisher" as entity.
     - Services using Mockito
     - EndPoints using WebMvcTest
     - Pojos and Dtos using OpenPojo
+    - End to End Test with TestRestTemplate
 - JMX
 - Eclipse support
 
@@ -38,8 +39,11 @@ The purpose of this tutorial is a Spring Boot tutorial, however I have inserted 
 ## compile
     ./gradlew clean build
 
-## quality code with checkstyle
-    ./gradlew check
+## reports
+    build/reports/checkstyle/main.html
+    build/reports/checkstyle/test.html
+    build/reports/tests/test/index.html
+    build/reports/jacoco/test/html/index.html
 
 # How to execute
 Different way to run this app
