@@ -63,6 +63,11 @@ public class AuthorEndToEndTest extends AbstractTestEndToEnd {
   }
 
   @Test
+  public void testGetAuthorBadRequest() throws Exception {
+    assertGetBadRequest(AUTHORS_URI + "/999999999999999999999999", String.class, "id.badRequest");
+  }
+
+  @Test
   public void testUpdateAuthorBadRequest() throws Exception {
     // id
     assertUpdateBadRequest(String.format(AUTHORS_ID_URI, 1L), TestUtils.createAuthorDto(null),

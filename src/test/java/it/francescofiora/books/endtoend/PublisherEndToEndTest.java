@@ -62,6 +62,12 @@ public class PublisherEndToEndTest extends AbstractTestEndToEnd {
   }
 
   @Test
+  public void testGetPublisherBadRequest() throws Exception {
+    assertGetBadRequest(PUBLISHERS_URI + "/999999999999999999999999", String.class,
+        "id.badRequest");
+  }
+
+  @Test
   public void testUpdatePublisherBadRequest() throws Exception {
     assertUpdateBadRequest(String.format(PUBLISHERS_ID_URI, 1L), TestUtils.createPublisherDto(null),
         ALERT_BAD_REQUEST);

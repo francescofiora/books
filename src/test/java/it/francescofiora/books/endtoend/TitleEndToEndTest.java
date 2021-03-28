@@ -121,6 +121,11 @@ public class TitleEndToEndTest extends AbstractTestEndToEnd {
   }
 
   @Test
+  public void testGetTitleBadRequest() throws Exception {
+    assertGetBadRequest(TITLES_URI + "/999999999999999999999999", String.class, "id.badRequest");
+  }
+
+  @Test
   public void testUpdateTitleBadRequest() throws Exception {
     // id
     UpdatebleTitleDto titleDto = TestUtils.createUpdatebleTitleDto(null);

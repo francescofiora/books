@@ -65,8 +65,8 @@ public class AuthorServiceImpl implements AuthorService {
     log.debug("Request to update Author : {}", authorDto);
     Optional<Author> authorOpt = authorRepository.findById(authorDto.getId());
     if (!authorOpt.isPresent()) {
-      throw new NotFoundAlertException(ENTITY_NAME, "id",
-          ENTITY_NAME + " not found with id " + authorDto.getId());
+      String id = String.valueOf(authorDto.getId());
+      throw new NotFoundAlertException(ENTITY_NAME, id, ENTITY_NAME + " not found with id " + id);
     }
     Author author = authorOpt.get();
     authorMapper.updateEntityFromDto(authorDto, author);
@@ -92,7 +92,8 @@ public class AuthorServiceImpl implements AuthorService {
     log.debug("Request to delete Author : {}", id);
     Optional<Author> authorOpt = authorRepository.findById(id);
     if (authorOpt.isPresent() && !authorOpt.get().getTitles().isEmpty()) {
-      throw new BadRequestAlertException(ENTITY_NAME, "id", "Almost a Title is using this author");
+      throw new BadRequestAlertException(ENTITY_NAME, String.valueOf(id),
+          "Almost a Title is using this author");
     }
     authorRepository.deleteById(id);
   }
@@ -103,7 +104,8 @@ public class AuthorServiceImpl implements AuthorService {
     log.debug("Request to get Ttitles by Author id: {}", id);
     Optional<Author> authorOpt = authorRepository.findById(id);
     if (!authorOpt.isPresent()) {
-      throw new NotFoundAlertException(ENTITY_NAME, "id", "Author Not Found with id " + id);
+      throw new NotFoundAlertException(ENTITY_NAME, String.valueOf(id),
+          "Author Not Found with id " + id);
     }
     Author author = authorOpt.get();
     return new PageImpl<TitleDto>(

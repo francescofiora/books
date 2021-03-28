@@ -10,9 +10,12 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @RestControllerAdvice
 public class GlobalControllerExceptionHandler {
+
+  private static final String TYPE_MISMATCH_MESSAGE = "'%s' should be a valid '%s' and '%s' isn't";
 
   /**
    * Handle BadRequest.
@@ -41,13 +44,33 @@ public class GlobalControllerExceptionHandler {
 
     final BindingResult result = ex.getBindingResult();
     final List<String> fieldErrors = result.getFieldErrors().stream()
-        .map(f -> f.getObjectName() + "." + f.getField() + ": " + f.getCode())
+        .map(f -> "[" + f.getObjectName() + "." + f.getField() + " - " + f.getCode() + "]")
         .collect(Collectors.toList());
     final String entityName = ex.getTarget().getClass().getSimpleName();
 
     return ResponseEntity.badRequest()
         .headers(
             HeaderUtil.createFailureAlert(entityName + ".badRequest", fieldErrors, ex.getMessage()))
+        .build();
+  }
+
+  /**
+   * Handle Validation Exception.
+   *
+   * @param ex MethodArgumentTypeMismatchException
+   * @return ResponseEntity
+   */
+  @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public ResponseEntity<Void> handleBadRequest(MethodArgumentTypeMismatchException ex) {
+
+    final String fieldError = String.format(TYPE_MISMATCH_MESSAGE, ex.getName(),
+        ex.getRequiredType().getSimpleName(), ex.getValue());
+    final String entityName = ex.getName();
+
+    return ResponseEntity.badRequest()
+        .headers(
+            HeaderUtil.createFailureAlert(entityName + ".badRequest", fieldError, ex.getMessage()))
         .build();
   }
 

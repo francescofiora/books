@@ -148,6 +148,13 @@ public class AbstractTestEndToEnd {
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
   }
 
+  protected <T> void assertGetBadRequest(String path, Class<T> responseType, String alert)
+      throws Exception {
+    ResponseEntity<T> result = performGet(path, responseType);
+    checkHeadersError(result.getHeaders(), alert);
+    assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+  }
+
   protected void delete(String path, String alert) throws Exception {
     ResponseEntity<Void> result = performDelete(path);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);

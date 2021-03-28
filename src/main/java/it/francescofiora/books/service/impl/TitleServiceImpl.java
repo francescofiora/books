@@ -58,8 +58,8 @@ public class TitleServiceImpl implements TitleService {
     log.debug("Request to update Title : {}", titleDto);
     Optional<Title> titleOpt = titleRepository.findById(titleDto.getId());
     if (!titleOpt.isPresent()) {
-      throw new NotFoundAlertException(ENTITY_NAME, "id",
-          ENTITY_NAME + " not found with id " + titleDto.getId());
+      final String id = String.valueOf(titleDto.getId());
+      throw new NotFoundAlertException(ENTITY_NAME, id, ENTITY_NAME + " not found with id " + id);
     }
     Title title = titleOpt.get();
     titleMapper.updateEntityFromDto(titleDto, title);
