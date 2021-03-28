@@ -9,26 +9,19 @@ public class NotFoundAlertException extends ResponseStatusException {
 
   private final String entityName;
 
-  private final String errorKey;
-
-  public NotFoundAlertException(String entityName) {
-    this(entityName, null, null);
-  }
-
-  public NotFoundAlertException(String entityName, String errorKey) {
-    this(entityName, errorKey, null);
-  }
+  private final String param;
 
   /**
    * Construttor.
+   *
    * @param entityName entity Name
-   * @param errorKey error Key
-   * @param message message
+   * @param param the parameter
+   * @param errorMessage message
    */
-  public NotFoundAlertException(String entityName, String errorKey, String message) {
-    super(HttpStatus.NOT_FOUND, message);
+  public NotFoundAlertException(String entityName, String param, String errorMessage) {
+    super(HttpStatus.NOT_FOUND, errorMessage);
     this.entityName = entityName;
-    this.errorKey = errorKey;
+    this.param = param;
   }
 
   public String getEntityName() {
@@ -36,6 +29,6 @@ public class NotFoundAlertException extends ResponseStatusException {
   }
 
   public String getErrorKey() {
-    return errorKey;
+    return param;
   }
 }

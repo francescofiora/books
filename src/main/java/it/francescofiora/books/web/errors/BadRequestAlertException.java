@@ -9,29 +9,26 @@ public class BadRequestAlertException extends ResponseStatusException {
 
   private final String entityName;
 
-  private final String errorKey;
-
-  public BadRequestAlertException(String entityName, String errorKey) {
-    this(entityName, errorKey, null);
-  }
+  private final String param;
 
   /**
    * Constructor.
+   *
    * @param entityName entity name
-   * @param errorKey error Key
-   * @param message message
+   * @param param the parameter
+   * @param errorMessage message
    */
-  public BadRequestAlertException(String entityName, String errorKey, String message) {
-    super(HttpStatus.BAD_REQUEST, message);
+  public BadRequestAlertException(String entityName, String param, String errorMessage) {
+    super(HttpStatus.BAD_REQUEST, errorMessage);
     this.entityName = entityName;
-    this.errorKey = errorKey;
+    this.param = param;
   }
 
   public String getEntityName() {
     return entityName;
   }
 
-  public String getErrorKey() {
-    return errorKey;
+  public String getParam() {
+    return param;
   }
 }

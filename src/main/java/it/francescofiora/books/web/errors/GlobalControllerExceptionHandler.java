@@ -24,8 +24,9 @@ public class GlobalControllerExceptionHandler {
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public ResponseEntity<Void> handleBadRequest(BadRequestAlertException ex) {
 
-    return ResponseEntity.badRequest()
-        .headers(HeaderUtil.createFailureAlert(ex.getEntityName(), ex.getMessage())).build();
+    return ResponseEntity.badRequest().headers(HeaderUtil
+        .createFailureAlert(ex.getEntityName() + ".badRequest", ex.getParam(), ex.getMessage()))
+        .build();
   }
 
   /**
@@ -38,13 +39,16 @@ public class GlobalControllerExceptionHandler {
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public ResponseEntity<Void> handleBadRequest(MethodArgumentNotValidException ex) {
 
-    BindingResult result = ex.getBindingResult();
-    List<String> fieldErrors = result.getFieldErrors().stream()
-        .map(f -> "{" + f.getObjectName() + ": " + f.getField() + ": " + f.getCode() + "} ")
+    final BindingResult result = ex.getBindingResult();
+    final List<String> fieldErrors = result.getFieldErrors().stream()
+        .map(f -> f.getObjectName() + "." + f.getField() + ": " + f.getCode())
         .collect(Collectors.toList());
+    final String entityName = ex.getTarget().getClass().getSimpleName();
 
     return ResponseEntity.badRequest()
-        .headers(HeaderUtil.createFailureAlert(ex.getMessage(), fieldErrors.toString())).build();
+        .headers(
+            HeaderUtil.createFailureAlert(entityName + ".badRequest", fieldErrors, ex.getMessage()))
+        .build();
   }
 
   /**
@@ -57,7 +61,8 @@ public class GlobalControllerExceptionHandler {
   @ResponseStatus(HttpStatus.NOT_FOUND)
   public ResponseEntity<Void> handleItemNotFound(NotFoundAlertException ex) {
 
-    return ResponseEntity.notFound()
-        .headers(HeaderUtil.createFailureAlert(ex.getEntityName(), ex.getMessage())).build();
+    return ResponseEntity.notFound().headers(HeaderUtil
+        .createFailureAlert(ex.getEntityName() + ".notFound", ex.getErrorKey(), ex.getMessage()))
+        .build();
   }
 }

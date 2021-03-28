@@ -23,7 +23,7 @@ public class TitleServiceImpl implements TitleService {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-  private static final String ENTITY_NAME = "Title";
+  private static final String ENTITY_NAME = "TitleDto";
 
   private final TitleRepository titleRepository;
 
@@ -34,9 +34,9 @@ public class TitleServiceImpl implements TitleService {
   /**
    * Constructor.
    * 
-   * @param titleRepository     TitleRepository
-   * @param titleMapper         TitleMapper
-   * @param newTitleMapper      NewTitleMapper
+   * @param titleRepository TitleRepository
+   * @param titleMapper TitleMapper
+   * @param newTitleMapper NewTitleMapper
    */
   public TitleServiceImpl(TitleRepository titleRepository, TitleMapper titleMapper,
       NewTitleMapper newTitleMapper) {
@@ -58,7 +58,8 @@ public class TitleServiceImpl implements TitleService {
     log.debug("Request to update Title : {}", titleDto);
     Optional<Title> titleOpt = titleRepository.findById(titleDto.getId());
     if (!titleOpt.isPresent()) {
-      throw new NotFoundAlertException(ENTITY_NAME);
+      throw new NotFoundAlertException(ENTITY_NAME, "id",
+          ENTITY_NAME + " not found with id " + titleDto.getId());
     }
     Title title = titleOpt.get();
     titleMapper.updateEntityFromDto(titleDto, title);

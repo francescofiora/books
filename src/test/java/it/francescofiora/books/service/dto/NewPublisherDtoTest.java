@@ -14,10 +14,10 @@ public class NewPublisherDtoTest {
     assertThat(publisherDto1).isNotEqualTo(publisherDto2);
 
     publisherDto2 = TestUtils.createNewPublisherDto();
-    assertThat(publisherDto1).isEqualTo(publisherDto2);
+    TestUtils.checkEqualHashAndToString(publisherDto1, publisherDto2);
 
     publisherDto1.setPublisherName("DifName");
-    assertThat(publisherDto1).isNotEqualTo(publisherDto2);
+    TestUtils.checkNotEqualHashAndToString(publisherDto1, publisherDto2);
 
     publisherDto1.setPublisherName(null);
     assertThat(publisherDto1).isNotEqualTo(publisherDto2);

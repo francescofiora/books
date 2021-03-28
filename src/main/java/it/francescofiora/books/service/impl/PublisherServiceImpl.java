@@ -25,7 +25,7 @@ public class PublisherServiceImpl implements PublisherService {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-  private static final String ENTITY_NAME = "Publisher";
+  private static final String ENTITY_NAME = "PublisherDto";
 
   private final PublisherRepository publisherRepository;
 
@@ -65,7 +65,8 @@ public class PublisherServiceImpl implements PublisherService {
     log.debug("Request to save Publisher : {}", publisherDto);
     Optional<Publisher> publisherOpt = publisherRepository.findById(publisherDto.getId());
     if (!publisherOpt.isPresent()) {
-      throw new NotFoundAlertException(ENTITY_NAME);
+      throw new NotFoundAlertException(ENTITY_NAME, "id",
+          ENTITY_NAME + " not found with id " + publisherDto.getId());
     }
     Publisher publisher = publisherOpt.get();
     publisherMapper.updateEntityFromDto(publisherDto, publisher);
@@ -91,7 +92,8 @@ public class PublisherServiceImpl implements PublisherService {
     log.debug("Request to delete Publisher : {}", id);
     Optional<Title> titleOpt = titleRepository.findOneWithPublisherRelationships(id);
     if (titleOpt.isPresent()) {
-      throw new BadRequestAlertException(ENTITY_NAME, "Almost a Title is using this publisher");
+      throw new BadRequestAlertException(ENTITY_NAME, "id",
+          "Almost a Title is using this publisher");
     }
     publisherRepository.deleteById(id);
   }

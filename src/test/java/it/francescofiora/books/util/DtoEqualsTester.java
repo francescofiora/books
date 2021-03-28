@@ -50,12 +50,12 @@ public class DtoEqualsTester implements Rule {
     assertThat(dtoObj1.equals(dtoObj2)).isFalse();
 
     dtoObj2.setId(2L);
-    assertThat(dtoObj1.equals(dtoObj2)).isFalse();
+    TestUtils.checkNotEqualHashAndToString(dtoObj1, dtoObj2);
 
     dtoObj2.setId(dtoObj1.getId());
-    assertThat(dtoObj1.equals(dtoObj2)).isTrue();
+    TestUtils.checkEqualHashAndToString(dtoObj1, dtoObj2);
 
     dtoObj1.setId(null);
-    assertThat(dtoObj1.equals(dtoObj2)).isFalse();
+    TestUtils.checkNotEqualHashAndToString(dtoObj1, dtoObj2);
   }
 }

@@ -5,7 +5,8 @@ plugins {
   id 'io.spring.dependency-management' version '1.0.11.RELEASE'
   id 'checkstyle'
   id 'jacoco'
-}
+  id 'info.solidsoft.pitest' version '1.5.1'
+ }
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -128,6 +129,10 @@ test {
 
 jacocoTestReport {
   dependsOn test
+}
+
+pitest {
+  junit5PluginVersion = '0.12'
 }
 
 wrapper {

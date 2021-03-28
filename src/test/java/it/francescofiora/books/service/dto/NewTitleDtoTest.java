@@ -16,37 +16,37 @@ public class NewTitleDtoTest {
     assertThat(titleDto1).isNotEqualTo(titleDto2);
 
     titleDto2 = TestUtils.createNewTitleDto();
-    assertThat(titleDto1).isEqualTo(titleDto2);
+    TestUtils.checkEqualHashAndToString(titleDto1, titleDto2);
 
     titleDto2.setCopyright(2021);
-    assertThat(titleDto1).isNotEqualTo(titleDto2);
+    TestUtils.checkNotEqualHashAndToString(titleDto1, titleDto2);
 
     titleDto2 = TestUtils.createNewTitleDto();
     titleDto2.setEditionNumber(1L);
-    assertThat(titleDto1).isNotEqualTo(titleDto2);
+    TestUtils.checkNotEqualHashAndToString(titleDto1, titleDto2);
 
     titleDto2 = TestUtils.createNewTitleDto();
     titleDto2.setImageFile("ImageFileDiff");
-    assertThat(titleDto1).isNotEqualTo(titleDto2);
+    TestUtils.checkNotEqualHashAndToString(titleDto1, titleDto2);
 
     titleDto2 = TestUtils.createNewTitleDto();
     titleDto2.setLanguage(Language.ITALIAN);
-    assertThat(titleDto1).isNotEqualTo(titleDto2);
+    TestUtils.checkNotEqualHashAndToString(titleDto1, titleDto2);
 
     titleDto2 = TestUtils.createNewTitleDto();
     titleDto2.setPrice(11L);
-    assertThat(titleDto1).isNotEqualTo(titleDto2);
+    TestUtils.checkNotEqualHashAndToString(titleDto1, titleDto2);
 
     titleDto2 = TestUtils.createNewTitleDto();
     titleDto2.setPublisher(new RefPublisherDto());
-    assertThat(titleDto1).isNotEqualTo(titleDto2);
+    TestUtils.checkNotEqualHashAndToString(titleDto1, titleDto2);
 
     titleDto2 = TestUtils.createNewTitleDto();
     titleDto2.setTitle("TitleDiff");
-    assertThat(titleDto1).isNotEqualTo(titleDto2);
+    TestUtils.checkNotEqualHashAndToString(titleDto1, titleDto2);
 
     titleDto2 = TestUtils.createNewTitleDto();
     titleDto2.setAuthors(Collections.singletonList(new RefAuthorDto()));
-    assertThat(titleDto1).isNotEqualTo(titleDto2);
+    TestUtils.checkNotEqualHashAndToString(titleDto1, titleDto2);
   }
 }

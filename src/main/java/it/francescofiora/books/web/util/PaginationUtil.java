@@ -3,30 +3,30 @@ package it.francescofiora.books.web.util;
 import java.text.MessageFormat;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
-public class PaginationUtil {
+public final class PaginationUtil {
   private static final String HEADER_X_TOTAL_COUNT = "X-Total-Count";
   private static final String HEADER_LINK_FORMAT = "<{0}>; rel=\"{1}\"";
 
-  private PaginationUtil() {
-  }
+  private PaginationUtil() {}
 
   /**
-   * Generate pagination headers for a Spring Data
-   * {@link org.springframework.data.domain.Page} object.
+   * Generate pagination headers for a Spring Data {@link org.springframework.data.domain.Page}
+   * object.
    *
-   * @param uriBuilder The URI builder.
-   * @param page       The page.
-   * @param <T>        The type of object.
-   * @return http header.
+   * @param entityName the entity name
+   * @param page The page
+   * @param <T> The type of object
+   * @return http header
    */
-  public static <T> HttpHeaders generatePaginationHttpHeaders(UriComponentsBuilder uriBuilder,
-      Page<T> page) {
-    HttpHeaders headers = new HttpHeaders();
-    headers.add(HEADER_X_TOTAL_COUNT, Long.toString(page.getTotalElements()));
+  public static <T> HttpHeaders getHttpHeadersfromPagination(String entityName, Page<T> page) {
+    UriComponentsBuilder uriBuilder = ServletUriComponentsBuilder.fromCurrentRequest();
     int pageNumber = page.getNumber();
     int pageSize = page.getSize();
+    HttpHeaders headers = HeaderUtil.createEntityGetAlert(entityName, pageNumber + " " + pageSize);
+    headers.add(HEADER_X_TOTAL_COUNT, Long.toString(page.getTotalElements()));
     StringBuilder link = new StringBuilder();
     if (pageNumber < page.getTotalPages() - 1) {
       link.append(prepareLink(uriBuilder, pageNumber + 1, pageSize, "next")).append(",");

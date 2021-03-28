@@ -13,19 +13,12 @@ import it.francescofiora.books.service.dto.AuthorDto;
 import it.francescofiora.books.service.dto.NewAuthorDto;
 import it.francescofiora.books.service.dto.TitleDto;
 import it.francescofiora.books.web.errors.BadRequestAlertException;
-import it.francescofiora.books.web.util.HeaderUtil;
-import it.francescofiora.books.web.util.PaginationUtil;
-import it.francescofiora.books.web.util.ResponseUtil;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Optional;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,29 +28,29 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @Tag(name = "author", description = "Author Rest API")
 @RequestMapping("/api")
-public class AuthorApi {
+public class AuthorApi extends AbstractApi {
 
-  private static final String ENTITY_NAME = "Author";
+  private static final String ENTITY_NAME = "AuthorDto";
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
   private final AuthorService authorService;
 
   public AuthorApi(AuthorService authorService) {
+    super(ENTITY_NAME);
     this.authorService = authorService;
   }
 
   /**
    * {@code POST  /authors} : Create a new author.
    *
-   * @param authorDto the author to create.
-   * @return the {@link ResponseEntity} with status {@code 201 (Created)}.
-   * @throws URISyntaxException if the Location URI syntax is incorrect.
+   * @param authorDto the author to create
+   * @return the {@link ResponseEntity} with status {@code 201 (Created)}
+   * @throws URISyntaxException if the Location URI syntax is incorrect
    */
   @Operation(summary = "Add new Author", description = "Add a new Author to the system",
       tags = {"author"})
@@ -70,20 +63,17 @@ public class AuthorApi {
       throws URISyntaxException {
     log.debug("REST request to create Author : {}", authorDto);
     AuthorDto result = authorService.create(authorDto);
-    return ResponseEntity.created(new URI("/api/authors/" + result.getId()))
-        .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-        .build();
+    return postResponse("/api/authors/" + result.getId(), result.getId());
   }
 
   /**
    * {@code PUT  /authors:id} : Updates an existing author.
    *
-   * @param authorDto the author to update.
-   * @param id the id of the author to update.
+   * @param authorDto the author to update
+   * @param id the id of the author to update
    * @return the {@link ResponseEntity} with status {@code 200 (OK)}, or with status
    *         {@code 400 (Bad Request)} if the author is not valid, or with status
-   *         {@code 500 (Internal Server Error)} if the author couldn't be updated.
-   * @throws URISyntaxException if the Location URI syntax is incorrect.
+   *         {@code 500 (Internal Server Error)} if the author couldn't be updated
    */
   @Operation(summary = "update Author", description = "Update an Author to the system",
       tags = {"author"})
@@ -94,23 +84,21 @@ public class AuthorApi {
   public ResponseEntity<Void> updateAuthor(
       @Parameter(description = "Author to update") @Valid @RequestBody AuthorDto authorDto,
       @Parameter(description = "The id of the author to update", required = true,
-          example = "1") @PathVariable("id") Long id)
-      throws URISyntaxException {
+          example = "1") @PathVariable("id") Long id) {
     log.debug("REST request to update Author : {}", authorDto);
     if (!id.equals(authorDto.getId())) {
       throw new BadRequestAlertException(ENTITY_NAME, "idNotValid", "Invalid id");
     }
     authorService.update(authorDto);
-    return ResponseEntity.ok()
-        .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, id.toString())).build();
+    return putResponse(id);
   }
 
   /**
    * {@code GET  /authors} : get all the authors.
    *
-   * @param pageable the pagination information.
+   * @param pageable the pagination information
    * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of authors in
-   *         body.
+   *         body
    */
   @Operation(summary = "Searches authors",
       description = "By passing in the appropriate options, "
@@ -124,18 +112,15 @@ public class AuthorApi {
   @GetMapping("/authors")
   public ResponseEntity<List<AuthorDto>> getAllAuthors(Pageable pageable) {
     log.debug("REST request to get a page of Authors");
-    Page<AuthorDto> page = authorService.findAll(pageable);
-    HttpHeaders headers = PaginationUtil
-        .generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-    return ResponseEntity.ok().headers(headers).body(page.getContent());
+    return getResponse(authorService.findAll(pageable));
   }
 
   /**
    * {@code GET  /authors/:id} : get the "id" author.
    *
-   * @param id the id of the author to retrieve.
+   * @param id the id of the author to retrieve
    * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the author, or
-   *         with status {@code 404 (Not Found)}.
+   *         with status {@code 404 (Not Found)}
    */
   @Operation(summary = "Searches author by 'id'", description = "Searches author by 'id'",
       tags = {"author"})
@@ -148,16 +133,15 @@ public class AuthorApi {
   public ResponseEntity<AuthorDto> getAuthor(@Parameter(description = "The id of the author to get",
       required = true, example = "1") @PathVariable("id") Long id) {
     log.debug("REST request to get Author : {}", id);
-    Optional<AuthorDto> authorDto = authorService.findOne(id);
-    return ResponseUtil.wrapOrNotFound(ENTITY_NAME, authorDto);
+    return getResponse(authorService.findOne(id), id);
   }
 
   /**
    * {@code GET  /authors/:id/titles} : get titles the "id" author.
    *
-   * @param id the id of the author of the TitleDto to retrieve.
+   * @param id the id of the author of the TitleDto to retrieve
    * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the list of the
-   *         titleDto of author, or with status {@code 404 (Not Found)}.
+   *         titleDto of author, or with status {@code 404 (Not Found)}
    */
   @Operation(summary = "Searches titles of the by author 'id'",
       description = "Searches titles by author 'id'", tags = {"author"})
@@ -172,17 +156,14 @@ public class AuthorApi {
       @Parameter(description = "The id of the author", required = true,
           example = "1") @PathVariable("id") Long id) {
     log.debug("REST request to get Titles of Author : {}", id);
-    Page<TitleDto> page = authorService.findTitlesByAuthorId(pageable, id);
-    HttpHeaders headers = PaginationUtil
-        .generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-    return ResponseEntity.ok().headers(headers).body(page.getContent());
+    return getResponse("TitleDto", authorService.findTitlesByAuthorId(pageable, id));
   }
 
   /**
    * {@code DELETE  /authors/:id} : delete the "id" author.
    *
-   * @param id the id of the authorDto to delete.
-   * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+   * @param id the id of the authorDto to delete
+   * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}
    */
   @Operation(summary = "Delete author by 'id'", description = "Delete an author by 'id'",
       tags = {"author"})
@@ -194,7 +175,6 @@ public class AuthorApi {
           example = "1") @PathVariable Long id) {
     log.debug("REST request to delete Author : {}", id);
     authorService.delete(id);
-    return ResponseEntity.noContent()
-        .headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+    return deleteResponse(id);
   }
 }

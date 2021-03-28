@@ -14,18 +14,18 @@ public class NewAuthorDtoTest {
     assertThat(authorDto1).isNotEqualTo(authorDto2);
 
     authorDto2 = TestUtils.createNewAuthorDto();
-    assertThat(authorDto1).isEqualTo(authorDto2);
+    TestUtils.checkEqualHashAndToString(authorDto1, authorDto2);
+
     authorDto2.setFirstName("NameDiff");
-    assertThat(authorDto1).isNotEqualTo(authorDto2);
+    TestUtils.checkNotEqualHashAndToString(authorDto1, authorDto2);
     authorDto1.setFirstName(null);
-    assertThat(authorDto1).isNotEqualTo(authorDto2);
+    TestUtils.checkNotEqualHashAndToString(authorDto1, authorDto2);
 
     authorDto1 = TestUtils.createNewAuthorDto();
     authorDto2 = TestUtils.createNewAuthorDto();
     authorDto2.setLastName("SurnameDiff");
-    assertThat(authorDto1).isNotEqualTo(authorDto2);
+    TestUtils.checkNotEqualHashAndToString(authorDto1, authorDto2);
     authorDto1.setLastName(null);
-    assertThat(authorDto1).isNotEqualTo(authorDto2);
+    TestUtils.checkNotEqualHashAndToString(authorDto1, authorDto2);
   }
-  
 }

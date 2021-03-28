@@ -39,11 +39,16 @@ The purpose of this tutorial is a Spring Boot tutorial, however I have inserted 
 ## compile
     ./gradlew clean build
 
+## Pitest
+    ./gradlew pitest
+
 ## reports
     build/reports/checkstyle/main.html
     build/reports/checkstyle/test.html
     build/reports/tests/test/index.html
     build/reports/jacoco/test/html/index.html
+    build/reports/pitest/<execution_date and time>/index.html
+
 
 # How to execute
 Different way to run this app
@@ -82,3 +87,5 @@ https://localhost:8081/books/swagger-ui.html
 - [Mockito](https://site.mockito.org/)
 - [JUnit 5](https://junit.org/junit5/)
 - [OpenPojo 0.8](https://github.com/OpenPojo)
+- [Jacoco 0.8](https://www.jacoco.org/)
+- [Pitest 1.5](https://pitest.org/)

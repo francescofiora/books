@@ -50,12 +50,12 @@ public class PojoEqualsTester implements Rule {
     assertThat(domainObj1.equals(domainObj2)).isFalse();
 
     domainObj2.setId(2L);
-    assertThat(domainObj1.equals(domainObj2)).isFalse();
+    TestUtils.checkNotEqualHashAndToString(domainObj1, domainObj2);
 
     domainObj2.setId(domainObj1.getId());
-    assertThat(domainObj1.equals(domainObj2)).isTrue();
+    TestUtils.checkEqualHashAndToString(domainObj1, domainObj2);
 
     domainObj1.setId(null);
-    assertThat(domainObj1.equals(domainObj2)).isFalse();
+    TestUtils.checkNotEqualHashAndToString(domainObj1, domainObj2);
   }
 }

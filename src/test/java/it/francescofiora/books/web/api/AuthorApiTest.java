@@ -22,6 +22,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MvcResult;
@@ -50,7 +51,8 @@ public class AuthorApiTest extends AbstractTestApi {
     MvcResult result =
         performPost(AUTHORS_URI, newAuthorDto).andExpect(status().isCreated()).andReturn();
 
-    assertThat(result.getResponse().getHeaderValue("location")).isEqualTo(AUTHORS_URI + "/" + ID);
+    assertThat(result.getResponse().getHeaderValue(HttpHeaders.LOCATION))
+        .isEqualTo(AUTHORS_URI + "/" + ID);
   }
 
   @Test

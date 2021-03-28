@@ -58,7 +58,7 @@ public class CustomErrorController  {
     Map<String, Object> map = getErrorAttributes(request, ErrorAttributeOptions.defaults());
 
     StringBuilder sb = new StringBuilder();
-    sb.append(status.value() + " - ");
+    sb.append(status + " - ");
     final Object error = map.get("error");
     if (error != null) {
       sb.append(error.toString() + " ");
@@ -70,7 +70,8 @@ public class CustomErrorController  {
 
     String path = map.get("path").toString();
 
-    return ResponseEntity.status(status).headers(HeaderUtil.createFailureAlert(path, sb.toString()))
+    return ResponseEntity.status(status)
+        .headers(HeaderUtil.createFailureAlert(status.toString(), path, sb.toString()))
         .build();
   }
 }

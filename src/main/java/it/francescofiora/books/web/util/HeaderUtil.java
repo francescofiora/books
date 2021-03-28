@@ -1,85 +1,101 @@
 package it.francescofiora.books.web.util;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+import java.util.List;
 import org.springframework.http.HttpHeaders;
 
 public interface HeaderUtil {
 
+  String X_ALERT = "X-alert";
+  String X_ERROR = "X-error";
+  String X_PARAMS = "X-params";
+
   /**
-   * <p>
-   * createEntityCreationAlert.
-   * </p>
+   * Create Entity Creation Alert.
    *
-   * @param entityName a {@link java.lang.String} object.
-   * @param param      a {@link java.lang.String} object.
-   * @return a {@link org.springframework.http.HttpHeaders} object.
+   * @param entityName the entity name
+   * @param param the parameter
+   * @return HttpHeaders
    */
-  public static HttpHeaders createEntityCreationAlert(String entityName, String param) {
+  static HttpHeaders createEntityCreationAlert(String entityName, String param) {
     return createAlert(entityName + ".created", param);
   }
 
   /**
-   * <p>
-   * createEntityUpdateAlert.
-   * </p>
+   * Create Entity Get Alert.
    *
-   * @param entityName a {@link java.lang.String} object.
-   * @param param      a {@link java.lang.String} object.
-   * @return a {@link org.springframework.http.HttpHeaders} object.
+   * @param entityName the entity name
+   * @param param the parameter
+   * @return HttpHeaders
    */
-  public static HttpHeaders createEntityUpdateAlert(String entityName, String param) {
+  static HttpHeaders createEntityGetAlert(String entityName, String param) {
+    return createAlert(entityName + ".get", param);
+  }
+
+  /**
+   * Create Entity Update Alert.
+   *
+   * @param entityName the entity name
+   * @param param the parameter
+   * @return HttpHeaders
+   */
+  static HttpHeaders createEntityUpdateAlert(String entityName, String param) {
     return createAlert(entityName + ".updated", param);
   }
 
   /**
-   * <p>
-   * createEntityDeletionAlert.
-   * </p>
+   * Create Entity Deletion Alert.
    *
-   * @param entityName a {@link java.lang.String} object.
-   * @param param      a {@link java.lang.String} object.
-   * @return a {@link org.springframework.http.HttpHeaders} object.
+   * @param entityName the entity name
+   * @param param the parameter
+   * @return HttpHeaders
    */
-  public static HttpHeaders createEntityDeletionAlert(String entityName, String param) {
+  static HttpHeaders createEntityDeletionAlert(String entityName, String param) {
     return createAlert(entityName + ".deleted", param);
   }
 
   /**
-   * <p>
-   * createFailureAlert.
-   * </p>
+   * Create Failure Alert.
    *
-   * @param entityName a {@link java.lang.String} object.
-   * @param message    a {@link java.lang.String} object.
-   * @return a {@link org.springframework.http.HttpHeaders} object.
+   * @param alert the message
+   * @param param the parameter
+   * @param errorMessage the error message
+   * @return HttpHeaders
    */
-  public static HttpHeaders createFailureAlert(String entityName, String message) {
+  static HttpHeaders createFailureAlert(String alert, String param, String errorMessage) {
     HttpHeaders headers = new HttpHeaders();
-    headers.add("X-error", message);
-    headers.add("X-params", entityName);
+    headers.add(X_ALERT, alert);
+    headers.add(X_PARAMS, param);
+    headers.add(X_ERROR, errorMessage);
     return headers;
   }
 
   /**
-   * <p>
-   * createAlert.
-   * </p>
+   * Create Failure Alert.
    *
-   * @param message a {@link java.lang.String} object.
-   * @param param   a {@link java.lang.String} object.
-   * @return a {@link org.springframework.http.HttpHeaders} object.
+   * @param alert the message
+   * @param params the list of parameters
+   * @param errorMessage the error message
+   * @return HttpHeaders
    */
-  public static HttpHeaders createAlert(String message, String param) {
+  static HttpHeaders createFailureAlert(String alert, List<String> params, String errorMessage) {
     HttpHeaders headers = new HttpHeaders();
-    headers.add("X-alert", message);
-    try {
-      headers.add("X-params", URLEncoder.encode(param, StandardCharsets.UTF_8.toString()));
-    } catch (UnsupportedEncodingException e) {
-      // StandardCharsets are supported by every Java implementation so this exception
-      // will never happen
-    }
+    headers.add(X_ALERT, alert);
+    headers.addAll(X_PARAMS, params);
+    headers.add(X_ERROR, errorMessage);
+    return headers;
+  }
+
+  /**
+   * Create Alert.
+   *
+   * @param alert the message
+   * @param param the parameter
+   * @return HttpHeaders
+   */
+  static HttpHeaders createAlert(String alert, String param) {
+    HttpHeaders headers = new HttpHeaders();
+    headers.add(X_ALERT, alert);
+    headers.add(X_PARAMS, param);
     return headers;
   }
 }

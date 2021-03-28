@@ -21,6 +21,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MvcResult;
@@ -45,7 +46,7 @@ public class PublisherApiTest extends AbstractTestApi {
     given(publisherService.create(any(NewPublisherDto.class))).willReturn(publisherDto);
     MvcResult result =
         performPost(PUBLISHERS_URI, newPublisherDto).andExpect(status().isCreated()).andReturn();
-    assertThat(result.getResponse().getHeaderValue("location"))
+    assertThat(result.getResponse().getHeaderValue(HttpHeaders.LOCATION))
         .isEqualTo(PUBLISHERS_URI + "/" + ID);
   }
 

@@ -12,19 +12,12 @@ import it.francescofiora.books.service.PublisherService;
 import it.francescofiora.books.service.dto.NewPublisherDto;
 import it.francescofiora.books.service.dto.PublisherDto;
 import it.francescofiora.books.web.errors.BadRequestAlertException;
-import it.francescofiora.books.web.util.HeaderUtil;
-import it.francescofiora.books.web.util.PaginationUtil;
-import it.francescofiora.books.web.util.ResponseUtil;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Optional;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,29 +27,29 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @Tag(name = "publisher", description = "Publisher Rest API")
 @RequestMapping("/api")
-public class PublisherApi {
+public class PublisherApi extends AbstractApi {
 
-  private static final String ENTITY_NAME = "Publisher";
+  private static final String ENTITY_NAME = "PublisherDto";
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
   private final PublisherService publisherService;
 
   public PublisherApi(PublisherService publisherService) {
+    super(ENTITY_NAME);
     this.publisherService = publisherService;
   }
 
   /**
    * {@code POST  /publishers} : Create a new publisher.
    *
-   * @param publisherDto the publisher to create.
-   * @return the {@link ResponseEntity} with status {@code 201 (Created)}.
-   * @throws URISyntaxException if the Location URI syntax is incorrect.
+   * @param publisherDto the publisher to create
+   * @return the {@link ResponseEntity} with status {@code 201 (Created)}
+   * @throws URISyntaxException if the Location URI syntax is incorrect
    */
   @Operation(summary = "Add new Publisher", description = "Add a new Publisher to the system",
       tags = {"publisher"})
@@ -70,20 +63,17 @@ public class PublisherApi {
       throws URISyntaxException {
     log.debug("REST request to create Publisher : {}", publisherDto);
     PublisherDto result = publisherService.create(publisherDto);
-    return ResponseEntity.created(new URI("/api/publishers/" + result.getId()))
-        .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-        .build();
+    return postResponse("/api/publishers/" + result.getId(), result.getId());
   }
 
   /**
    * {@code PUT  /publishers:id} : Updates an existing publisher.
    *
-   * @param publisherDto the publisher to update.
-   * @param id the id of the publisher to update.
+   * @param publisherDto the publisher to update
+   * @param id the id of the publisher to update
    * @return the {@link ResponseEntity} with status {@code 200 (OK)}, or with status
    *         {@code 400 (Bad Request)} if the publisher is not valid, or with status
-   *         {@code 500 (Internal Server Error)} if the publisher couldn't be updated.
-   * @throws URISyntaxException if the Location URI syntax is incorrect.
+   *         {@code 500 (Internal Server Error)} if the publisher couldn't be updated
    */
   @Operation(summary = "Update Publisher", description = "Update an Publisher to the system",
       tags = {"publisher"})
@@ -94,23 +84,21 @@ public class PublisherApi {
   public ResponseEntity<Void> updatePublisher(
       @Parameter(description = "Publisher to update") @Valid @RequestBody PublisherDto publisherDto,
       @Parameter(description = "The id of the publisher to update", required = true,
-          example = "1") @PathVariable("id") Long id)
-      throws URISyntaxException {
+          example = "1") @PathVariable("id") Long id) {
     log.debug("REST request to update Publisher : {}", publisherDto);
     if (!id.equals(publisherDto.getId())) {
       throw new BadRequestAlertException(ENTITY_NAME, "idNotValid", "Invalid id");
     }
     publisherService.update(publisherDto);
-    return ResponseEntity.ok()
-        .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, id.toString())).build();
+    return putResponse(id);
   }
 
   /**
    * {@code GET  /publishers} : get all the publishers.
    *
-   * @param pageable the pagination information.
+   * @param pageable the pagination information
    * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of publishers in
-   *         body.
+   *         body
    */
   @Operation(summary = "Searches publishers",
       description = "By passing in the appropriate options, "
@@ -124,18 +112,15 @@ public class PublisherApi {
   @GetMapping("/publishers")
   public ResponseEntity<List<PublisherDto>> getAllPublishers(Pageable pageable) {
     log.debug("REST request to get a page of Publishers");
-    Page<PublisherDto> page = publisherService.findAll(pageable);
-    HttpHeaders headers = PaginationUtil
-        .generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-    return ResponseEntity.ok().headers(headers).body(page.getContent());
+    return getResponse(publisherService.findAll(pageable));
   }
 
   /**
    * {@code GET  /publishers/:id} : get the "id" publisher.
    *
-   * @param id the id of the publisherDto to retrieve.
+   * @param id the id of the publisherDto to retrieve
    * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the publisherDto,
-   *         or with status {@code 404 (Not Found)}.
+   *         or with status {@code 404 (Not Found)}
    */
   @Operation(summary = "Searches publisher by 'id'", description = "Searches publisher by 'id'",
       tags = {"publisher"})
@@ -149,15 +134,14 @@ public class PublisherApi {
       @Parameter(description = "The id of the publisher to get", required = true,
           example = "1") @PathVariable("id") Long id) {
     log.debug("REST request to get Publisher : {}", id);
-    Optional<PublisherDto> publisherDto = publisherService.findOne(id);
-    return ResponseUtil.wrapOrNotFound(ENTITY_NAME, publisherDto);
+    return getResponse(publisherService.findOne(id), id);
   }
 
   /**
    * {@code DELETE  /publishers/:id} : delete the "id" publisher.
    *
-   * @param id the id of the publisherDto to delete.
-   * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+   * @param id the id of the publisherDto to delete
+   * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}
    */
   @Operation(summary = "Delete publisher by 'id'", description = "Delete an publisher by 'id'",
       tags = {"publisher"})
@@ -169,7 +153,6 @@ public class PublisherApi {
           example = "1") @PathVariable Long id) {
     log.debug("REST request to delete Publisher : {}", id);
     publisherService.delete(id);
-    return ResponseEntity.noContent()
-        .headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+    return deleteResponse(id);
   }
 }

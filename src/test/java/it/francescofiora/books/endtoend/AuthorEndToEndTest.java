@@ -23,6 +23,13 @@ public class AuthorEndToEndTest extends AbstractTestEndToEnd {
   private static final String AUTHORS_URI = "/api/authors";
   private static final String AUTHORS_ID_URI = "/api/authors/%d";
 
+  private static final String ALERT_CREATED = "AuthorDto.created";
+  private static final String ALERT_UPDATED = "AuthorDto.updated";
+  private static final String ALERT_DELETED = "AuthorDto.deleted";
+  private static final String ALERT_GET = "AuthorDto.get";
+  private static final String ALERT_BAD_REQUEST = "AuthorDto.badRequest";
+  private static final String ALERT_NOT_FOUND = "AuthorDto.notFound";
+
   @Test
   public void testAuth() throws Exception {
     testUnauthorized(AUTHORS_URI);
@@ -31,64 +38,67 @@ public class AuthorEndToEndTest extends AbstractTestEndToEnd {
   @Test
   public void testCreate() throws Exception {
     NewAuthorDto newAuthorDto = TestUtils.createNewAuthorDto();
-    Long authorId = createResource(AUTHORS_URI, newAuthorDto, "Author.created");
+    Long authorId = createAndReturnId(AUTHORS_URI, newAuthorDto, ALERT_CREATED);
 
     final String authorsIdUri = String.format(AUTHORS_ID_URI, authorId);
 
     AuthorDto authorDto = TestUtils.createAuthorDto(authorId);
-    updateResource(authorsIdUri, authorDto, "Author.updated");
+    update(authorsIdUri, authorDto, ALERT_UPDATED);
 
-    AuthorDto actual = getResource(authorsIdUri, AuthorDto.class);
+    AuthorDto actual = get(authorsIdUri, AuthorDto.class, ALERT_GET);
     assertThat(actual).isEqualTo(authorDto);
+    assertThat(actual.getFirstName()).isEqualTo(authorDto.getFirstName());
+    assertThat(actual.getLastName()).isEqualTo(authorDto.getLastName());
 
-    AuthorDto[] authors = getResource(AUTHORS_URI, PageRequest.of(1, 1), AuthorDto[].class);
+    AuthorDto[] authors = get(AUTHORS_URI, PageRequest.of(1, 1), AuthorDto[].class, ALERT_GET);
     assertThat(authors).isNotEmpty();
     Optional<AuthorDto> option =
         Stream.of(authors).filter(author -> author.getId().equals(authorId)).findAny();
     assertThat(option).isPresent();
     assertThat(option.get()).isEqualTo(authorDto);
 
-    deleteResource(authorsIdUri);
+    delete(authorsIdUri, ALERT_DELETED);
 
-    getResourceNotFound(authorsIdUri, AuthorDto.class);
+    assertGetNotFound(authorsIdUri, AuthorDto.class, ALERT_NOT_FOUND);
   }
 
   @Test
   public void testUpdateAuthorBadRequest() throws Exception {
     // id
-    updateResourceBadRequest(String.format(AUTHORS_ID_URI, 1L), TestUtils.createAuthorDto(null));
+    assertUpdateBadRequest(String.format(AUTHORS_ID_URI, 1L), TestUtils.createAuthorDto(null),
+        ALERT_BAD_REQUEST);
 
-    Long id = createResource(AUTHORS_URI, TestUtils.createNewAuthorDto(), "Author.created");
+    Long id = createAndReturnId(AUTHORS_URI, TestUtils.createNewAuthorDto(), ALERT_CREATED);
 
-    updateResourceBadRequest(String.format(AUTHORS_ID_URI, (id + 1)),
-        TestUtils.createAuthorDto(id));
+    assertUpdateBadRequest(String.format(AUTHORS_ID_URI, (id + 1)), TestUtils.createAuthorDto(id),
+        ALERT_BAD_REQUEST);
 
     final String path = String.format(AUTHORS_ID_URI, id);
 
     // firstName
     AuthorDto authorDto = TestUtils.createAuthorDto(id);
     authorDto.setFirstName(null);
-    updateResourceBadRequest(path, authorDto);
+    assertUpdateBadRequest(path, authorDto, ALERT_BAD_REQUEST);
 
     authorDto = TestUtils.createAuthorDto(id);
     authorDto.setFirstName("");
-    updateResourceBadRequest(path, authorDto);
+    assertUpdateBadRequest(path, authorDto, ALERT_BAD_REQUEST);
 
     authorDto = TestUtils.createAuthorDto(id);
     authorDto.setFirstName("  ");
-    updateResourceBadRequest(path, authorDto);
+    assertUpdateBadRequest(path, authorDto, ALERT_BAD_REQUEST);
 
     // lastName
     authorDto = TestUtils.createAuthorDto(id);
     authorDto.setLastName(null);
-    updateResourceBadRequest(path, authorDto);
+    assertUpdateBadRequest(path, authorDto, ALERT_BAD_REQUEST);
 
     authorDto = TestUtils.createAuthorDto(id);
     authorDto.setLastName("");
-    updateResourceBadRequest(path, authorDto);
+    assertUpdateBadRequest(path, authorDto, ALERT_BAD_REQUEST);
 
     authorDto = TestUtils.createAuthorDto(id);
     authorDto.setLastName("  ");
-    updateResourceBadRequest(path, authorDto);
+    assertUpdateBadRequest(path, authorDto, ALERT_BAD_REQUEST);
   }
 }

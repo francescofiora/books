@@ -3,10 +3,7 @@ package it.francescofiora.books.service.util;
 import it.francescofiora.books.service.dto.DtoIdentifier;
 import java.util.Objects;
 
-public final class DtoUtils {
-
-  private DtoUtils() {
-  }
+public interface DtoUtils {
 
   /**
    * return true if obj1 and obj2 are same reference or they have same id.
@@ -15,7 +12,7 @@ public final class DtoUtils {
    * @param obj2 Object
    * @return true if obj1 and obj2 are same reference or they have same id
    */
-  public static boolean equals(DtoIdentifier obj1, Object obj2) {
+  static boolean equals(DtoIdentifier obj1, Object obj2) {
     if (obj1 == obj2) {
       return true;
     }

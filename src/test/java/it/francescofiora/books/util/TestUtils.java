@@ -1,5 +1,7 @@
 package it.francescofiora.books.util;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import it.francescofiora.books.domain.enumeration.Language;
 import it.francescofiora.books.service.dto.AuthorDto;
 import it.francescofiora.books.service.dto.NewAuthorDto;
@@ -50,7 +52,7 @@ public final class TestUtils {
    */
   public static NewAuthorDto createNewAuthorDto() {
     NewAuthorDto authorDto = new NewAuthorDto();
-    authorDto.setFirstName("John");
+    authorDto.setFirstName("Robert");
     authorDto.setLastName("Smith");
     return authorDto;
   }
@@ -62,7 +64,7 @@ public final class TestUtils {
    */
   public static NewPublisherDto createNewPublisherDto() {
     NewPublisherDto publisherDto = new NewPublisherDto();
-    publisherDto.setPublisherName("Name");
+    publisherDto.setPublisherName("Publisher");
     return publisherDto;
   }
 
@@ -85,12 +87,12 @@ public final class TestUtils {
    */
   public static NewTitleDto createNewSimpleTitleDto() {
     NewTitleDto titleDto = new NewTitleDto();
-    titleDto.setTitle("Title");
+    titleDto.setTitle("The Title");
     titleDto.setCopyright(2020);
     titleDto.setEditionNumber(10L);
     titleDto.setImageFile("path_image");
     titleDto.setLanguage(Language.ENGLISH);
-    titleDto.setPrice(10L);
+    titleDto.setPrice(15L);
     return titleDto;
   }
 
@@ -127,14 +129,14 @@ public final class TestUtils {
   public static TitleDto createTitleDto(final Long id) {
     TitleDto titleDto = new TitleDto();
     titleDto.setId(id);
-    titleDto.setTitle("Title");
-    titleDto.setCopyright(2020);
-    titleDto.setEditionNumber(10L);
+    titleDto.setTitle("One Title");
+    titleDto.setCopyright(2021);
+    titleDto.setEditionNumber(2L);
     titleDto.setImageFile("path_image");
-    titleDto.setLanguage(Language.ENGLISH);
-    titleDto.setPrice(10L);
-    titleDto.setPublisher(createPublisherDto(1L));
-    titleDto.getAuthors().add(createAuthorDto(1L));
+    titleDto.setLanguage(Language.ITALIAN);
+    titleDto.setPrice(12L);
+    titleDto.setPublisher(createPublisherDto(2L));
+    titleDto.getAuthors().add(createAuthorDto(2L));
     return titleDto;
   }
 
@@ -146,8 +148,8 @@ public final class TestUtils {
    */
   public static UpdatebleTitleDto createUpdatebleTitleDto(final Long id) {
     UpdatebleTitleDto titleDto = createSimpleUpdatebleTitleDto(id);
-    titleDto.setPublisher(createRefPublisherDto(1L));
-    titleDto.getAuthors().add(createRefAuthorDto(1L));
+    titleDto.setPublisher(createRefPublisherDto(3L));
+    titleDto.getAuthors().add(createRefAuthorDto(3L));
     return titleDto;
   }
 
@@ -160,13 +162,37 @@ public final class TestUtils {
   public static UpdatebleTitleDto createSimpleUpdatebleTitleDto(final Long id) {
     UpdatebleTitleDto titleDto = new UpdatebleTitleDto();
     titleDto.setId(id);
-    titleDto.setTitle("Title");
-    titleDto.setCopyright(2020);
-    titleDto.setEditionNumber(10L);
+    titleDto.setTitle("Simple Title");
+    titleDto.setCopyright(2019);
+    titleDto.setEditionNumber(8L);
     titleDto.setImageFile("path_image");
-    titleDto.setLanguage(Language.ENGLISH);
-    titleDto.setPrice(10L);
+    titleDto.setLanguage(Language.SPANISH);
+    titleDto.setPrice(11L);
     return titleDto;
+  }
+
+  /**
+   * assert that obj1 is equal to obj2 and also their hashCode and ToString.
+   *
+   * @param obj1 the Object to compare
+   * @param obj2 the Object to compare
+   */
+  public static void checkEqualHashAndToString(final Object obj1, final Object obj2) {
+    assertThat(obj1.equals(obj2)).isTrue();
+    assertThat(obj1.hashCode()).isEqualTo(obj2.hashCode());
+    assertThat(obj1.toString()).isEqualTo(obj2.toString());
+  }
+
+  /**
+   * assert that obj1 is not equal to obj2 and also their hashCode and ToString.
+   *
+   * @param obj1 the Object to compare
+   * @param obj2 the Object to compare
+   */
+  public static void checkNotEqualHashAndToString(final Object obj1, final Object obj2) {
+    assertThat(obj1.equals(obj2)).isFalse();
+    assertThat(obj1.hashCode()).isNotEqualTo(obj2.hashCode());
+    assertThat(obj1.toString()).isNotEqualTo(obj2.toString());
   }
 
   private TestUtils() {}
