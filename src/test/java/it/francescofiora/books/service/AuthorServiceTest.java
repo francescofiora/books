@@ -1,6 +1,12 @@
 package it.francescofiora.books.service;
 
+import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
 
 import it.francescofiora.books.domain.Author;
 import it.francescofiora.books.domain.Title;
@@ -13,13 +19,10 @@ import it.francescofiora.books.service.mapper.AuthorMapper;
 import it.francescofiora.books.service.mapper.NewAuthorMapper;
 import it.francescofiora.books.service.mapper.TitleMapper;
 import it.francescofiora.books.web.errors.NotFoundAlertException;
-import java.util.Collections;
 import java.util.Optional;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -48,18 +51,18 @@ public class AuthorServiceTest {
 
   @BeforeEach
   public void setUp() {
-    authorService = new AuthorServiceImpl(authorRepository, authorMapper, newAuthorMapper,
-        titleMapper);
+    authorService =
+        new AuthorServiceImpl(authorRepository, authorMapper, newAuthorMapper, titleMapper);
   }
 
   @Test
   public void testCreate() throws Exception {
     Author author = new Author();
-    Mockito.when(newAuthorMapper.toEntity(Mockito.any(NewAuthorDto.class))).thenReturn(author);
-    Mockito.when(authorRepository.save(Mockito.any(Author.class))).thenReturn(author);
+    when(newAuthorMapper.toEntity(any(NewAuthorDto.class))).thenReturn(author);
+    when(authorRepository.save(any(Author.class))).thenReturn(author);
 
     AuthorDto expected = new AuthorDto();
-    Mockito.when(authorMapper.toDto(Mockito.any(Author.class))).thenReturn(expected);
+    when(authorMapper.toDto(any(Author.class))).thenReturn(expected);
 
     NewAuthorDto authorDto = new NewAuthorDto();
     AuthorDto actual = authorService.create(authorDto);
@@ -69,13 +72,13 @@ public class AuthorServiceTest {
   @Test
   public void testUpdateNotFound() throws Exception {
     AuthorDto authorDto = new AuthorDto();
-    Assertions.assertThrows(NotFoundAlertException.class, () -> authorService.update(authorDto));
+    assertThrows(NotFoundAlertException.class, () -> authorService.update(authorDto));
   }
 
   @Test
   public void testUpdate() throws Exception {
     Author author = new Author();
-    Mockito.when(authorRepository.findById(Mockito.eq(ID))).thenReturn(Optional.of(author));
+    when(authorRepository.findById(eq(ID))).thenReturn(Optional.of(author));
 
     AuthorDto authorDto = new AuthorDto();
     authorDto.setId(ID);
@@ -85,10 +88,10 @@ public class AuthorServiceTest {
   @Test
   public void testFindAll() throws Exception {
     Author author = new Author();
-    Mockito.when(authorRepository.findAll(Mockito.any(Pageable.class)))
-        .thenReturn(new PageImpl<Author>(Collections.singletonList(author)));
+    when(authorRepository.findAll(any(Pageable.class)))
+        .thenReturn(new PageImpl<Author>(singletonList(author)));
     AuthorDto expected = new AuthorDto();
-    Mockito.when(authorMapper.toDto(Mockito.any(Author.class))).thenReturn(expected);
+    when(authorMapper.toDto(any(Author.class))).thenReturn(expected);
     Pageable pageable = PageRequest.of(1, 1);
     Page<AuthorDto> page = authorService.findAll(pageable);
     assertThat(page.getContent().get(0)).isEqualTo(expected);
@@ -104,10 +107,9 @@ public class AuthorServiceTest {
   public void testFindOne() throws Exception {
     Author author = new Author();
     author.setId(ID);
-    Mockito.when(authorRepository.findById(Mockito.eq(author.getId())))
-        .thenReturn(Optional.of(author));
+    when(authorRepository.findById(eq(author.getId()))).thenReturn(Optional.of(author));
     AuthorDto expected = new AuthorDto();
-    Mockito.when(authorMapper.toDto(Mockito.any(Author.class))).thenReturn(expected);
+    when(authorMapper.toDto(any(Author.class))).thenReturn(expected);
 
     Optional<AuthorDto> authorOpt = authorService.findOne(ID);
     assertThat(authorOpt).isPresent();
@@ -120,12 +122,10 @@ public class AuthorServiceTest {
     Author author = new Author();
     author.getTitles().add(new Title());
     author.setId(ID);
-    Mockito.when(authorRepository.findById(Mockito.eq(author.getId())))
-        .thenReturn(Optional.of(author));
+    when(authorRepository.findById(eq(author.getId()))).thenReturn(Optional.of(author));
 
     TitleDto expected = new TitleDto();
-    Mockito.when(titleMapper.toDto(Mockito.anyList()))
-        .thenReturn(Collections.singletonList(expected));
+    when(titleMapper.toDto(anyList())).thenReturn(singletonList(expected));
     Pageable pageable = PageRequest.of(1, 1);
     Page<TitleDto> page = authorService.findTitlesByAuthorId(pageable, ID);
     assertThat(page.getContent().get(0)).isEqualTo(expected);

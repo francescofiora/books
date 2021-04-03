@@ -1,11 +1,11 @@
 package it.francescofiora.books.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import com.openpojo.reflection.PojoClass;
 import com.openpojo.validation.rule.Rule;
 import it.francescofiora.books.domain.DomainIdentifier;
-import org.junit.jupiter.api.Assertions;
 
 public class PojoEqualsTester implements Rule {
 
@@ -18,7 +18,7 @@ public class PojoEqualsTester implements Rule {
           domainIdentifierVerifier(pojoClass.getClazz());
         }
       } catch (Exception e) {
-        Assertions.fail(e.getMessage());
+        fail(e.getMessage());
       }
     }
   }

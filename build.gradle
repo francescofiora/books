@@ -132,6 +132,7 @@ jacocoTestReport {
 }
 
 pitest {
+  timestampedReports = false
   junit5PluginVersion = '0.12'
 }
 

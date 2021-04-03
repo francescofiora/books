@@ -47,17 +47,15 @@ The purpose of this tutorial is a Spring Boot tutorial, however I have inserted 
     build/reports/checkstyle/test.html
     build/reports/tests/test/index.html
     build/reports/jacoco/test/html/index.html
-    build/reports/pitest/<execution_date and time>/index.html
+    build/reports/pitest/index.html
 
 
 # How to execute
-Different way to run this app
 - gradle: ./gradlew bootRun
 - fat jar: java -jar ./build/libs/books-1.0-SNAPSHOT.jar
 - Eclipse: import "Existing Gradle project" and "Run Application"
 
 # How to execute with JMX support
-Different way to run this app
 - fat jar: java -Dcom.sun.management.jmxremote.port=9999 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false  -jar ./build/libs/books-1.0-SNAPSHOT.jar
 - Eclipse: import "Existing Gradle project", "Run Configuration ..." add java JMX configuration on "VM arguments" then "Run Application"
 

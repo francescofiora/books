@@ -1,6 +1,11 @@
 package it.francescofiora.books.service;
 
+import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
 
 import it.francescofiora.books.domain.Title;
 import it.francescofiora.books.repository.TitleRepository;
@@ -11,13 +16,10 @@ import it.francescofiora.books.service.impl.TitleServiceImpl;
 import it.francescofiora.books.service.mapper.NewTitleMapper;
 import it.francescofiora.books.service.mapper.TitleMapper;
 import it.francescofiora.books.web.errors.NotFoundAlertException;
-import java.util.Collections;
 import java.util.Optional;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -49,11 +51,11 @@ public class TitleServiceTest {
   @Test
   public void testCreate() throws Exception {
     Title title = new Title();
-    Mockito.when(newTitleMapper.toEntity(Mockito.any(NewTitleDto.class))).thenReturn(title);
-    Mockito.when(titleRepository.save(Mockito.any(Title.class))).thenReturn(title);
+    when(newTitleMapper.toEntity(any(NewTitleDto.class))).thenReturn(title);
+    when(titleRepository.save(any(Title.class))).thenReturn(title);
 
     TitleDto expected = new TitleDto();
-    Mockito.when(titleMapper.toDto(Mockito.any(Title.class))).thenReturn(expected);
+    when(titleMapper.toDto(any(Title.class))).thenReturn(expected);
 
     NewTitleDto titleDto = new NewTitleDto();
     TitleDto actual = titleService.create(titleDto);
@@ -63,13 +65,13 @@ public class TitleServiceTest {
   @Test
   public void testUpdateNotFound() throws Exception {
     UpdatebleTitleDto titleDto = new UpdatebleTitleDto();
-    Assertions.assertThrows(NotFoundAlertException.class, () -> titleService.update(titleDto));
+    assertThrows(NotFoundAlertException.class, () -> titleService.update(titleDto));
   }
 
   @Test
   public void testUpdate() throws Exception {
     Title title = new Title();
-    Mockito.when(titleRepository.findById(Mockito.eq(ID))).thenReturn(Optional.of(title));
+    when(titleRepository.findById(eq(ID))).thenReturn(Optional.of(title));
 
     UpdatebleTitleDto titleDto = new UpdatebleTitleDto();
     titleDto.setId(ID);
@@ -79,10 +81,10 @@ public class TitleServiceTest {
   @Test
   public void testFindAll() throws Exception {
     Title title = new Title();
-    Mockito.when(titleRepository.findAll(Mockito.any(Pageable.class)))
-        .thenReturn(new PageImpl<Title>(Collections.singletonList(title)));
+    when(titleRepository.findAll(any(Pageable.class)))
+        .thenReturn(new PageImpl<Title>(singletonList(title)));
     TitleDto expected = new TitleDto();
-    Mockito.when(titleMapper.toDto(Mockito.any(Title.class))).thenReturn(expected);
+    when(titleMapper.toDto(any(Title.class))).thenReturn(expected);
     Pageable pageable = PageRequest.of(1, 1);
     Page<TitleDto> page = titleService.findAll(pageable);
     assertThat(page.getContent().get(0)).isEqualTo(expected);
@@ -98,10 +100,10 @@ public class TitleServiceTest {
   public void testFindOne() throws Exception {
     Title title = new Title();
     title.setId(ID);
-    Mockito.when(titleRepository.findById(Mockito.eq(title.getId())))
+    when(titleRepository.findById(eq(title.getId())))
         .thenReturn(Optional.of(title));
     TitleDto expected = new TitleDto();
-    Mockito.when(titleMapper.toDto(Mockito.any(Title.class))).thenReturn(expected);
+    when(titleMapper.toDto(any(Title.class))).thenReturn(expected);
 
     Optional<TitleDto> titleOpt = titleService.findOne(ID);
     assertThat(titleOpt).isPresent();
