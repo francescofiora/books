@@ -87,7 +87,8 @@ public class TitleApi extends AbstractApi {
           example = "1") @PathVariable("id") Long id) {
     log.debug("REST request to update Title : {}", titleDto);
     if (!id.equals(titleDto.getId())) {
-      throw new BadRequestAlertException(ENTITY_NAME, "idNotValid", "Invalid id");
+      throw new BadRequestAlertException(ENTITY_NAME, String.valueOf(titleDto.getId()),
+          "Invalid id");
     }
     titleService.update(titleDto);
     return putResponse(titleDto.getId());

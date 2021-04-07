@@ -87,7 +87,8 @@ public class AuthorApi extends AbstractApi {
           example = "1") @PathVariable("id") Long id) {
     log.debug("REST request to update Author : {}", authorDto);
     if (!id.equals(authorDto.getId())) {
-      throw new BadRequestAlertException(ENTITY_NAME, "idNotValid", "Invalid id");
+      throw new BadRequestAlertException(ENTITY_NAME, String.valueOf(authorDto.getId()),
+          "Invalid id");
     }
     authorService.update(authorDto);
     return putResponse(id);
@@ -97,8 +98,7 @@ public class AuthorApi extends AbstractApi {
    * {@code GET  /authors} : get all the authors.
    *
    * @param pageable the pagination information
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of authors in
-   *         body
+   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of authors in body
    */
   @Operation(summary = "Searches authors",
       description = "By passing in the appropriate options, "

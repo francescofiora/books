@@ -87,7 +87,8 @@ public class PublisherApi extends AbstractApi {
           example = "1") @PathVariable("id") Long id) {
     log.debug("REST request to update Publisher : {}", publisherDto);
     if (!id.equals(publisherDto.getId())) {
-      throw new BadRequestAlertException(ENTITY_NAME, "idNotValid", "Invalid id");
+      throw new BadRequestAlertException(ENTITY_NAME, String.valueOf(publisherDto.getId()),
+          "Invalid id");
     }
     publisherService.update(publisherDto);
     return putResponse(id);

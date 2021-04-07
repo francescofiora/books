@@ -50,6 +50,25 @@ public class TitleEndToEndTest extends AbstractTestEndToEnd {
   private static final String ALERT_UPDATED = "TitleDto.updated";
   private static final String ALERT_GET = "TitleDto.get";
 
+  private static final String PARAM_PAGE_20 = "0 20";
+  private static final String PARAM_PAGE_1 = "0 1";
+  private static final String PARAM_NOT_VALID_LONG =
+      "'id' should be a valid 'Long' and '999999999999999999999999' isn't";
+
+  private static final String PARAM_ID_NOT_NULL = "[updatebleTitleDto.id - NotNull]";
+  private static final String PARAM_ID_NOT_NULL2 = "[updatebleTitleDto.authors[0].id - NotNull]";
+  private static final String PARAM_AUTHORS_NOT_EMPTY = "[updatebleTitleDto.authors - NotEmpty]";
+  private static final String PARAM_ID_NOT_NULL3 = "[updatebleTitleDto.publisher.id - NotNull]";
+  private static final String PARAM_PUBLISHER_NOT_EMPTY = "[updatebleTitleDto.publisher - NotNull]";
+  private static final String PARAM_COPYRIGHT_NOT_EMPTY = "[updatebleTitleDto.copyright - NotNull]";
+  private static final String PARAM_EDITION_NUMBER_NOT_EMPTY =
+      "[updatebleTitleDto.editionNumber - NotNull]";
+  private static final String PARAM_LANGUAGE_NOT_EMPTY = "[updatebleTitleDto.language - NotNull]";
+  private static final String PARAM_PRICE_NOT_EMPTY = "[updatebleTitleDto.price - NotNull]";
+  private static final String PARAM_PRICE_POSITIVE = "[updatebleTitleDto.price - Positive]";
+  private static final String PARAM_TITLE_NOT_BLANK = "[updatebleTitleDto.title - NotBlank]";
+  private static final String PARAM_WRONG_URI = "/books" + WRONG_URI;
+
   @Test
   public void testAuth() throws Exception {
     testUnauthorized(TITLES_URI);
@@ -74,9 +93,9 @@ public class TitleEndToEndTest extends AbstractTestEndToEnd {
 
     final String titlesIdUri = String.format(TITLES_ID_URI, titleId);
 
-    update(titlesIdUri, updatebleTitleDto, ALERT_UPDATED);
+    update(titlesIdUri, updatebleTitleDto, ALERT_UPDATED, String.valueOf(titleId));
 
-    TitleDto titleDto = get(titlesIdUri, TitleDto.class, ALERT_GET);
+    TitleDto titleDto = get(titlesIdUri, TitleDto.class, ALERT_GET, String.valueOf(titleId));
     assertThat(titleDto.getId()).isEqualTo(updatebleTitleDto.getId());
     assertThat(titleDto.getTitle()).isEqualTo(updatebleTitleDto.getTitle());
     assertThat(titleDto.getCopyright()).isEqualTo(updatebleTitleDto.getCopyright());
@@ -88,7 +107,7 @@ public class TitleEndToEndTest extends AbstractTestEndToEnd {
     assertThat(titleDto.getAuthors().get(0).getId()).isEqualTo(authorId);
 
     Pageable pageable = PageRequest.of(1, 1);
-    TitleDto[] titles = get(TITLES_URI, pageable, TitleDto[].class, ALERT_GET);
+    TitleDto[] titles = get(TITLES_URI, pageable, TitleDto[].class, ALERT_GET, PARAM_PAGE_20);
     assertThat(titles).isNotEmpty();
     Optional<TitleDto> option =
         Stream.of(titles).filter(title -> title.getId().equals(titleId)).findAny();
@@ -97,7 +116,7 @@ public class TitleEndToEndTest extends AbstractTestEndToEnd {
 
     final String authorsTitlesUri = String.format(AUTHORS_TITLES_URI, authorId);
 
-    titles = get(authorsTitlesUri, pageable, TitleDto[].class, ALERT_GET);
+    titles = get(authorsTitlesUri, pageable, TitleDto[].class, ALERT_GET, PARAM_PAGE_1);
     assertThat(titles).isNotEmpty();
     option = Stream.of(titles).filter(title -> title.getId().equals(titleId)).findAny();
     assertThat(option).isPresent();
@@ -105,32 +124,34 @@ public class TitleEndToEndTest extends AbstractTestEndToEnd {
 
     final String authorsIdUri = String.format(AUTHORS_ID_URI, authorId);
 
-    assertDeleteBadRequest(authorsIdUri, AUTHOR_ALERT_BAD_REQUEST);
+    assertDeleteBadRequest(authorsIdUri, AUTHOR_ALERT_BAD_REQUEST, String.valueOf(authorId));
     assertDeleteBadRequest(String.format(PUBLISHERS_ID_URI, publisherId),
-        PUBLISHER_ALERT_BAD_REQUEST);
+        PUBLISHER_ALERT_BAD_REQUEST, String.valueOf(publisherId));
 
-    delete(titlesIdUri, TITLE_ALERT_DELETED);
+    delete(titlesIdUri, TITLE_ALERT_DELETED, String.valueOf(titleId));
 
-    assertGetNotFound(titlesIdUri, TitleDto.class, TITLE_ALERT_NOT_FOUND);
+    assertGetNotFound(titlesIdUri, TitleDto.class, TITLE_ALERT_NOT_FOUND, String.valueOf(titleId));
 
-    delete(authorsIdUri, AUTHOR_ALERT_DELETED);
-    delete(String.format(PUBLISHERS_ID_URI, publisherId), PUBLISHER_ALERT_DELETED);
+    delete(authorsIdUri, AUTHOR_ALERT_DELETED, String.valueOf(authorId));
+    delete(String.format(PUBLISHERS_ID_URI, publisherId), PUBLISHER_ALERT_DELETED,
+        String.valueOf(publisherId));
 
     assertGetNotFound(String.format(AUTHORS_TITLES_URI, authorId), pageable, TitleDto[].class,
-        AUTHOR_ALERT_NOT_FOUND);
+        AUTHOR_ALERT_NOT_FOUND, String.valueOf(authorId));
   }
 
   @Test
   public void testGetTitleBadRequest() throws Exception {
-    assertGetBadRequest(TITLES_URI + "/999999999999999999999999", String.class, "id.badRequest");
+    assertGetBadRequest(TITLES_URI + "/999999999999999999999999", String.class, "id.badRequest",
+        PARAM_NOT_VALID_LONG);
   }
 
   @Test
   public void testUpdateTitleBadRequest() throws Exception {
     // id
     UpdatebleTitleDto titleDto = TestUtils.createUpdatebleTitleDto(null);
-    assertUpdateBadRequest(String.format(TITLES_ID_URI, 1L), titleDto,
-        TITLE_ALERT_BEAN_BAD_REQUEST);
+    assertUpdateBadRequest(String.format(TITLES_ID_URI, 1L), titleDto, TITLE_ALERT_BEAN_BAD_REQUEST,
+        PARAM_ID_NOT_NULL);
 
     Long authorId =
         createAndReturnId(AUTHORS_URI, TestUtils.createNewAuthorDto(), AUTHOR_ALERT_CREATED);
@@ -144,68 +165,70 @@ public class TitleEndToEndTest extends AbstractTestEndToEnd {
     Long id = createAndReturnId(TITLES_URI, newTitleDto, TITLE_ALERT_CREATED);
 
     titleDto = TestUtils.createUpdatebleTitleDto(id);
-    assertUpdateBadRequest(String.format(TITLES_ID_URI, id + 1), titleDto, TITLE_ALERT_BAD_REQUEST);
+    assertUpdateBadRequest(String.format(TITLES_ID_URI, id + 1), titleDto, TITLE_ALERT_BAD_REQUEST,
+        String.valueOf(id));
 
     final String path = String.format(TITLES_ID_URI, id);
 
     // Authors
     titleDto = TestUtils.createUpdatebleTitleDto(id);
     titleDto.getAuthors().get(0).setId(null);
-    assertUpdateBadRequest(path, titleDto, TITLE_ALERT_BEAN_BAD_REQUEST);
+    assertUpdateBadRequest(path, titleDto, TITLE_ALERT_BEAN_BAD_REQUEST, PARAM_ID_NOT_NULL2);
 
     titleDto = TestUtils.createUpdatebleTitleDto(id);
     titleDto.getAuthors().clear();
-    assertUpdateBadRequest(path, titleDto, TITLE_ALERT_BEAN_BAD_REQUEST);
+    assertUpdateBadRequest(path, titleDto, TITLE_ALERT_BEAN_BAD_REQUEST, PARAM_AUTHORS_NOT_EMPTY);
 
     titleDto = TestUtils.createUpdatebleTitleDto(id);
     titleDto.setAuthors(null);
-    assertUpdateBadRequest(path, titleDto, TITLE_ALERT_BEAN_BAD_REQUEST);
+    assertUpdateBadRequest(path, titleDto, TITLE_ALERT_BEAN_BAD_REQUEST, PARAM_AUTHORS_NOT_EMPTY);
 
     // Publisher
     titleDto = TestUtils.createUpdatebleTitleDto(id);
     titleDto.getPublisher().setId(null);
-    assertUpdateBadRequest(path, titleDto, TITLE_ALERT_BEAN_BAD_REQUEST);
+    assertUpdateBadRequest(path, titleDto, TITLE_ALERT_BEAN_BAD_REQUEST, PARAM_ID_NOT_NULL3);
 
     titleDto = TestUtils.createUpdatebleTitleDto(id);
     titleDto.setPublisher(null);
-    assertUpdateBadRequest(path, titleDto, TITLE_ALERT_BEAN_BAD_REQUEST);
+    assertUpdateBadRequest(path, titleDto, TITLE_ALERT_BEAN_BAD_REQUEST, PARAM_PUBLISHER_NOT_EMPTY);
 
     // copyright
     titleDto = TestUtils.createUpdatebleTitleDto(id);
     titleDto.setCopyright(null);
-    assertUpdateBadRequest(path, titleDto, TITLE_ALERT_BEAN_BAD_REQUEST);
+    assertUpdateBadRequest(path, titleDto, TITLE_ALERT_BEAN_BAD_REQUEST, PARAM_COPYRIGHT_NOT_EMPTY);
 
     // editionNumber
     titleDto = TestUtils.createUpdatebleTitleDto(id);
     titleDto.setEditionNumber(null);
-    assertUpdateBadRequest(path, titleDto, TITLE_ALERT_BEAN_BAD_REQUEST);
+    assertUpdateBadRequest(path, titleDto, TITLE_ALERT_BEAN_BAD_REQUEST,
+        PARAM_EDITION_NUMBER_NOT_EMPTY);
 
     // language
     titleDto = TestUtils.createUpdatebleTitleDto(id);
     titleDto.setLanguage(null);
-    assertUpdateBadRequest(path, titleDto, TITLE_ALERT_BEAN_BAD_REQUEST);
+    assertUpdateBadRequest(path, titleDto, TITLE_ALERT_BEAN_BAD_REQUEST, PARAM_LANGUAGE_NOT_EMPTY);
 
     // price
     titleDto = TestUtils.createUpdatebleTitleDto(id);
     titleDto.setPrice(null);
-    assertUpdateBadRequest(path, titleDto, TITLE_ALERT_BEAN_BAD_REQUEST);
+    assertUpdateBadRequest(path, titleDto, TITLE_ALERT_BEAN_BAD_REQUEST, PARAM_PRICE_NOT_EMPTY);
 
     titleDto = TestUtils.createUpdatebleTitleDto(id);
     titleDto.setPrice(0L);
-    assertUpdateBadRequest(path, titleDto, TITLE_ALERT_BEAN_BAD_REQUEST);
+    assertUpdateBadRequest(path, titleDto, TITLE_ALERT_BEAN_BAD_REQUEST, PARAM_PRICE_POSITIVE);
 
     // title
     titleDto = TestUtils.createUpdatebleTitleDto(id);
     titleDto.setTitle(null);
-    assertUpdateBadRequest(path, titleDto, TITLE_ALERT_BEAN_BAD_REQUEST);
+    assertUpdateBadRequest(path, titleDto, TITLE_ALERT_BEAN_BAD_REQUEST, PARAM_TITLE_NOT_BLANK);
 
     titleDto = TestUtils.createUpdatebleTitleDto(id);
     titleDto.setTitle("  ");
-    assertUpdateBadRequest(path, titleDto, TITLE_ALERT_BEAN_BAD_REQUEST);
+    assertUpdateBadRequest(path, titleDto, TITLE_ALERT_BEAN_BAD_REQUEST, PARAM_TITLE_NOT_BLANK);
   }
 
   @Test
   public void testWrongUri() throws Exception {
-    assertGetNotFound(WRONG_URI, String.class, "404 NOT_FOUND");
+    assertGetNotFound(WRONG_URI, String.class, "404 NOT_FOUND", PARAM_WRONG_URI);
   }
 }

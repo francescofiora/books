@@ -80,10 +80,10 @@ public class AbstractTestEndToEnd {
     return restTemplate.exchange(getPath(path), HttpMethod.PUT, request, Void.class);
   }
 
-  private void checkHeaders(HttpHeaders headers, String alert) {
+  private void checkHeaders(HttpHeaders headers, String alert, String param) {
     assertThat(headers).containsKeys(HeaderUtil.X_ALERT, HeaderUtil.X_PARAMS);
     assertThat(headers.get(HeaderUtil.X_ALERT)).contains(alert);
-    assertThat(headers.get(HeaderUtil.X_PARAMS)).isNotEmpty();
+    assertThat(headers.get(HeaderUtil.X_PARAMS)).contains(param);
   }
 
   protected <T> Long createAndReturnId(String path, T body, String alert) throws Exception {
@@ -92,78 +92,81 @@ public class AbstractTestEndToEnd {
         HeaderUtil.X_PARAMS);
     assertThat(result.getHeaders().get(HeaderUtil.X_ALERT)).contains(alert);
     assertThat(result.getHeaders().get(HeaderUtil.X_PARAMS)).isNotEmpty();
-    checkHeaders(result.getHeaders(), alert);
-    return getIdFormHttpHeaders(result.getHeaders());
+    Long id = getIdFormHttpHeaders(result.getHeaders());
+    checkHeaders(result.getHeaders(), alert, String.valueOf(id));
+    return id;
   }
 
-  protected <T> void update(String path, T body, String alert) throws Exception {
+  protected <T> void update(String path, T body, String alert, String param) throws Exception {
     ResponseEntity<Void> result = performPut(path, body);
-    checkHeaders(result.getHeaders(), alert);
+    checkHeaders(result.getHeaders(), alert, param);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
   }
 
-  protected <T> void assertUpdateBadRequest(String path, T body, String alert) throws Exception {
+  protected <T> void assertUpdateBadRequest(String path, T body, String alert, String param)
+      throws Exception {
     ResponseEntity<Void> result = performPut(path, body);
-    checkHeadersError(result.getHeaders(), alert);
+    checkHeadersError(result.getHeaders(), alert, param);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
   }
 
-  private void checkHeadersError(HttpHeaders headers, String alert) {
+  private void checkHeadersError(HttpHeaders headers, String alert, String param) {
     assertThat(headers).containsKeys(HeaderUtil.X_ALERT, HeaderUtil.X_ERROR, HeaderUtil.X_PARAMS);
     assertThat(headers.get(HeaderUtil.X_ALERT)).contains(alert);
     assertThat(headers.get(HeaderUtil.X_ERROR)).isNotEmpty();
-    assertThat(headers.get(HeaderUtil.X_PARAMS)).isNotEmpty();
+    assertThat(headers.get(HeaderUtil.X_PARAMS)).contains(param);
   }
 
-  protected <T> T get(String path, Class<T> responseType, String alert) throws Exception {
+  protected <T> T get(String path, Class<T> responseType, String alert, String param)
+      throws Exception {
     ResponseEntity<T> result = performGet(path, responseType);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
-    checkHeaders(result.getHeaders(), alert);
+    checkHeaders(result.getHeaders(), alert, param);
     T value = result.getBody();
     assertThat(value).isNotNull();
     return value;
   }
 
-  protected <T> T get(String path, Pageable pageable, Class<T> responseType, String alert)
-      throws Exception {
+  protected <T> T get(String path, Pageable pageable, Class<T> responseType, String alert,
+      String param) throws Exception {
     ResponseEntity<T> result = performGet(path, pageable, responseType);
-    checkHeaders(result.getHeaders(), alert);
+    checkHeaders(result.getHeaders(), alert, param);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
     T value = result.getBody();
     assertThat(value).isNotNull();
     return value;
   }
 
-  protected <T> void assertGetNotFound(String path, Class<T> responseType, String alert)
-      throws Exception {
+  protected <T> void assertGetNotFound(String path, Class<T> responseType, String alert,
+      String param) throws Exception {
     ResponseEntity<T> result = performGet(path, responseType);
-    checkHeadersError(result.getHeaders(), alert);
+    checkHeadersError(result.getHeaders(), alert, param);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
   }
 
   protected <T> void assertGetNotFound(String path, Pageable pageable, Class<T> responseType,
-      String alert) throws Exception {
+      String alert, String param) throws Exception {
     ResponseEntity<T> result = performGet(path, pageable, responseType);
-    checkHeadersError(result.getHeaders(), alert);
+    checkHeadersError(result.getHeaders(), alert, param);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
   }
 
-  protected <T> void assertGetBadRequest(String path, Class<T> responseType, String alert)
-      throws Exception {
+  protected <T> void assertGetBadRequest(String path, Class<T> responseType, String alert,
+      String param) throws Exception {
     ResponseEntity<T> result = performGet(path, responseType);
-    checkHeadersError(result.getHeaders(), alert);
+    checkHeadersError(result.getHeaders(), alert, param);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
   }
 
-  protected void delete(String path, String alert) throws Exception {
+  protected void delete(String path, String alert, String param) throws Exception {
     ResponseEntity<Void> result = performDelete(path);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
-    checkHeaders(result.getHeaders(), alert);
+    checkHeaders(result.getHeaders(), alert, param);
   }
 
-  protected void assertDeleteBadRequest(String path, String alert) throws Exception {
+  protected void assertDeleteBadRequest(String path, String alert, String param) throws Exception {
     ResponseEntity<Void> result = performDelete(path);
-    checkHeadersError(result.getHeaders(), alert);
+    checkHeadersError(result.getHeaders(), alert, param);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
   }
 
