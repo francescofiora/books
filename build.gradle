@@ -1,7 +1,7 @@
 plugins {
   id 'java'
   id 'eclipse-wtp'
-  id 'org.springframework.boot' version '2.4.2'
+  id 'org.springframework.boot' version '2.4.5'
   id 'io.spring.dependency-management' version '1.0.11.RELEASE'
   id 'checkstyle'
   id 'jacoco'
@@ -19,8 +19,6 @@ repositories {
 group 'it.francescofiora'
 version '1.0-SNAPSHOT'
 
-def commons_collections_version = property('commons-collections.version')
-def commons_lang_version = property('commons-lang3.version')
 def springdoc_openapi_version = property('springdoc-openapi.version')
 def mapstruct_version = property('mapstruct.version')
 def lombok_version = property('lombok.version')
@@ -37,9 +35,6 @@ dependencies {
   implementation 'org.springframework.boot:spring-boot-devtools'
 
   implementation "ch.qos.logback:logback-classic:${logback_version}"
-
-  implementation "org.apache.commons:commons-lang3:${commons_lang_version}"
-  implementation "org.apache.commons:commons-collections4:${commons_collections_version}"
 
   implementation "org.springdoc:springdoc-openapi-ui:${springdoc_openapi_version}"
   implementation "org.springdoc:springdoc-openapi-data-rest:${springdoc_openapi_version}"
