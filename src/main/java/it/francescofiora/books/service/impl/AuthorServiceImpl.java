@@ -7,7 +7,6 @@ import it.francescofiora.books.service.dto.AuthorDto;
 import it.francescofiora.books.service.dto.NewAuthorDto;
 import it.francescofiora.books.service.dto.TitleDto;
 import it.francescofiora.books.service.mapper.AuthorMapper;
-import it.francescofiora.books.service.mapper.NewAuthorMapper;
 import it.francescofiora.books.service.mapper.TitleMapper;
 import it.francescofiora.books.web.errors.BadRequestAlertException;
 import it.francescofiora.books.web.errors.NotFoundAlertException;
@@ -33,8 +32,6 @@ public class AuthorServiceImpl implements AuthorService {
 
   private final AuthorMapper authorMapper;
 
-  private final NewAuthorMapper newAuthorMapper;
-
   private final TitleMapper titleMapper;
 
   /**
@@ -42,20 +39,18 @@ public class AuthorServiceImpl implements AuthorService {
    * 
    * @param authorRepository AuthorRepository
    * @param authorMapper AuthorMapper
-   * @param newAuthorMapper NewAuthorMapper
    */
   public AuthorServiceImpl(AuthorRepository authorRepository, AuthorMapper authorMapper,
-      NewAuthorMapper newAuthorMapper, TitleMapper titleMapper) {
+      TitleMapper titleMapper) {
     this.authorRepository = authorRepository;
     this.authorMapper = authorMapper;
-    this.newAuthorMapper = newAuthorMapper;
     this.titleMapper = titleMapper;
   }
 
   @Override
   public AuthorDto create(NewAuthorDto authorDto) {
     log.debug("Request to create a new Author : {}", authorDto);
-    Author author = newAuthorMapper.toEntity(authorDto);
+    Author author = authorMapper.toEntity(authorDto);
     author = authorRepository.save(author);
     return authorMapper.toDto(author);
   }

@@ -16,7 +16,6 @@ import it.francescofiora.books.service.dto.NewAuthorDto;
 import it.francescofiora.books.service.dto.TitleDto;
 import it.francescofiora.books.service.impl.AuthorServiceImpl;
 import it.francescofiora.books.service.mapper.AuthorMapper;
-import it.francescofiora.books.service.mapper.NewAuthorMapper;
 import it.francescofiora.books.service.mapper.TitleMapper;
 import it.francescofiora.books.web.errors.NotFoundAlertException;
 import java.util.Optional;
@@ -42,23 +41,20 @@ public class AuthorServiceTest {
   private AuthorMapper authorMapper;
 
   @MockBean
-  private NewAuthorMapper newAuthorMapper;
-
-  @MockBean
   private TitleMapper titleMapper;
 
   private AuthorService authorService;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     authorService =
-        new AuthorServiceImpl(authorRepository, authorMapper, newAuthorMapper, titleMapper);
+        new AuthorServiceImpl(authorRepository, authorMapper, titleMapper);
   }
 
   @Test
-  public void testCreate() throws Exception {
+  void testCreate() throws Exception {
     Author author = new Author();
-    when(newAuthorMapper.toEntity(any(NewAuthorDto.class))).thenReturn(author);
+    when(authorMapper.toEntity(any(NewAuthorDto.class))).thenReturn(author);
     when(authorRepository.save(any(Author.class))).thenReturn(author);
 
     AuthorDto expected = new AuthorDto();
@@ -70,13 +66,13 @@ public class AuthorServiceTest {
   }
 
   @Test
-  public void testUpdateNotFound() throws Exception {
+  void testUpdateNotFound() throws Exception {
     AuthorDto authorDto = new AuthorDto();
     assertThrows(NotFoundAlertException.class, () -> authorService.update(authorDto));
   }
 
   @Test
-  public void testUpdate() throws Exception {
+  void testUpdate() throws Exception {
     Author author = new Author();
     when(authorRepository.findById(eq(ID))).thenReturn(Optional.of(author));
 
@@ -86,7 +82,7 @@ public class AuthorServiceTest {
   }
 
   @Test
-  public void testFindAll() throws Exception {
+  void testFindAll() throws Exception {
     Author author = new Author();
     when(authorRepository.findAll(any(Pageable.class)))
         .thenReturn(new PageImpl<Author>(singletonList(author)));
@@ -98,13 +94,13 @@ public class AuthorServiceTest {
   }
 
   @Test
-  public void testFindOneNotFound() throws Exception {
+  void testFindOneNotFound() throws Exception {
     Optional<AuthorDto> authorOpt = authorService.findOne(ID);
     assertThat(authorOpt).isNotPresent();
   }
 
   @Test
-  public void testFindOne() throws Exception {
+  void testFindOne() throws Exception {
     Author author = new Author();
     author.setId(ID);
     when(authorRepository.findById(eq(author.getId()))).thenReturn(Optional.of(author));
@@ -118,7 +114,7 @@ public class AuthorServiceTest {
   }
 
   @Test
-  public void testFindTitlesByAuthorId() throws Exception {
+  void testFindTitlesByAuthorId() throws Exception {
     Author author = new Author();
     author.getTitles().add(new Title());
     author.setId(ID);
@@ -132,7 +128,7 @@ public class AuthorServiceTest {
   }
 
   @Test
-  public void testDelete() throws Exception {
+  void testDelete() throws Exception {
     authorService.delete(ID);
   }
 }

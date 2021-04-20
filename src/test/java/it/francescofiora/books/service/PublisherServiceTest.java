@@ -13,7 +13,6 @@ import it.francescofiora.books.repository.TitleRepository;
 import it.francescofiora.books.service.dto.NewPublisherDto;
 import it.francescofiora.books.service.dto.PublisherDto;
 import it.francescofiora.books.service.impl.PublisherServiceImpl;
-import it.francescofiora.books.service.mapper.NewPublisherMapper;
 import it.francescofiora.books.service.mapper.PublisherMapper;
 import it.francescofiora.books.web.errors.NotFoundAlertException;
 import java.util.Optional;
@@ -41,21 +40,18 @@ public class PublisherServiceTest {
   @MockBean
   private PublisherMapper publisherMapper;
 
-  @MockBean
-  private NewPublisherMapper newPublisherMapper;
-
   private PublisherService publisherService;
 
   @BeforeEach
-  public void setUp() {
-    publisherService = new PublisherServiceImpl(publisherRepository, publisherMapper,
-        newPublisherMapper, titleRepository);
+  void setUp() {
+    publisherService =
+        new PublisherServiceImpl(publisherRepository, publisherMapper, titleRepository);
   }
 
   @Test
-  public void testCreate() throws Exception {
+  void testCreate() throws Exception {
     Publisher publisher = new Publisher();
-    when(newPublisherMapper.toEntity(any(NewPublisherDto.class))).thenReturn(publisher);
+    when(publisherMapper.toEntity(any(NewPublisherDto.class))).thenReturn(publisher);
     when(publisherRepository.save(any(Publisher.class))).thenReturn(publisher);
 
     PublisherDto expected = new PublisherDto();
@@ -67,13 +63,13 @@ public class PublisherServiceTest {
   }
 
   @Test
-  public void testUpdateNotFound() throws Exception {
+  void testUpdateNotFound() throws Exception {
     PublisherDto publisherDto = new PublisherDto();
     assertThrows(NotFoundAlertException.class, () -> publisherService.update(publisherDto));
   }
 
   @Test
-  public void testUpdate() throws Exception {
+  void testUpdate() throws Exception {
     Publisher publisher = new Publisher();
     when(publisherRepository.findById(eq(ID))).thenReturn(Optional.of(publisher));
 
@@ -83,7 +79,7 @@ public class PublisherServiceTest {
   }
 
   @Test
-  public void testFindAll() throws Exception {
+  void testFindAll() throws Exception {
     Publisher publisher = new Publisher();
     when(publisherRepository.findAll(any(Pageable.class)))
         .thenReturn(new PageImpl<Publisher>(singletonList(publisher)));
@@ -95,13 +91,13 @@ public class PublisherServiceTest {
   }
 
   @Test
-  public void testFindOneNotFound() throws Exception {
+  void testFindOneNotFound() throws Exception {
     Optional<PublisherDto> publisherOpt = publisherService.findOne(ID);
     assertThat(publisherOpt).isNotPresent();
   }
 
   @Test
-  public void testFindOne() throws Exception {
+  void testFindOne() throws Exception {
     Publisher publisher = new Publisher();
     publisher.setId(ID);
     when(publisherRepository.findById(eq(publisher.getId()))).thenReturn(Optional.of(publisher));
@@ -115,7 +111,7 @@ public class PublisherServiceTest {
   }
 
   @Test
-  public void testDelete() throws Exception {
+  void testDelete() throws Exception {
     publisherService.delete(ID);
   }
 }

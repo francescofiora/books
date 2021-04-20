@@ -40,7 +40,7 @@ public class PublisherApiTest extends AbstractTestApi {
   private PublisherService publisherService;
 
   @Test
-  public void testCreatePublisher() throws Exception {
+  void testCreatePublisher() throws Exception {
     NewPublisherDto newPublisherDto = TestUtils.createNewPublisherDto();
     PublisherDto publisherDto = TestUtils.createPublisherDto(ID);
     given(publisherService.create(any(NewPublisherDto.class))).willReturn(publisherDto);
@@ -51,7 +51,7 @@ public class PublisherApiTest extends AbstractTestApi {
   }
 
   @Test
-  public void testUpdatePublisherBadRequest() throws Exception {
+  void testUpdatePublisherBadRequest() throws Exception {
     PublisherDto publisherDto = TestUtils.createPublisherDto(null);
     performPut(PUBLISHERS_ID_URI, ID, publisherDto).andExpect(status().isBadRequest());
 
@@ -69,13 +69,13 @@ public class PublisherApiTest extends AbstractTestApi {
   }
 
   @Test
-  public void testUpdatePublisher() throws Exception {
+  void testUpdatePublisher() throws Exception {
     PublisherDto publisherDto = TestUtils.createPublisherDto(ID);
     performPut(PUBLISHERS_ID_URI, ID, publisherDto).andExpect(status().isOk());
   }
 
   @Test
-  public void testGetAllPublishers() throws Exception {
+  void testGetAllPublishers() throws Exception {
     Pageable pageable = PageRequest.of(1, 1);
     PublisherDto expected = TestUtils.createPublisherDto(ID);
     given(publisherService.findAll(any(Pageable.class)))
@@ -87,7 +87,7 @@ public class PublisherApiTest extends AbstractTestApi {
   }
 
   @Test
-  public void testGetPublisher() throws Exception {
+  void testGetPublisher() throws Exception {
     PublisherDto expected = TestUtils.createPublisherDto(ID);
     given(publisherService.findOne(eq(ID))).willReturn(Optional.of(expected));
     MvcResult result = performGet(PUBLISHERS_ID_URI, ID).andExpect(status().isOk()).andReturn();
@@ -96,12 +96,12 @@ public class PublisherApiTest extends AbstractTestApi {
   }
 
   @Test
-  public void testDeletePublisher() throws Exception {
+  void testDeletePublisher() throws Exception {
     performDelete(PUBLISHERS_ID_URI, ID).andExpect(status().isNoContent()).andReturn();
   }
 
   @Test
-  public void testWrongUri() throws Exception {
+  void testWrongUri() throws Exception {
     performGet(WRONG_URI).andExpect(status().isNotFound()).andReturn();
   }
 }

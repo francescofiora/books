@@ -41,7 +41,7 @@ public class TitleApiTest extends AbstractTestApi {
   private TitleService titleService;
 
   @Test
-  public void testCreateTitle() throws Exception {
+  void testCreateTitle() throws Exception {
     NewTitleDto newTitleDto = TestUtils.createNewTitleDto();
     TitleDto titleDto = TestUtils.createTitleDto(ID);
     given(titleService.create(any(NewTitleDto.class))).willReturn(titleDto);
@@ -54,7 +54,7 @@ public class TitleApiTest extends AbstractTestApi {
   }
 
   @Test
-  public void testCreateTitleBadRequest() throws Exception {
+  void testCreateTitleBadRequest() throws Exception {
     // Authors
     NewTitleDto titleDto = TestUtils.createNewTitleDto();
     titleDto.getAuthors().get(0).setId(null);
@@ -112,7 +112,7 @@ public class TitleApiTest extends AbstractTestApi {
   }
 
   @Test
-  public void testUpdateTitleBadRequest() throws Exception {
+  void testUpdateTitleBadRequest() throws Exception {
     // Authors
     UpdatebleTitleDto titleDto = TestUtils.createUpdatebleTitleDto(ID);
     titleDto.getAuthors().get(0).setId(null);
@@ -175,13 +175,13 @@ public class TitleApiTest extends AbstractTestApi {
   }
 
   @Test
-  public void testUpdateTitle() throws Exception {
+  void testUpdateTitle() throws Exception {
     UpdatebleTitleDto titleDto = TestUtils.createUpdatebleTitleDto(ID);
     performPut(TITLES_ID_URI, ID, titleDto).andExpect(status().isOk());
   }
 
   @Test
-  public void testGetAllTitles() throws Exception {
+  void testGetAllTitles() throws Exception {
     Pageable pageable = PageRequest.of(1, 1);
     TitleDto expected = new TitleDto();
     expected.setId(ID);
@@ -194,7 +194,7 @@ public class TitleApiTest extends AbstractTestApi {
   }
 
   @Test
-  public void testGetTitle() throws Exception {
+  void testGetTitle() throws Exception {
     TitleDto expected = new TitleDto();
     expected.setId(ID);
     given(titleService.findOne(eq(ID))).willReturn(Optional.of(expected));
@@ -204,12 +204,12 @@ public class TitleApiTest extends AbstractTestApi {
   }
 
   @Test
-  public void testDeleteTitle() throws Exception {
+  void testDeleteTitle() throws Exception {
     performDelete(TITLES_ID_URI, ID).andExpect(status().isNoContent()).andReturn();
   }
 
   @Test
-  public void testWrongUri() throws Exception {
+  void testWrongUri() throws Exception {
     performGet(WRONG_URI).andExpect(status().isNotFound()).andReturn();
   }
 }

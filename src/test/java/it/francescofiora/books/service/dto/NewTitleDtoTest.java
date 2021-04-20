@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 public class NewTitleDtoTest {
 
   @Test
-  public void dtoEqualsVerifier() throws Exception {
+  void dtoEqualsVerifier() throws Exception {
     NewTitleDto titleDto1 = TestUtils.createNewTitleDto();
     NewTitleDto titleDto2 = new NewTitleDto();
     assertThat(titleDto1).isNotEqualTo(titleDto2);

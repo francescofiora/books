@@ -22,14 +22,14 @@ public class DtoTest {
   private static final String DTO_PACKAGE = "it.francescofiora.books.service.dto";
 
   @Test
-  public void ensureExpectedPojoCount() {
+  void ensureExpectedPojoCount() {
     List<PojoClass> pojoClasses =
         PojoClassFactory.getPojoClasses(DTO_PACKAGE, new FilterPackageInfo());
     Affirm.affirmEquals("Classes added / removed?", EXPECTED_CLASS_COUNT, pojoClasses.size());
   }
 
   @Test
-  public void testPojoStructureAndBehavior() {
+  void testPojoStructureAndBehavior() {
     // @formatter:off
     Validator validator = ValidatorBuilder.create()
         .with(new GetterMustExistRule())

@@ -15,7 +15,7 @@ public class PublisherRepositoryTest extends AbstractTestRepository {
   private PublisherRepository publisherRepository;
 
   @Test
-  public void testCrud() throws Exception {
+  void testCrud() throws Exception {
     Publisher expected1 = UtilsRepository.createPublisher1();
     Publisher expected2 = UtilsRepository.createPublisher2();
     publisherRepository.save(expected1);

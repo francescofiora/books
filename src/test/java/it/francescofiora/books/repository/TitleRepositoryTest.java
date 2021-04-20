@@ -15,7 +15,7 @@ public class TitleRepositoryTest extends AbstractTestRepository {
   private TitleRepository titleRepository;
 
   @Test
-  public void testCrud() throws Exception {
+  void testCrud() throws Exception {
     Title expected1 = UtilsRepository.createTitle1();
     expected1.getAuthors().forEach(author -> getEntityManager().persist(author));
     getEntityManager().persist(expected1.getPublisher());

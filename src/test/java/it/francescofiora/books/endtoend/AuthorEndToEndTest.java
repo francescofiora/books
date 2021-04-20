@@ -39,12 +39,12 @@ public class AuthorEndToEndTest extends AbstractTestEndToEnd {
   private static final String PARAM_LAST_NAME_NOT_BLANK = "[authorDto.lastName - NotBlank]";
 
   @Test
-  public void testAuth() throws Exception {
+  void testAuth() throws Exception {
     testUnauthorized(AUTHORS_URI);
   }
 
   @Test
-  public void testCreate() throws Exception {
+  void testCreate() throws Exception {
     NewAuthorDto newAuthorDto = TestUtils.createNewAuthorDto();
     Long authorId = createAndReturnId(AUTHORS_URI, newAuthorDto, ALERT_CREATED);
 
@@ -72,13 +72,13 @@ public class AuthorEndToEndTest extends AbstractTestEndToEnd {
   }
 
   @Test
-  public void testGetAuthorBadRequest() throws Exception {
+  void testGetAuthorBadRequest() throws Exception {
     assertGetBadRequest(AUTHORS_URI + "/999999999999999999999999", String.class, "id.badRequest",
         PARAM_NOT_VALID_LONG);
   }
 
   @Test
-  public void testUpdateAuthorBadRequest() throws Exception {
+  void testUpdateAuthorBadRequest() throws Exception {
     // id
     assertUpdateBadRequest(String.format(AUTHORS_ID_URI, 1L), TestUtils.createAuthorDto(null),
         ALERT_BAD_REQUEST, PARAM_ID_NOT_NULL);

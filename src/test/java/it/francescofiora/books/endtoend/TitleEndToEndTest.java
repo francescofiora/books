@@ -70,12 +70,12 @@ public class TitleEndToEndTest extends AbstractTestEndToEnd {
   private static final String PARAM_WRONG_URI = "/books" + WRONG_URI;
 
   @Test
-  public void testAuth() throws Exception {
+  void testAuth() throws Exception {
     testUnauthorized(TITLES_URI);
   }
 
   @Test
-  public void testCreate() throws Exception {
+  void testCreate() throws Exception {
     Long authorId =
         createAndReturnId(AUTHORS_URI, TestUtils.createNewAuthorDto(), AUTHOR_ALERT_CREATED);
 
@@ -141,13 +141,13 @@ public class TitleEndToEndTest extends AbstractTestEndToEnd {
   }
 
   @Test
-  public void testGetTitleBadRequest() throws Exception {
+  void testGetTitleBadRequest() throws Exception {
     assertGetBadRequest(TITLES_URI + "/999999999999999999999999", String.class, "id.badRequest",
         PARAM_NOT_VALID_LONG);
   }
 
   @Test
-  public void testUpdateTitleBadRequest() throws Exception {
+  void testUpdateTitleBadRequest() throws Exception {
     // id
     UpdatebleTitleDto titleDto = TestUtils.createUpdatebleTitleDto(null);
     assertUpdateBadRequest(String.format(TITLES_ID_URI, 1L), titleDto, TITLE_ALERT_BEAN_BAD_REQUEST,
@@ -228,7 +228,7 @@ public class TitleEndToEndTest extends AbstractTestEndToEnd {
   }
 
   @Test
-  public void testWrongUri() throws Exception {
+  void testWrongUri() throws Exception {
     assertGetNotFound(WRONG_URI, String.class, "404 NOT_FOUND", PARAM_WRONG_URI);
   }
 }

@@ -13,7 +13,7 @@ import org.springframework.http.HttpStatus;
 public class CustomErrorControllerTest {
 
   @Test
-  public void testgetStatus() {
+  void testgetStatus() {
     CustomErrorController ex = new CustomErrorController((x) -> null);
 
     HttpServletRequest request = mock(HttpServletRequest.class);

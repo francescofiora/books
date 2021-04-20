@@ -10,12 +10,12 @@ public class TitleMapperTest {
   private TitleMapper titleMapper;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     titleMapper = new TitleMapperImpl();
   }
 
   @Test
-  public void testEntityFromId() {
+  void testEntityFromId() {
     Long id = 1L;
     assertThat(titleMapper.fromId(id).getId()).isEqualTo(id);
     assertThat(titleMapper.fromId(null)).isNull();

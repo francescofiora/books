@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 public class NewAuthorDtoTest {
 
   @Test
-  public void dtoEqualsVerifier() throws Exception {
+  void dtoEqualsVerifier() throws Exception {
     NewAuthorDto authorDto1 = TestUtils.createNewAuthorDto();
     NewAuthorDto authorDto2 = new NewAuthorDto();
     assertThat(authorDto1).isNotEqualTo(authorDto2);

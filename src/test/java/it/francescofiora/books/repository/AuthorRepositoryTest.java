@@ -15,7 +15,7 @@ public class AuthorRepositoryTest extends AbstractTestRepository {
   private AuthorRepository authorRepository;
 
   @Test
-  public void testCrud() throws Exception {
+  void testCrud() throws Exception {
     Author expected1 = UtilsRepository.createAuthor1();
     Author expected2 = UtilsRepository.createAuthor2();
     authorRepository.save(expected1);

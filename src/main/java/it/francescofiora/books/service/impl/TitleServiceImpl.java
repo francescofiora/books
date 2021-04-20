@@ -6,7 +6,6 @@ import it.francescofiora.books.service.TitleService;
 import it.francescofiora.books.service.dto.NewTitleDto;
 import it.francescofiora.books.service.dto.TitleDto;
 import it.francescofiora.books.service.dto.UpdatebleTitleDto;
-import it.francescofiora.books.service.mapper.NewTitleMapper;
 import it.francescofiora.books.service.mapper.TitleMapper;
 import it.francescofiora.books.web.errors.NotFoundAlertException;
 import java.util.Optional;
@@ -29,26 +28,21 @@ public class TitleServiceImpl implements TitleService {
 
   private final TitleMapper titleMapper;
 
-  private final NewTitleMapper newTitleMapper;
-
   /**
    * Constructor.
    * 
    * @param titleRepository TitleRepository
    * @param titleMapper TitleMapper
-   * @param newTitleMapper NewTitleMapper
    */
-  public TitleServiceImpl(TitleRepository titleRepository, TitleMapper titleMapper,
-      NewTitleMapper newTitleMapper) {
+  public TitleServiceImpl(TitleRepository titleRepository, TitleMapper titleMapper) {
     this.titleRepository = titleRepository;
     this.titleMapper = titleMapper;
-    this.newTitleMapper = newTitleMapper;
   }
 
   @Override
   public TitleDto create(NewTitleDto titleDto) {
     log.debug("Request to create Title : {}", titleDto);
-    Title title = newTitleMapper.toEntity(titleDto);
+    Title title = titleMapper.toEntity(titleDto);
     title = titleRepository.save(title);
     return titleMapper.toDto(title);
   }

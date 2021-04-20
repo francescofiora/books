@@ -42,7 +42,7 @@ public class AuthorApiTest extends AbstractTestApi {
   private AuthorService authorService;
 
   @Test
-  public void testCreateAuthor() throws Exception {
+  void testCreateAuthor() throws Exception {
     NewAuthorDto newAuthorDto = TestUtils.createNewAuthorDto();
 
     AuthorDto authorDto = TestUtils.createAuthorDto(ID);
@@ -56,7 +56,7 @@ public class AuthorApiTest extends AbstractTestApi {
   }
 
   @Test
-  public void testUpdateAuthorBadRequest() throws Exception {
+  void testUpdateAuthorBadRequest() throws Exception {
     // id
     AuthorDto authorDto = TestUtils.createAuthorDto(null);
     performPut(AUTHORS_ID_URI, ID, authorDto).andExpect(status().isBadRequest());
@@ -89,13 +89,13 @@ public class AuthorApiTest extends AbstractTestApi {
   }
 
   @Test
-  public void testUpdateAuthor() throws Exception {
+  void testUpdateAuthor() throws Exception {
     AuthorDto authorDto = TestUtils.createAuthorDto(ID);
     performPut(AUTHORS_ID_URI, ID, authorDto).andExpect(status().isOk());
   }
 
   @Test
-  public void testGetAllAuthors() throws Exception {
+  void testGetAllAuthors() throws Exception {
     Pageable pageable = PageRequest.of(1, 1);
     AuthorDto expected = TestUtils.createAuthorDto(ID);
     given(authorService.findAll(any(Pageable.class)))
@@ -108,7 +108,7 @@ public class AuthorApiTest extends AbstractTestApi {
   }
 
   @Test
-  public void testGetAuthor() throws Exception {
+  void testGetAuthor() throws Exception {
     AuthorDto expected = TestUtils.createAuthorDto(ID);
     given(authorService.findOne(eq(ID))).willReturn(Optional.of(expected));
     MvcResult result = performGet(AUTHORS_ID_URI, ID).andExpect(status().isOk()).andReturn();
@@ -117,7 +117,7 @@ public class AuthorApiTest extends AbstractTestApi {
   }
 
   @Test
-  public void testGetTitlesByAuthor() throws Exception {
+  void testGetTitlesByAuthor() throws Exception {
     TitleDto expected = TestUtils.createTitleDto(ID);
     given(authorService.findTitlesByAuthorId(any(Pageable.class), eq(ID)))
         .willReturn(new PageImpl<TitleDto>(Collections.singletonList(expected)));
@@ -131,12 +131,12 @@ public class AuthorApiTest extends AbstractTestApi {
   }
 
   @Test
-  public void testDeleteAuthor() throws Exception {
+  void testDeleteAuthor() throws Exception {
     performDelete(AUTHORS_ID_URI, ID).andExpect(status().isNoContent()).andReturn();
   }
 
   @Test
-  public void testWrongUri() throws Exception {
+  void testWrongUri() throws Exception {
     performGet(WRONG_URI).andExpect(status().isNotFound()).andReturn();
   }
 }

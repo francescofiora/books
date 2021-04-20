@@ -13,7 +13,6 @@ import it.francescofiora.books.service.dto.NewTitleDto;
 import it.francescofiora.books.service.dto.TitleDto;
 import it.francescofiora.books.service.dto.UpdatebleTitleDto;
 import it.francescofiora.books.service.impl.TitleServiceImpl;
-import it.francescofiora.books.service.mapper.NewTitleMapper;
 import it.francescofiora.books.service.mapper.TitleMapper;
 import it.francescofiora.books.web.errors.NotFoundAlertException;
 import java.util.Optional;
@@ -38,20 +37,17 @@ public class TitleServiceTest {
   @MockBean
   private TitleMapper titleMapper;
 
-  @MockBean
-  private NewTitleMapper newTitleMapper;
-
   private TitleService titleService;
 
   @BeforeEach
-  public void setUp() {
-    titleService = new TitleServiceImpl(titleRepository, titleMapper, newTitleMapper);
+  void setUp() {
+    titleService = new TitleServiceImpl(titleRepository, titleMapper);
   }
 
   @Test
-  public void testCreate() throws Exception {
+  void testCreate() throws Exception {
     Title title = new Title();
-    when(newTitleMapper.toEntity(any(NewTitleDto.class))).thenReturn(title);
+    when(titleMapper.toEntity(any(NewTitleDto.class))).thenReturn(title);
     when(titleRepository.save(any(Title.class))).thenReturn(title);
 
     TitleDto expected = new TitleDto();
@@ -63,13 +59,13 @@ public class TitleServiceTest {
   }
 
   @Test
-  public void testUpdateNotFound() throws Exception {
+  void testUpdateNotFound() throws Exception {
     UpdatebleTitleDto titleDto = new UpdatebleTitleDto();
     assertThrows(NotFoundAlertException.class, () -> titleService.update(titleDto));
   }
 
   @Test
-  public void testUpdate() throws Exception {
+  void testUpdate() throws Exception {
     Title title = new Title();
     when(titleRepository.findById(eq(ID))).thenReturn(Optional.of(title));
 
@@ -79,7 +75,7 @@ public class TitleServiceTest {
   }
 
   @Test
-  public void testFindAll() throws Exception {
+  void testFindAll() throws Exception {
     Title title = new Title();
     when(titleRepository.findAll(any(Pageable.class)))
         .thenReturn(new PageImpl<Title>(singletonList(title)));
@@ -91,13 +87,13 @@ public class TitleServiceTest {
   }
 
   @Test
-  public void testFindOneNotFound() throws Exception {
+  void testFindOneNotFound() throws Exception {
     Optional<TitleDto> titleOpt = titleService.findOne(ID);
     assertThat(titleOpt).isNotPresent();
   }
 
   @Test
-  public void testFindOne() throws Exception {
+  void testFindOne() throws Exception {
     Title title = new Title();
     title.setId(ID);
     when(titleRepository.findById(eq(title.getId())))
@@ -112,7 +108,7 @@ public class TitleServiceTest {
   }
 
   @Test
-  public void testDelete() throws Exception {
+  void testDelete() throws Exception {
     titleService.delete(ID);
   }
 

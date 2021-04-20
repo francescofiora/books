@@ -10,12 +10,12 @@ public class PublisherMapperTest {
   private PublisherMapper publisherMapper;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     publisherMapper = new PublisherMapperImpl();
   }
 
   @Test
-  public void testEntityFromId() {
+  void testEntityFromId() {
     Long id = 1L;
     assertThat(publisherMapper.fromId(id).getId()).isEqualTo(id);
     assertThat(publisherMapper.fromId(null)).isNull();

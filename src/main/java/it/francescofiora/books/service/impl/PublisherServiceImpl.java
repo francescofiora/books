@@ -7,7 +7,6 @@ import it.francescofiora.books.repository.TitleRepository;
 import it.francescofiora.books.service.PublisherService;
 import it.francescofiora.books.service.dto.NewPublisherDto;
 import it.francescofiora.books.service.dto.PublisherDto;
-import it.francescofiora.books.service.mapper.NewPublisherMapper;
 import it.francescofiora.books.service.mapper.PublisherMapper;
 import it.francescofiora.books.web.errors.BadRequestAlertException;
 import it.francescofiora.books.web.errors.NotFoundAlertException;
@@ -33,29 +32,24 @@ public class PublisherServiceImpl implements PublisherService {
 
   private final PublisherMapper publisherMapper;
 
-  private final NewPublisherMapper newPublisherMapper;
-
   /**
    * Constructor.
    *
    * @param publisherRepository PublisherRepository
    * @param publisherMapper PublisherMapper
-   * @param newPublisherMapper NewPublisherMapper
    * @param titleRepository TitleRepository
    */
   public PublisherServiceImpl(PublisherRepository publisherRepository,
-      PublisherMapper publisherMapper, NewPublisherMapper newPublisherMapper,
-      TitleRepository titleRepository) {
+      PublisherMapper publisherMapper, TitleRepository titleRepository) {
     this.publisherRepository = publisherRepository;
     this.publisherMapper = publisherMapper;
-    this.newPublisherMapper = newPublisherMapper;
     this.titleRepository = titleRepository;
   }
 
   @Override
   public PublisherDto create(NewPublisherDto publisherDto) {
     log.debug("Request to create a new Publisher : {}", publisherDto);
-    Publisher publisher = newPublisherMapper.toEntity(publisherDto);
+    Publisher publisher = publisherMapper.toEntity(publisherDto);
     publisher = publisherRepository.save(publisher);
     return publisherMapper.toDto(publisher);
   }

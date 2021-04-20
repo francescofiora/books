@@ -1,7 +1,9 @@
 package it.francescofiora.books.service.mapper;
 
 import it.francescofiora.books.domain.Publisher;
+import it.francescofiora.books.service.dto.NewPublisherDto;
 import it.francescofiora.books.service.dto.PublisherDto;
+import it.francescofiora.books.service.dto.RefPublisherDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -16,6 +18,12 @@ public interface PublisherMapper {
 
   @Mapping(target = "id", ignore = true)
   void updateEntityFromDto(PublisherDto publisherDto, @MappingTarget Publisher publisher);
+
+  @Mapping(target = "id", ignore = true)
+  Publisher toEntity(NewPublisherDto dto);
+
+  @Mapping(target = "publisherName", ignore = true)
+  Publisher toEntity(RefPublisherDto dto);
 
   /**
    * create Publisher from id.
