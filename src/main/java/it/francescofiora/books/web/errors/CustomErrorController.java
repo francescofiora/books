@@ -7,19 +7,18 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
+import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
 @Controller
 @Hidden
-public class CustomErrorController  {
-  private static final String PATH = "/error";
+public class CustomErrorController implements ErrorController {
 
   private final ErrorAttributes errorAttributes;
 
@@ -51,8 +50,7 @@ public class CustomErrorController  {
    * @param request rest request
    * @return handle Error
    */
-  @RequestMapping(value = PATH, produces = MediaType.APPLICATION_JSON_VALUE)
-  @ResponseBody
+  @RequestMapping(value = "{$server.error.path}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Void> handleError(HttpServletRequest request) {
     HttpStatus status = getStatus(request);
     Map<String, Object> map = getErrorAttributes(request, ErrorAttributeOptions.defaults());
@@ -71,7 +69,12 @@ public class CustomErrorController  {
     String path = map.get("path").toString();
 
     return ResponseEntity.status(status)
-        .headers(HeaderUtil.createFailureAlert(status.toString(), path, sb.toString()))
-        .build();
+        .headers(HeaderUtil.createFailureAlert(status.toString(), path, sb.toString())).build();
+  }
+
+  @Override
+  @SuppressWarnings("deprecation")
+  public String getErrorPath() {
+    return null;
   }
 }
