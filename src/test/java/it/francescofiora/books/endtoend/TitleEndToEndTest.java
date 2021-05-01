@@ -20,7 +20,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = {"classpath:application_test.properties"})
-public class TitleEndToEndTest extends AbstractTestEndToEnd {
+class TitleEndToEndTest extends AbstractTestEndToEnd {
 
   private static final String AUTHORS_URI = "/api/authors";
   private static final String AUTHORS_ID_URI = "/api/authors/%d";
@@ -45,6 +45,7 @@ public class TitleEndToEndTest extends AbstractTestEndToEnd {
   private static final String TITLE_ALERT_BEAN_BAD_REQUEST = "UpdatebleTitleDto.badRequest";
 
   private static final String AUTHOR_ALERT_NOT_FOUND = "AuthorDto.notFound";
+  private static final String PUBLISHER_ALERT_NOT_FOUND = "PublisherDto.notFound";
   private static final String TITLE_ALERT_NOT_FOUND = "TitleDto.notFound";
 
   private static final String ALERT_UPDATED = "TitleDto.updated";
@@ -141,13 +142,36 @@ public class TitleEndToEndTest extends AbstractTestEndToEnd {
   }
 
   @Test
-  void testGetTitleBadRequest() throws Exception {
+  void testCreateBadRequest() throws Exception {
+    NewTitleDto newTitleDto = TestUtils.createNewSimpleTitleDto();
+
+    Long authorId =
+        createAndReturnId(AUTHORS_URI, TestUtils.createNewAuthorDto(), AUTHOR_ALERT_CREATED);
+    newTitleDto.getAuthors().add(TestUtils.createRefAuthorDto(authorId));
+    Long publisherId = 100L;
+    newTitleDto.setPublisher(TestUtils.createRefPublisherDto(publisherId));
+
+    assertCreateNotFound(TITLES_URI, newTitleDto, PUBLISHER_ALERT_NOT_FOUND,
+        String.valueOf(publisherId));
+
+    authorId = 100L;
+    newTitleDto.getAuthors().add(TestUtils.createRefAuthorDto(authorId));
+    publisherId = createAndReturnId(PUBLISHERS_URI, TestUtils.createNewPublisherDto(),
+        PUBLISHER_ALERT_CREATED);
+    newTitleDto.setPublisher(TestUtils.createRefPublisherDto(publisherId));
+
+    assertCreateNotFound(TITLES_URI, newTitleDto, AUTHOR_ALERT_NOT_FOUND, String.valueOf(authorId));
+  }
+
+
+  @Test
+  void testGetBadRequest() throws Exception {
     assertGetBadRequest(TITLES_URI + "/999999999999999999999999", String.class, "id.badRequest",
         PARAM_NOT_VALID_LONG);
   }
 
   @Test
-  void testUpdateTitleBadRequest() throws Exception {
+  void testUpdateBadRequest() throws Exception {
     // id
     UpdatebleTitleDto titleDto = TestUtils.createUpdatebleTitleDto(null);
     assertUpdateBadRequest(String.format(TITLES_ID_URI, 1L), titleDto, TITLE_ALERT_BEAN_BAD_REQUEST,

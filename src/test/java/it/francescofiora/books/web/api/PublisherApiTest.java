@@ -29,7 +29,7 @@ import org.springframework.test.web.servlet.MvcResult;
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = PublisherApi.class)
 @TestPropertySource(locations = {"classpath:application_test.properties"})
-public class PublisherApiTest extends AbstractTestApi {
+class PublisherApiTest extends AbstractTestApi {
 
   private static final Long ID = 1L;
   private static final String PUBLISHERS_URI = "/api/publishers";

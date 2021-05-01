@@ -1,9 +1,14 @@
 package it.francescofiora.books.service.impl;
 
 import it.francescofiora.books.domain.Title;
+import it.francescofiora.books.repository.AuthorRepository;
+import it.francescofiora.books.repository.PublisherRepository;
 import it.francescofiora.books.repository.TitleRepository;
+import it.francescofiora.books.service.AuthorService;
+import it.francescofiora.books.service.PublisherService;
 import it.francescofiora.books.service.TitleService;
 import it.francescofiora.books.service.dto.NewTitleDto;
+import it.francescofiora.books.service.dto.RefAuthorDto;
 import it.francescofiora.books.service.dto.TitleDto;
 import it.francescofiora.books.service.dto.UpdatebleTitleDto;
 import it.francescofiora.books.service.mapper.TitleMapper;
@@ -28,20 +33,44 @@ public class TitleServiceImpl implements TitleService {
 
   private final TitleMapper titleMapper;
 
+  private final AuthorRepository authorRepository;
+
+  private final PublisherRepository publisherRepository;
+
   /**
    * Constructor.
    * 
    * @param titleRepository TitleRepository
    * @param titleMapper TitleMapper
+   * @param authorRepository AuthorRepository
+   * @param publisherRepository PublisherRepository
    */
-  public TitleServiceImpl(TitleRepository titleRepository, TitleMapper titleMapper) {
+  public TitleServiceImpl(TitleRepository titleRepository, TitleMapper titleMapper,
+      AuthorRepository authorRepository, PublisherRepository publisherRepository) {
     this.titleRepository = titleRepository;
     this.titleMapper = titleMapper;
+    this.authorRepository = authorRepository;
+    this.publisherRepository = publisherRepository;
   }
 
   @Override
   public TitleDto create(NewTitleDto titleDto) {
     log.debug("Request to create Title : {}", titleDto);
+
+    if (!publisherRepository.findById(titleDto.getPublisher().getId()).isPresent()) {
+      final String id = String.valueOf(titleDto.getPublisher().getId());
+      throw new NotFoundAlertException(PublisherService.ENTITY_NAME, id,
+          PublisherService.ENTITY_NAME + " not found with id " + id);
+    }
+
+    for (RefAuthorDto authorDto : titleDto.getAuthors()) {
+      if (!authorRepository.findById(authorDto.getId()).isPresent()) {
+        final String id = String.valueOf(authorDto.getId());
+        throw new NotFoundAlertException(AuthorService.ENTITY_NAME, id,
+            AuthorService.ENTITY_NAME + " not found with id " + id);
+      }
+    }
+
     Title title = titleMapper.toEntity(titleDto);
     title = titleRepository.save(title);
     return titleMapper.toDto(title);

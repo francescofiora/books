@@ -7,13 +7,18 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
+import it.francescofiora.books.domain.Author;
+import it.francescofiora.books.domain.Publisher;
 import it.francescofiora.books.domain.Title;
+import it.francescofiora.books.repository.AuthorRepository;
+import it.francescofiora.books.repository.PublisherRepository;
 import it.francescofiora.books.repository.TitleRepository;
 import it.francescofiora.books.service.dto.NewTitleDto;
 import it.francescofiora.books.service.dto.TitleDto;
 import it.francescofiora.books.service.dto.UpdatebleTitleDto;
 import it.francescofiora.books.service.impl.TitleServiceImpl;
 import it.francescofiora.books.service.mapper.TitleMapper;
+import it.francescofiora.books.util.TestUtils;
 import it.francescofiora.books.web.errors.NotFoundAlertException;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,18 +35,25 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 public class TitleServiceTest {
 
   private static final Long ID = 1L;
-  
+
   @MockBean
   private TitleRepository titleRepository;
 
   @MockBean
   private TitleMapper titleMapper;
 
+  @MockBean
+  private AuthorRepository authorRepository;
+
+  @MockBean
+  private PublisherRepository publisherRepository;
+
   private TitleService titleService;
 
   @BeforeEach
   void setUp() {
-    titleService = new TitleServiceImpl(titleRepository, titleMapper);
+    titleService =
+        new TitleServiceImpl(titleRepository, titleMapper, authorRepository, publisherRepository);
   }
 
   @Test
@@ -53,7 +65,13 @@ public class TitleServiceTest {
     TitleDto expected = new TitleDto();
     when(titleMapper.toDto(any(Title.class))).thenReturn(expected);
 
-    NewTitleDto titleDto = new NewTitleDto();
+    NewTitleDto titleDto = TestUtils.createNewTitleDto();
+    when(authorRepository.findById(eq(titleDto.getAuthors().get(0).getId())))
+        .thenReturn(Optional.of(new Author()));
+
+    when(publisherRepository.findById(eq(titleDto.getPublisher().getId())))
+        .thenReturn(Optional.of(new Publisher()));
+
     TitleDto actual = titleService.create(titleDto);
     assertThat(actual).isEqualTo(expected);
   }
@@ -96,8 +114,7 @@ public class TitleServiceTest {
   void testFindOne() throws Exception {
     Title title = new Title();
     title.setId(ID);
-    when(titleRepository.findById(eq(title.getId())))
-        .thenReturn(Optional.of(title));
+    when(titleRepository.findById(eq(title.getId()))).thenReturn(Optional.of(title));
     TitleDto expected = new TitleDto();
     when(titleMapper.toDto(any(Title.class))).thenReturn(expected);
 

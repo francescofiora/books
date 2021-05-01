@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 
 public interface AuthorService {
 
+  String ENTITY_NAME = "AuthorDto";
+
   /**
    * Create a new author.
    *
@@ -49,6 +51,7 @@ public interface AuthorService {
 
   /**
    * Get titles by author 'id'.
+   *
    * @param pageable Pageable
    * @param id id
    * @return the list of titles

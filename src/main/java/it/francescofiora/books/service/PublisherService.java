@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 
 public interface PublisherService {
 
+  String ENTITY_NAME = "PublisherDto";
+
   /**
    * Create a new publisher.
    *

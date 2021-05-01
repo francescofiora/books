@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import it.francescofiora.books.util.TestUtils;
 import org.junit.jupiter.api.Test;
 
-public class NewAuthorDtoTest {
+class NewAuthorDtoTest {
 
   @Test
   void dtoEqualsVerifier() throws Exception {

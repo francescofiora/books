@@ -3,21 +3,22 @@ package it.francescofiora.books.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import it.francescofiora.books.domain.Author;
+import it.francescofiora.books.util.TestUtils;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
-public class AuthorRepositoryTest extends AbstractTestRepository {
+class AuthorRepositoryTest extends AbstractTestRepository {
 
   @Autowired
   private AuthorRepository authorRepository;
 
   @Test
   void testCrud() throws Exception {
-    Author expected1 = UtilsRepository.createAuthor1();
-    Author expected2 = UtilsRepository.createAuthor2();
+    Author expected1 = TestUtils.createAuthor1();
+    Author expected2 = TestUtils.createAuthor2();
     authorRepository.save(expected1);
     authorRepository.save(expected2);
 
@@ -26,11 +27,11 @@ public class AuthorRepositoryTest extends AbstractTestRepository {
 
     for (Author actual : authors) {
       assertThat(actual).isNotNull();
-      assertThat(UtilsRepository.dataEquals(expected1, actual)
-          || UtilsRepository.dataEquals(expected2, actual)).isTrue();
+      assertThat(TestUtils.dataEquals(expected1, actual)
+          || TestUtils.dataEquals(expected2, actual)).isTrue();
     }
 
-    Author expected3 = UtilsRepository.createAuthor3();
+    Author expected3 = TestUtils.createAuthor3();
     Author author = authors.getContent().get(0);
     author.setFirstName(expected3.getFirstName());
     author.setLastName(expected3.getLastName());
@@ -39,7 +40,7 @@ public class AuthorRepositoryTest extends AbstractTestRepository {
     Optional<Author> optional = authorRepository.findById(author.getId());
     assertThat(optional).isPresent();
     author = optional.get();
-    assertThat(UtilsRepository.dataEquals(expected3, author)).isTrue();
+    assertThat(TestUtils.dataEquals(expected3, author)).isTrue();
 
     for (Author actual : authors) {
       authorRepository.delete(actual);

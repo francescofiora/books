@@ -24,8 +24,6 @@ public class PublisherServiceImpl implements PublisherService {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-  private static final String ENTITY_NAME = "PublisherDto";
-
   private final PublisherRepository publisherRepository;
 
   private final TitleRepository titleRepository;

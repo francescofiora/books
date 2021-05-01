@@ -97,6 +97,13 @@ public class AbstractTestEndToEnd {
     return id;
   }
 
+  protected <T> void assertCreateNotFound(String path, T body, String alert, String param)
+      throws Exception {
+    ResponseEntity<Void> result = performPost(path, body);
+    checkHeadersError(result.getHeaders(), alert, param);
+    assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+  }
+
   protected <T> void update(String path, T body, String alert, String param) throws Exception {
     ResponseEntity<Void> result = performPut(path, body);
     checkHeaders(result.getHeaders(), alert, param);

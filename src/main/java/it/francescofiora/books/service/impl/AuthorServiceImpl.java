@@ -26,8 +26,6 @@ public class AuthorServiceImpl implements AuthorService {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-  private static final String ENTITY_NAME = "AuthorDto";
-
   private final AuthorRepository authorRepository;
 
   private final AuthorMapper authorMapper;

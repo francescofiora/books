@@ -7,7 +7,7 @@ import it.francescofiora.books.util.TestUtils;
 import java.util.Collections;
 import org.junit.jupiter.api.Test;
 
-public class NewTitleDtoTest {
+class NewTitleDtoTest {
 
   @Test
   void dtoEqualsVerifier() throws Exception {

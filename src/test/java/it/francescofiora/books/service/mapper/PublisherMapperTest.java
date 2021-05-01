@@ -7,7 +7,7 @@ import it.francescofiora.books.service.dto.RefPublisherDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class PublisherMapperTest {
+class PublisherMapperTest {
 
   private PublisherMapper publisherMapper;
 

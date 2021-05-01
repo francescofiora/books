@@ -14,7 +14,7 @@ import it.francescofiora.books.util.FilterPackageInfo;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
-public class DtoTest {
+class DtoTest {
   // Configured for expectation, so we know when a class gets added or removed.
   private static final int EXPECTED_CLASS_COUNT = 9;
 

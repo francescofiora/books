@@ -30,7 +30,7 @@ import org.springframework.test.web.servlet.MvcResult;
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = AuthorApi.class)
 @TestPropertySource(locations = {"classpath:application_test.properties"})
-public class AuthorApiTest extends AbstractTestApi {
+class AuthorApiTest extends AbstractTestApi {
 
   private static final Long ID = 1L;
   private static final String AUTHORS_URI = "/api/authors";

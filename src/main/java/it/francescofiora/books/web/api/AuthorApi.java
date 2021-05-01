@@ -75,7 +75,7 @@ public class AuthorApi extends AbstractApi {
    *         {@code 400 (Bad Request)} if the author is not valid, or with status
    *         {@code 500 (Internal Server Error)} if the author couldn't be updated
    */
-  @Operation(summary = "update Author", description = "Update an Author to the system",
+  @Operation(summary = "Update Author", description = "Update an Author to the system",
       tags = {"author"})
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Author updated"),
       @ApiResponse(responseCode = "400", description = "Invalid input, object invalid"),

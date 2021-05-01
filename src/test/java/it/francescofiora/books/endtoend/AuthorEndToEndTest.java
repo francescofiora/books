@@ -18,7 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = {"classpath:application_test.properties"})
-public class AuthorEndToEndTest extends AbstractTestEndToEnd {
+class AuthorEndToEndTest extends AbstractTestEndToEnd {
 
   private static final String AUTHORS_URI = "/api/authors";
   private static final String AUTHORS_ID_URI = "/api/authors/%d";
@@ -72,13 +72,13 @@ public class AuthorEndToEndTest extends AbstractTestEndToEnd {
   }
 
   @Test
-  void testGetAuthorBadRequest() throws Exception {
+  void testGetBadRequest() throws Exception {
     assertGetBadRequest(AUTHORS_URI + "/999999999999999999999999", String.class, "id.badRequest",
         PARAM_NOT_VALID_LONG);
   }
 
   @Test
-  void testUpdateAuthorBadRequest() throws Exception {
+  void testUpdateBadRequest() throws Exception {
     // id
     assertUpdateBadRequest(String.format(AUTHORS_ID_URI, 1L), TestUtils.createAuthorDto(null),
         ALERT_BAD_REQUEST, PARAM_ID_NOT_NULL);
