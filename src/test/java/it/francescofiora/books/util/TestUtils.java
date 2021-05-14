@@ -18,16 +18,16 @@ import it.francescofiora.books.service.dto.UpdatebleTitleDto;
 import java.util.Objects;
 
 /**
- * Utility class for testing.
+ * Utility for testing.
  */
-public final class TestUtils {
+public interface TestUtils {
 
   /**
    * Create first example of Author.
    *
    * @return Author
    */
-  public static Author createAuthor1() {
+  static Author createAuthor1() {
     Author author = new Author();
     author.setFirstName("John");
     author.setLastName("Smith");
@@ -39,7 +39,7 @@ public final class TestUtils {
    *
    * @return Author
    */
-  public static Author createAuthor2() {
+  static Author createAuthor2() {
     Author author = new Author();
     author.setFirstName("Sophia");
     author.setLastName("Brown");
@@ -51,7 +51,7 @@ public final class TestUtils {
    *
    * @return Author
    */
-  public static Author createAuthor3() {
+  static Author createAuthor3() {
     Author author = new Author();
     author.setFirstName("William");
     author.setLastName("Wilson");
@@ -63,7 +63,7 @@ public final class TestUtils {
    *
    * @return Publisher
    */
-  public static Publisher createPublisher1() {
+  static Publisher createPublisher1() {
     Publisher publisher = new Publisher();
     publisher.setPublisherName("Small Publisher Ltd");
     return publisher;
@@ -74,7 +74,7 @@ public final class TestUtils {
    *
    * @return Publisher
    */
-  public static Publisher createPublisher2() {
+  static Publisher createPublisher2() {
     Publisher publisher = new Publisher();
     publisher.setPublisherName("Publisher Ltd");
     return publisher;
@@ -85,7 +85,7 @@ public final class TestUtils {
    *
    * @return Publisher
    */
-  public static Publisher createPublisher3() {
+  static Publisher createPublisher3() {
     Publisher publisher = new Publisher();
     publisher.setPublisherName("Big Publisher Ltd");
     return publisher;
@@ -96,7 +96,7 @@ public final class TestUtils {
    *
    * @return Title
    */
-  public static Title createTitle1() {
+  static Title createTitle1() {
     Title title = new Title();
     title.getAuthors().add(createAuthor1());
     title.setCopyright(2020);
@@ -114,7 +114,7 @@ public final class TestUtils {
    *
    * @return Title
    */
-  public static Title createTitle2() {
+  static Title createTitle2() {
     Title title = new Title();
     title.getAuthors().add(createAuthor2());
     title.setCopyright(2019);
@@ -132,7 +132,7 @@ public final class TestUtils {
    *
    * @return Title
    */
-  public static Title createTitle3() {
+  static Title createTitle3() {
     Title title = new Title();
     title.setCopyright(2018);
     title.setEditionNumber(3L);
@@ -150,7 +150,7 @@ public final class TestUtils {
    * @param actual Author
    * @return true if actual contains same data then expected
    */
-  public static boolean dataEquals(Author expected, Author actual) {
+  static boolean dataEquals(Author expected, Author actual) {
     return Objects.equals(expected.getFirstName(), actual.getFirstName())
         && Objects.equals(expected.getLastName(), actual.getLastName());
   }
@@ -162,7 +162,7 @@ public final class TestUtils {
    * @param actual Publisher
    * @return true if actual contains same data then expected
    */
-  public static boolean dataEquals(Publisher expected, Publisher actual) {
+  static boolean dataEquals(Publisher expected, Publisher actual) {
     return Objects.equals(expected.getPublisherName(), actual.getPublisherName());
   }
 
@@ -173,7 +173,7 @@ public final class TestUtils {
    * @param actual Title
    * @return true if actual contains same data then expected
    */
-  public static boolean dataEquals(Title expected, Title actual) {
+  static boolean dataEquals(Title expected, Title actual) {
     return Objects.equals(expected.getCopyright(), actual.getCopyright())
         && Objects.equals(expected.getEditionNumber(), actual.getEditionNumber())
         && Objects.equals(expected.getImageFile(), actual.getImageFile())
@@ -188,7 +188,7 @@ public final class TestUtils {
    * @param id ID
    * @return AuthorDto
    */
-  public static AuthorDto createAuthorDto(final Long id) {
+  static AuthorDto createAuthorDto(final Long id) {
     AuthorDto authorDto = new AuthorDto();
     authorDto.setId(id);
     authorDto.setFirstName("John");
@@ -202,7 +202,7 @@ public final class TestUtils {
    * @param id ID
    * @return PublisherDto
    */
-  public static PublisherDto createPublisherDto(final Long id) {
+  static PublisherDto createPublisherDto(final Long id) {
     PublisherDto publisherDto = new PublisherDto();
     publisherDto.setId(id);
     publisherDto.setPublisherName("Peter");
@@ -214,7 +214,7 @@ public final class TestUtils {
    *
    * @return NewAuthorDto
    */
-  public static NewAuthorDto createNewAuthorDto() {
+  static NewAuthorDto createNewAuthorDto() {
     NewAuthorDto authorDto = new NewAuthorDto();
     authorDto.setFirstName("Robert");
     authorDto.setLastName("Smith");
@@ -226,7 +226,7 @@ public final class TestUtils {
    *
    * @return NewPublisherDto
    */
-  public static NewPublisherDto createNewPublisherDto() {
+  static NewPublisherDto createNewPublisherDto() {
     NewPublisherDto publisherDto = new NewPublisherDto();
     publisherDto.setPublisherName("Publisher");
     return publisherDto;
@@ -237,7 +237,7 @@ public final class TestUtils {
    *
    * @return NewTitleDto
    */
-  public static NewTitleDto createNewTitleDto() {
+  static NewTitleDto createNewTitleDto() {
     NewTitleDto titleDto = createNewSimpleTitleDto();
     titleDto.setPublisher(createRefPublisherDto(1L));
     titleDto.getAuthors().add(createRefAuthorDto(1L));
@@ -249,7 +249,7 @@ public final class TestUtils {
    *
    * @return NewTitleDto
    */
-  public static NewTitleDto createNewSimpleTitleDto() {
+  static NewTitleDto createNewSimpleTitleDto() {
     NewTitleDto titleDto = new NewTitleDto();
     titleDto.setTitle("The Title");
     titleDto.setCopyright(2020);
@@ -266,7 +266,7 @@ public final class TestUtils {
    * @param id ID
    * @return RefAuthorDto
    */
-  public static RefAuthorDto createRefAuthorDto(final Long id) {
+  static RefAuthorDto createRefAuthorDto(final Long id) {
     RefAuthorDto authorDto = new RefAuthorDto();
     authorDto.setId(id);
     return authorDto;
@@ -278,7 +278,7 @@ public final class TestUtils {
    * @param id ID
    * @return RefPublisherDto
    */
-  public static RefPublisherDto createRefPublisherDto(final Long id) {
+  static RefPublisherDto createRefPublisherDto(final Long id) {
     RefPublisherDto publisherDto = new RefPublisherDto();
     publisherDto.setId(id);
     return publisherDto;
@@ -290,7 +290,7 @@ public final class TestUtils {
    * @param id ID
    * @return TitleDto
    */
-  public static TitleDto createTitleDto(final Long id) {
+  static TitleDto createTitleDto(final Long id) {
     TitleDto titleDto = new TitleDto();
     titleDto.setId(id);
     titleDto.setTitle("One Title");
@@ -310,7 +310,7 @@ public final class TestUtils {
    * @param id ID
    * @return UpdatebleTitleDto
    */
-  public static UpdatebleTitleDto createUpdatebleTitleDto(final Long id) {
+  static UpdatebleTitleDto createUpdatebleTitleDto(final Long id) {
     UpdatebleTitleDto titleDto = createSimpleUpdatebleTitleDto(id);
     titleDto.setPublisher(createRefPublisherDto(3L));
     titleDto.getAuthors().add(createRefAuthorDto(3L));
@@ -323,7 +323,7 @@ public final class TestUtils {
    * @param id ID
    * @return UpdatebleTitleDto
    */
-  public static UpdatebleTitleDto createSimpleUpdatebleTitleDto(final Long id) {
+  static UpdatebleTitleDto createSimpleUpdatebleTitleDto(final Long id) {
     UpdatebleTitleDto titleDto = new UpdatebleTitleDto();
     titleDto.setId(id);
     titleDto.setTitle("Simple Title");
@@ -341,7 +341,7 @@ public final class TestUtils {
    * @param obj1 the Object to compare
    * @param obj2 the Object to compare
    */
-  public static void checkEqualHashAndToString(final Object obj1, final Object obj2) {
+  static void checkEqualHashAndToString(final Object obj1, final Object obj2) {
     assertThat(obj1.equals(obj2)).isTrue();
     assertThat(obj1.hashCode()).isEqualTo(obj2.hashCode());
     assertThat(obj1.toString()).isEqualTo(obj2.toString());
@@ -353,11 +353,9 @@ public final class TestUtils {
    * @param obj1 the Object to compare
    * @param obj2 the Object to compare
    */
-  public static void checkNotEqualHashAndToString(final Object obj1, final Object obj2) {
+  static void checkNotEqualHashAndToString(final Object obj1, final Object obj2) {
     assertThat(obj1.equals(obj2)).isFalse();
     assertThat(obj1.hashCode()).isNotEqualTo(obj2.hashCode());
     assertThat(obj1.toString()).isNotEqualTo(obj2.toString());
   }
-
-  private TestUtils() {}
 }

@@ -26,7 +26,7 @@ public interface TitleMapper {
   Title toEntity(NewTitleDto dto);
 
   /**
-   * create Title from id.
+   * Create Title from id.
    *
    * @param id id
    * @return Title

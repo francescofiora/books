@@ -6,7 +6,7 @@ import java.util.Objects;
 public interface DtoUtils {
 
   /**
-   * return true if obj1 and obj2 are same reference or they have same id.
+   * Return true if obj1 and obj2 are same reference or they have same id.
    *
    * @param obj1 DtoIdentifier
    * @param obj2 Object

@@ -45,7 +45,7 @@ public class CustomErrorController implements ErrorController {
   }
 
   /**
-   * return the error in JSON format.
+   * Return the error in JSON format.
    * 
    * @param request rest request
    * @return handle Error

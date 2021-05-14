@@ -32,7 +32,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-public class TitleServiceTest {
+class TitleServiceTest {
 
   private static final Long ID = 1L;
 

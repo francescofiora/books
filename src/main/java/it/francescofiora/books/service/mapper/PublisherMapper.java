@@ -26,7 +26,7 @@ public interface PublisherMapper {
   Publisher toEntity(RefPublisherDto dto);
 
   /**
-   * create Publisher from id.
+   * Create Publisher from id.
    *
    * @param id id
    * @return Publisher

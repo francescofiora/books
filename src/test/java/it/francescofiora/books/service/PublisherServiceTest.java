@@ -27,7 +27,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-public class PublisherServiceTest {
+class PublisherServiceTest {
 
   private static final Long ID = 1L;
 

@@ -30,7 +30,7 @@ public interface AuthorMapper {
   Author toEntity(RefAuthorDto dto);
 
   /**
-   * create Author from id.
+   * Create Author from id.
    *
    * @param id id
    * @return Author

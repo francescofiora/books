@@ -9,8 +9,7 @@ public class FilterPackageInfo implements PojoClassFilter {
   @Override
   public boolean include(final PojoClass pojoClass) {
     return !pojoClass.getName().endsWith(Java.PACKAGE_DELIMITER + Java.PACKAGE_INFO)
-        && !pojoClass.getName().endsWith("Test")
-        && pojoClass.isConcrete();
+        && !pojoClass.getName().endsWith("Test") && pojoClass.isConcrete();
   }
 
   @Override
@@ -22,5 +21,4 @@ public class FilterPackageInfo implements PojoClassFilter {
   public int hashCode() {
     return this.getClass().hashCode();
   }
-  
 }

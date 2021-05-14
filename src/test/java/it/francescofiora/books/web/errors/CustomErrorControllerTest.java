@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
-public class CustomErrorControllerTest {
+class CustomErrorControllerTest {
 
   @Test
   void testgetStatus() {

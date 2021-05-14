@@ -19,17 +19,17 @@ class PojoTest {
   private static final int EXPECTED_CLASS_COUNT = 3;
 
   // The package to test
-  private static final String POJO_PACKAGE = "it.francescofiora.books.domain";
+  private static final String POJO_PACKAGE = PojoTest.class.getPackage().getName();
 
   @Test
-  void ensureExpectedPojoCount() {
-    List<PojoClass> pojoClasses =
+  void ensureExpectedCount() {
+    List<PojoClass> classes =
         PojoClassFactory.getPojoClasses(POJO_PACKAGE, new FilterPackageInfo());
-    Affirm.affirmEquals("Classes added / removed?", EXPECTED_CLASS_COUNT, pojoClasses.size());
+    Affirm.affirmEquals("Classes added / removed?", EXPECTED_CLASS_COUNT, classes.size());
   }
 
   @Test
-  void testPojoStructureAndBehavior() {
+  void testStructureAndBehavior() {
     // @formatter:off
     Validator validator = ValidatorBuilder.create()
         .with(new GetterMustExistRule())

@@ -12,7 +12,7 @@ public class NotFoundAlertException extends ResponseStatusException {
   private final String param;
 
   /**
-   * Construttor.
+   * Constructor.
    *
    * @param entityName entity Name
    * @param param the parameter
