@@ -66,15 +66,9 @@ public class CustomErrorController implements ErrorController {
       sb.append(message.toString());
     }
 
-    String path = map.get("path").toString();
+    String path = String.valueOf(map.get("path"));
 
     return ResponseEntity.status(status)
         .headers(HeaderUtil.createFailureAlert(status.toString(), path, sb.toString())).build();
-  }
-
-  @Override
-  @SuppressWarnings("deprecation")
-  public String getErrorPath() {
-    return null;
   }
 }
