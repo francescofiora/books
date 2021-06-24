@@ -18,7 +18,7 @@ class PublisherMapperTest {
 
   @Test
   void testEntityFromId() {
-    Long id = 1L;
+    var id = 1L;
     assertThat(publisherMapper.fromId(id).getId()).isEqualTo(id);
     assertThat(publisherMapper.fromId(null)).isNull();
   }

@@ -10,7 +10,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import it.francescofiora.books.service.TitleService;
 import it.francescofiora.books.service.dto.NewTitleDto;
 import it.francescofiora.books.service.dto.TitleDto;
-import it.francescofiora.books.service.dto.UpdatebleTitleDto;
 import it.francescofiora.books.util.TestUtils;
 import java.util.Collections;
 import java.util.List;
@@ -25,7 +24,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MvcResult;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = TitleApi.class)
@@ -42,12 +40,11 @@ class TitleApiTest extends AbstractTestApi {
 
   @Test
   void testCreateTitle() throws Exception {
-    NewTitleDto newTitleDto = TestUtils.createNewTitleDto();
-    TitleDto titleDto = TestUtils.createTitleDto(ID);
+    var newTitleDto = TestUtils.createNewTitleDto();
+    var titleDto = TestUtils.createTitleDto(ID);
     given(titleService.create(any(NewTitleDto.class))).willReturn(titleDto);
 
-    MvcResult result =
-        performPost(TITLES_URI, newTitleDto).andExpect(status().isCreated()).andReturn();
+    var result = performPost(TITLES_URI, newTitleDto).andExpect(status().isCreated()).andReturn();
 
     assertThat(result.getResponse().getHeaderValue(HttpHeaders.LOCATION))
         .isEqualTo(TITLES_URI + "/" + ID);
@@ -56,7 +53,7 @@ class TitleApiTest extends AbstractTestApi {
   @Test
   void testCreateTitleBadRequest() throws Exception {
     // Authors
-    NewTitleDto titleDto = TestUtils.createNewTitleDto();
+    var titleDto = TestUtils.createNewTitleDto();
     titleDto.getAuthors().get(0).setId(null);
     performPost(TITLES_URI, titleDto).andExpect(status().isBadRequest());
 
@@ -114,7 +111,7 @@ class TitleApiTest extends AbstractTestApi {
   @Test
   void testUpdateTitleBadRequest() throws Exception {
     // Authors
-    UpdatebleTitleDto titleDto = TestUtils.createUpdatebleTitleDto(ID);
+    var titleDto = TestUtils.createUpdatebleTitleDto(ID);
     titleDto.getAuthors().get(0).setId(null);
     performPut(TITLES_ID_URI, ID, titleDto).andExpect(status().isBadRequest());
 
@@ -176,30 +173,30 @@ class TitleApiTest extends AbstractTestApi {
 
   @Test
   void testUpdateTitle() throws Exception {
-    UpdatebleTitleDto titleDto = TestUtils.createUpdatebleTitleDto(ID);
+    var titleDto = TestUtils.createUpdatebleTitleDto(ID);
     performPut(TITLES_ID_URI, ID, titleDto).andExpect(status().isOk());
   }
 
   @Test
   void testGetAllTitles() throws Exception {
-    Pageable pageable = PageRequest.of(1, 1);
-    TitleDto expected = new TitleDto();
+    var pageable = PageRequest.of(1, 1);
+    var expected = new TitleDto();
     expected.setId(ID);
     given(titleService.findAll(any(Pageable.class)))
         .willReturn(new PageImpl<TitleDto>(Collections.singletonList(expected)));
-    MvcResult result = performGet(TITLES_URI, pageable).andExpect(status().isOk()).andReturn();
-    List<TitleDto> list = readValue(result, new TypeReference<List<TitleDto>>() {});
+    var result = performGet(TITLES_URI, pageable).andExpect(status().isOk()).andReturn();
+    var list = readValue(result, new TypeReference<List<TitleDto>>() {});
     assertThat(list).isNotNull().isNotEmpty();
     assertThat(list.get(0)).isEqualTo(expected);
   }
 
   @Test
   void testGetTitle() throws Exception {
-    TitleDto expected = new TitleDto();
+    var expected = new TitleDto();
     expected.setId(ID);
     given(titleService.findOne(eq(ID))).willReturn(Optional.of(expected));
-    MvcResult result = performGet(TITLES_ID_URI, ID).andExpect(status().isOk()).andReturn();
-    TitleDto actual = readValue(result, new TypeReference<TitleDto>() {});
+    var result = performGet(TITLES_ID_URI, ID).andExpect(status().isOk()).andReturn();
+    var actual = readValue(result, new TypeReference<TitleDto>() {});
     assertThat(actual).isNotNull().isEqualTo(expected);
   }
 

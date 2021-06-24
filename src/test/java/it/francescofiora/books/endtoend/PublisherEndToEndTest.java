@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import it.francescofiora.books.service.dto.PublisherDto;
 import it.francescofiora.books.util.TestUtils;
-import java.util.Optional;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,23 +42,22 @@ class PublisherEndToEndTest extends AbstractTestEndToEnd {
 
   @Test
   void testCreate() throws Exception {
-    Long publisherId =
+    var publisherId =
         createAndReturnId(PUBLISHERS_URI, TestUtils.createNewPublisherDto(), ALERT_CREATED);
 
-    final String publishersIdUri = String.format(PUBLISHERS_ID_URI, publisherId);
+    final var publishersIdUri = String.format(PUBLISHERS_ID_URI, publisherId);
 
-    PublisherDto publisherDto = TestUtils.createPublisherDto(publisherId);
+    var publisherDto = TestUtils.createPublisherDto(publisherId);
     update(publishersIdUri, publisherDto, ALERT_UPDATED, String.valueOf(publisherId));
 
-    PublisherDto actual =
-        get(publishersIdUri, PublisherDto.class, ALERT_GET, String.valueOf(publisherId));
+    var actual = get(publishersIdUri, PublisherDto.class, ALERT_GET, String.valueOf(publisherId));
     assertThat(actual).isEqualTo(publisherDto);
     assertThat(actual.getPublisherName()).isEqualTo(publisherDto.getPublisherName());
 
-    PublisherDto[] publishers =
+    var publishers =
         get(PUBLISHERS_URI, PageRequest.of(1, 1), PublisherDto[].class, ALERT_GET, PARAM_PAGE_20);
     assertThat(publishers).isNotEmpty();
-    Optional<PublisherDto> option =
+    var option =
         Stream.of(publishers).filter(publisher -> publisher.getId().equals(publisherId)).findAny();
     assertThat(option).isPresent();
     assertThat(option.get()).isEqualTo(publisherDto);
@@ -81,14 +79,14 @@ class PublisherEndToEndTest extends AbstractTestEndToEnd {
     assertUpdateBadRequest(String.format(PUBLISHERS_ID_URI, 1L), TestUtils.createPublisherDto(null),
         ALERT_BAD_REQUEST, PARAM_ID_NOT_NULL);
 
-    Long id = createAndReturnId(PUBLISHERS_URI, TestUtils.createNewPublisherDto(), ALERT_CREATED);
+    var id = createAndReturnId(PUBLISHERS_URI, TestUtils.createNewPublisherDto(), ALERT_CREATED);
 
     assertUpdateBadRequest(String.format(PUBLISHERS_ID_URI, id + 1),
         TestUtils.createPublisherDto(id), ALERT_BAD_REQUEST, String.valueOf(id));
 
-    final String path = String.format(PUBLISHERS_ID_URI, id + 1);
+    final var path = String.format(PUBLISHERS_ID_URI, id + 1);
 
-    PublisherDto publisherDto = TestUtils.createPublisherDto(id);
+    var publisherDto = TestUtils.createPublisherDto(id);
     publisherDto.setPublisherName(null);
     assertUpdateBadRequest(path, publisherDto, ALERT_BAD_REQUEST, PARAM_NAME_NOT_BLANK);
 

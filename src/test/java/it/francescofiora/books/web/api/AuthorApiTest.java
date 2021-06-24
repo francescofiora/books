@@ -25,7 +25,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MvcResult;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = AuthorApi.class)
@@ -43,13 +42,12 @@ class AuthorApiTest extends AbstractTestApi {
 
   @Test
   void testCreateAuthor() throws Exception {
-    NewAuthorDto newAuthorDto = TestUtils.createNewAuthorDto();
+    var newAuthorDto = TestUtils.createNewAuthorDto();
 
-    AuthorDto authorDto = TestUtils.createAuthorDto(ID);
+    var authorDto = TestUtils.createAuthorDto(ID);
     given(authorService.create(any(NewAuthorDto.class))).willReturn(authorDto);
 
-    MvcResult result =
-        performPost(AUTHORS_URI, newAuthorDto).andExpect(status().isCreated()).andReturn();
+    var result = performPost(AUTHORS_URI, newAuthorDto).andExpect(status().isCreated()).andReturn();
 
     assertThat(result.getResponse().getHeaderValue(HttpHeaders.LOCATION))
         .isEqualTo(AUTHORS_URI + "/" + ID);
@@ -58,7 +56,7 @@ class AuthorApiTest extends AbstractTestApi {
   @Test
   void testUpdateAuthorBadRequest() throws Exception {
     // id
-    AuthorDto authorDto = TestUtils.createAuthorDto(null);
+    var authorDto = TestUtils.createAuthorDto(null);
     performPut(AUTHORS_ID_URI, ID, authorDto).andExpect(status().isBadRequest());
 
     // firstName
@@ -90,42 +88,42 @@ class AuthorApiTest extends AbstractTestApi {
 
   @Test
   void testUpdateAuthor() throws Exception {
-    AuthorDto authorDto = TestUtils.createAuthorDto(ID);
+    var authorDto = TestUtils.createAuthorDto(ID);
     performPut(AUTHORS_ID_URI, ID, authorDto).andExpect(status().isOk());
   }
 
   @Test
   void testGetAllAuthors() throws Exception {
-    Pageable pageable = PageRequest.of(1, 1);
-    AuthorDto expected = TestUtils.createAuthorDto(ID);
+    var pageable = PageRequest.of(1, 1);
+    var expected = TestUtils.createAuthorDto(ID);
     given(authorService.findAll(any(Pageable.class)))
         .willReturn(new PageImpl<AuthorDto>(Collections.singletonList(expected)));
 
-    MvcResult result = performGet(AUTHORS_URI, pageable).andExpect(status().isOk()).andReturn();
-    List<AuthorDto> list = readValue(result, new TypeReference<List<AuthorDto>>() {});
+    var result = performGet(AUTHORS_URI, pageable).andExpect(status().isOk()).andReturn();
+    var list = readValue(result, new TypeReference<List<AuthorDto>>() {});
     assertThat(list).isNotNull().isNotEmpty();
     assertThat(list.get(0)).isEqualTo(expected);
   }
 
   @Test
   void testGetAuthor() throws Exception {
-    AuthorDto expected = TestUtils.createAuthorDto(ID);
+    var expected = TestUtils.createAuthorDto(ID);
     given(authorService.findOne(eq(ID))).willReturn(Optional.of(expected));
-    MvcResult result = performGet(AUTHORS_ID_URI, ID).andExpect(status().isOk()).andReturn();
-    AuthorDto actual = readValue(result, new TypeReference<AuthorDto>() {});
+    var result = performGet(AUTHORS_ID_URI, ID).andExpect(status().isOk()).andReturn();
+    var actual = readValue(result, new TypeReference<AuthorDto>() {});
     assertThat(actual).isNotNull().isEqualTo(expected);
   }
 
   @Test
   void testGetTitlesByAuthor() throws Exception {
-    TitleDto expected = TestUtils.createTitleDto(ID);
+    var expected = TestUtils.createTitleDto(ID);
     given(authorService.findTitlesByAuthorId(any(Pageable.class), eq(ID)))
         .willReturn(new PageImpl<TitleDto>(Collections.singletonList(expected)));
 
-    Pageable pageable = PageRequest.of(1, 1);
-    MvcResult result =
+    var pageable = PageRequest.of(1, 1);
+    var result =
         performGet(AUTHORS_TITLES_URI, ID, pageable).andExpect(status().isOk()).andReturn();
-    List<TitleDto> list = readValue(result, new TypeReference<List<TitleDto>>() {});
+    var list = readValue(result, new TypeReference<List<TitleDto>>() {});
     assertThat(list).isNotNull().isNotEmpty();
     assertThat(list.get(0)).isEqualTo(expected);
   }

@@ -35,7 +35,7 @@ public interface PublisherMapper {
     if (id == null) {
       return null;
     }
-    Publisher publisher = new Publisher();
+    var publisher = new Publisher();
     publisher.setId(id);
     return publisher;
   }

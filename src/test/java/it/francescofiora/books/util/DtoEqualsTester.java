@@ -24,8 +24,8 @@ public class DtoEqualsTester implements Rule {
   }
 
   private <T> void equalsVerifier(Class<T> clazz) throws Exception {
-    T dtoObj1 = clazz.getConstructor().newInstance();
-    T dtoObj2 = clazz.getConstructor().newInstance();
+    var dtoObj1 = clazz.getConstructor().newInstance();
+    var dtoObj2 = clazz.getConstructor().newInstance();
 
     // Test equals
     assertThat(dtoObj1.equals(dtoObj2)).isTrue();
@@ -41,12 +41,12 @@ public class DtoEqualsTester implements Rule {
   }
 
   private <T> void dtoIdentifierVerifier(Class<T> clazz) throws Exception {
-    DtoIdentifier dtoObj1 = (DtoIdentifier) clazz.getConstructor().newInstance();
+    var dtoObj1 = (DtoIdentifier) clazz.getConstructor().newInstance();
     dtoObj1.setId(1L);
     assertThat(dtoObj1.equals(null)).isFalse();
     assertThat(dtoObj1.equals(new Object())).isFalse();
 
-    DtoIdentifier dtoObj2 = (DtoIdentifier) clazz.getConstructor().newInstance();
+    var dtoObj2 = (DtoIdentifier) clazz.getConstructor().newInstance();
     assertThat(dtoObj1.equals(dtoObj2)).isFalse();
 
     dtoObj2.setId(2L);

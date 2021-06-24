@@ -72,7 +72,7 @@ https://localhost:8081/books/swagger-ui.html
 
 # Technologies used
 - [Gradle 7.0](https://gradle.org/)
-- [Java 8](http://www.oracle.com/technetwork/java/javaee/overview/index.html)
+- [Java 11](https://openjdk.java.net/projects/jdk/11/)
 - [Spring Boot 2.5](https://spring.io/projects/spring-boot)
 - [Spring Security](https://spring.io/projects/spring-security)
 - [Swagger OpeApi 3.0](https://swagger.io/specification/)

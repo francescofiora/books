@@ -9,8 +9,8 @@ class NewAuthorDtoTest {
 
   @Test
   void dtoEqualsVerifier() throws Exception {
-    NewAuthorDto authorDto1 = TestUtils.createNewAuthorDto();
-    NewAuthorDto authorDto2 = new NewAuthorDto();
+    var authorDto1 = TestUtils.createNewAuthorDto();
+    var authorDto2 = new NewAuthorDto();
     assertThat(authorDto1).isNotEqualTo(authorDto2);
 
     authorDto2 = TestUtils.createNewAuthorDto();

@@ -92,7 +92,7 @@ public abstract class AbstractTestApi {
   }
 
   private HttpHeaders createHttpHeaders() {
-    HttpHeaders headers = new HttpHeaders();
+    var headers = new HttpHeaders();
     headers.setBasicAuth(user, password);
     return headers;
   }

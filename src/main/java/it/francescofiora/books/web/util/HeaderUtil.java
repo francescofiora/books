@@ -62,7 +62,7 @@ public interface HeaderUtil {
    * @return HttpHeaders
    */
   static HttpHeaders createFailureAlert(String alert, String param, String errorMessage) {
-    HttpHeaders headers = new HttpHeaders();
+    var headers = new HttpHeaders();
     headers.add(X_ALERT, alert);
     headers.add(X_PARAMS, param);
     headers.add(X_ERROR, errorMessage);
@@ -78,7 +78,7 @@ public interface HeaderUtil {
    * @return HttpHeaders
    */
   static HttpHeaders createFailureAlert(String alert, List<String> params, String errorMessage) {
-    HttpHeaders headers = new HttpHeaders();
+    var headers = new HttpHeaders();
     headers.add(X_ALERT, alert);
     headers.addAll(X_PARAMS, params);
     headers.add(X_ERROR, errorMessage);
@@ -93,7 +93,7 @@ public interface HeaderUtil {
    * @return HttpHeaders
    */
   static HttpHeaders createAlert(String alert, String param) {
-    HttpHeaders headers = new HttpHeaders();
+    var headers = new HttpHeaders();
     headers.add(X_ALERT, alert);
     headers.add(X_PARAMS, param);
     return headers;

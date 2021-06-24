@@ -9,8 +9,8 @@ class NewPublisherDtoTest {
 
   @Test
   void dtoEqualsVerifier() throws Exception {
-    NewPublisherDto publisherDto1 = TestUtils.createNewPublisherDto();
-    NewPublisherDto publisherDto2 = new NewPublisherDto();
+    var publisherDto1 = TestUtils.createNewPublisherDto();
+    var publisherDto2 = new NewPublisherDto();
     assertThat(publisherDto1).isNotEqualTo(publisherDto2);
 
     publisherDto2 = TestUtils.createNewPublisherDto();

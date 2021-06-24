@@ -24,8 +24,8 @@ class DtoUtilsTest {
 
   @Test
   void equalsVerifier() {
-    DummyDto dtoObj1 = new DummyDto();
-    DummyDto dtoObj2 = new DummyDto();
+    var dtoObj1 = new DummyDto();
+    var dtoObj2 = new DummyDto();
 
     // Test equals
     assertThat(DtoUtils.equals(dtoObj1, dtoObj2)).isTrue();
@@ -36,13 +36,13 @@ class DtoUtilsTest {
 
   @Test
   void dtoIdentifierVerifier() {
-    DtoIdentifier domainObj1 = new DummyDto();
+    var domainObj1 = new DummyDto();
     domainObj1.setId(1L);
     assertThat(DtoUtils.equals(null, domainObj1)).isFalse();
     assertThat(DtoUtils.equals(domainObj1, null)).isFalse();
     assertThat(DtoUtils.equals(domainObj1, new Object())).isFalse();
 
-    DtoIdentifier domainObj2 = new DummyDto();
+    var domainObj2 = new DummyDto();
     assertThat(DtoUtils.equals(domainObj1, domainObj2)).isFalse();
 
     domainObj2.setId(2L);

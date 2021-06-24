@@ -22,12 +22,12 @@ public final class PaginationUtil {
    * @return http header
    */
   public static <T> HttpHeaders getHttpHeadersfromPagination(String entityName, Page<T> page) {
-    UriComponentsBuilder uriBuilder = ServletUriComponentsBuilder.fromCurrentRequest();
-    int pageNumber = page.getNumber();
-    int pageSize = page.getSize();
-    HttpHeaders headers = HeaderUtil.createEntityGetAlert(entityName, pageNumber + " " + pageSize);
+    var uriBuilder = ServletUriComponentsBuilder.fromCurrentRequest();
+    var pageNumber = page.getNumber();
+    var pageSize = page.getSize();
+    var headers = HeaderUtil.createEntityGetAlert(entityName, pageNumber + " " + pageSize);
     headers.add(HEADER_X_TOTAL_COUNT, Long.toString(page.getTotalElements()));
-    StringBuilder link = new StringBuilder();
+    var link = new StringBuilder();
     if (pageNumber < page.getTotalPages() - 1) {
       link.append(prepareLink(uriBuilder, pageNumber + 1, pageSize, "next")).append(",");
     }

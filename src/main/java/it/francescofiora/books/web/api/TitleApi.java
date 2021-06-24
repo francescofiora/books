@@ -62,7 +62,7 @@ public class TitleApi extends AbstractApi {
       @Parameter(description = "Add new Title") @Valid @RequestBody NewTitleDto titleDto)
       throws URISyntaxException {
     log.debug("REST request to save Title : {}", titleDto);
-    TitleDto result = titleService.create(titleDto);
+    var result = titleService.create(titleDto);
     return postResponse("/api/titles/" + result.getId(), result.getId());
   }
 

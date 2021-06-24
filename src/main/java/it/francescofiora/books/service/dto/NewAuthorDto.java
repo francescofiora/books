@@ -40,7 +40,7 @@ public class NewAuthorDto implements Serializable {
     if (obj == null || getClass() != obj.getClass()) {
       return false;
     }
-    NewAuthorDto other = (NewAuthorDto) obj;
+    var other = (NewAuthorDto) obj;
     return Objects.equals(getFirstName(), other.getFirstName())
         && Objects.equals(getLastName(), other.getLastName());
   }

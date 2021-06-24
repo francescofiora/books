@@ -44,7 +44,7 @@ public class NewTitleDto extends BaseTitleDto implements Serializable {
     if (obj == null || getClass() != obj.getClass()) {
       return false;
     }
-    NewTitleDto other = (NewTitleDto) obj;
+    var other = (NewTitleDto) obj;
     return Objects.equals(getAuthors(), other.getAuthors())
         && Objects.equals(getCopyright(), other.getCopyright())
         && Objects.equals(getEditionNumber(), other.getEditionNumber())

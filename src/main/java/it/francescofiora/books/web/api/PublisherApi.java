@@ -62,7 +62,7 @@ public class PublisherApi extends AbstractApi {
           description = "Add new Publisher") @Valid @RequestBody NewPublisherDto publisherDto)
       throws URISyntaxException {
     log.debug("REST request to create Publisher : {}", publisherDto);
-    PublisherDto result = publisherService.create(publisherDto);
+    var result = publisherService.create(publisherDto);
     return postResponse("/api/publishers/" + result.getId(), result.getId());
   }
 

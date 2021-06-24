@@ -11,8 +11,8 @@ class NewTitleDtoTest {
 
   @Test
   void dtoEqualsVerifier() throws Exception {
-    NewTitleDto titleDto1 = TestUtils.createNewTitleDto();
-    NewTitleDto titleDto2 = new NewTitleDto();
+    var titleDto1 = TestUtils.createNewTitleDto();
+    var titleDto2 = new NewTitleDto();
     assertThat(titleDto1).isNotEqualTo(titleDto2);
 
     titleDto2 = TestUtils.createNewTitleDto();

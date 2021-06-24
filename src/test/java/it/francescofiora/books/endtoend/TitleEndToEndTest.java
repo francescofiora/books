@@ -2,18 +2,14 @@ package it.francescofiora.books.endtoend;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import it.francescofiora.books.service.dto.NewTitleDto;
 import it.francescofiora.books.service.dto.TitleDto;
-import it.francescofiora.books.service.dto.UpdatebleTitleDto;
 import it.francescofiora.books.util.TestUtils;
-import java.util.Optional;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -77,26 +73,26 @@ class TitleEndToEndTest extends AbstractTestEndToEnd {
 
   @Test
   void testCreate() throws Exception {
-    Long authorId =
+    var authorId =
         createAndReturnId(AUTHORS_URI, TestUtils.createNewAuthorDto(), AUTHOR_ALERT_CREATED);
 
-    Long publisherId = createAndReturnId(PUBLISHERS_URI, TestUtils.createNewPublisherDto(),
+    var publisherId = createAndReturnId(PUBLISHERS_URI, TestUtils.createNewPublisherDto(),
         PUBLISHER_ALERT_CREATED);
 
-    NewTitleDto newTitleDto = TestUtils.createNewSimpleTitleDto();
+    var newTitleDto = TestUtils.createNewSimpleTitleDto();
     newTitleDto.getAuthors().add(TestUtils.createRefAuthorDto(authorId));
     newTitleDto.setPublisher(TestUtils.createRefPublisherDto(publisherId));
-    Long titleId = createAndReturnId(TITLES_URI, newTitleDto, TITLE_ALERT_CREATED);
+    var titleId = createAndReturnId(TITLES_URI, newTitleDto, TITLE_ALERT_CREATED);
 
-    UpdatebleTitleDto updatebleTitleDto = TestUtils.createSimpleUpdatebleTitleDto(titleId);
+    var updatebleTitleDto = TestUtils.createSimpleUpdatebleTitleDto(titleId);
     updatebleTitleDto.getAuthors().add(TestUtils.createRefAuthorDto(authorId));
     updatebleTitleDto.setPublisher(TestUtils.createRefPublisherDto(publisherId));
 
-    final String titlesIdUri = String.format(TITLES_ID_URI, titleId);
+    final var titlesIdUri = String.format(TITLES_ID_URI, titleId);
 
     update(titlesIdUri, updatebleTitleDto, ALERT_UPDATED, String.valueOf(titleId));
 
-    TitleDto titleDto = get(titlesIdUri, TitleDto.class, ALERT_GET, String.valueOf(titleId));
+    var titleDto = get(titlesIdUri, TitleDto.class, ALERT_GET, String.valueOf(titleId));
     assertThat(titleDto.getId()).isEqualTo(updatebleTitleDto.getId());
     assertThat(titleDto.getTitle()).isEqualTo(updatebleTitleDto.getTitle());
     assertThat(titleDto.getCopyright()).isEqualTo(updatebleTitleDto.getCopyright());
@@ -107,15 +103,14 @@ class TitleEndToEndTest extends AbstractTestEndToEnd {
     assertThat(titleDto.getPublisher().getId()).isEqualTo(publisherId);
     assertThat(titleDto.getAuthors().get(0).getId()).isEqualTo(authorId);
 
-    Pageable pageable = PageRequest.of(1, 1);
-    TitleDto[] titles = get(TITLES_URI, pageable, TitleDto[].class, ALERT_GET, PARAM_PAGE_20);
+    var pageable = PageRequest.of(1, 1);
+    var titles = get(TITLES_URI, pageable, TitleDto[].class, ALERT_GET, PARAM_PAGE_20);
     assertThat(titles).isNotEmpty();
-    Optional<TitleDto> option =
-        Stream.of(titles).filter(title -> title.getId().equals(titleId)).findAny();
+    var option = Stream.of(titles).filter(title -> title.getId().equals(titleId)).findAny();
     assertThat(option).isPresent();
     assertThat(option.get()).isEqualTo(titleDto);
 
-    final String authorsTitlesUri = String.format(AUTHORS_TITLES_URI, authorId);
+    final var authorsTitlesUri = String.format(AUTHORS_TITLES_URI, authorId);
 
     titles = get(authorsTitlesUri, pageable, TitleDto[].class, ALERT_GET, PARAM_PAGE_1);
     assertThat(titles).isNotEmpty();
@@ -123,7 +118,7 @@ class TitleEndToEndTest extends AbstractTestEndToEnd {
     assertThat(option).isPresent();
     assertThat(option.get()).isEqualTo(titleDto);
 
-    final String authorsIdUri = String.format(AUTHORS_ID_URI, authorId);
+    final var authorsIdUri = String.format(AUTHORS_ID_URI, authorId);
 
     assertDeleteBadRequest(authorsIdUri, AUTHOR_ALERT_BAD_REQUEST, String.valueOf(authorId));
     assertDeleteBadRequest(String.format(PUBLISHERS_ID_URI, publisherId),
@@ -143,12 +138,12 @@ class TitleEndToEndTest extends AbstractTestEndToEnd {
 
   @Test
   void testCreateBadRequest() throws Exception {
-    NewTitleDto newTitleDto = TestUtils.createNewSimpleTitleDto();
+    var newTitleDto = TestUtils.createNewSimpleTitleDto();
 
-    Long authorId =
+    var authorId =
         createAndReturnId(AUTHORS_URI, TestUtils.createNewAuthorDto(), AUTHOR_ALERT_CREATED);
     newTitleDto.getAuthors().add(TestUtils.createRefAuthorDto(authorId));
-    Long publisherId = 100L;
+    var publisherId = 100L;
     newTitleDto.setPublisher(TestUtils.createRefPublisherDto(publisherId));
 
     assertCreateNotFound(TITLES_URI, newTitleDto, PUBLISHER_ALERT_NOT_FOUND,
@@ -173,17 +168,17 @@ class TitleEndToEndTest extends AbstractTestEndToEnd {
   @Test
   void testUpdateBadRequest() throws Exception {
     // id
-    UpdatebleTitleDto titleDto = TestUtils.createUpdatebleTitleDto(null);
+    var titleDto = TestUtils.createUpdatebleTitleDto(null);
     assertUpdateBadRequest(String.format(TITLES_ID_URI, 1L), titleDto, TITLE_ALERT_BEAN_BAD_REQUEST,
         PARAM_ID_NOT_NULL);
 
-    Long authorId =
+    var authorId =
         createAndReturnId(AUTHORS_URI, TestUtils.createNewAuthorDto(), AUTHOR_ALERT_CREATED);
 
-    Long publisherId = createAndReturnId(PUBLISHERS_URI, TestUtils.createNewPublisherDto(),
+    var publisherId = createAndReturnId(PUBLISHERS_URI, TestUtils.createNewPublisherDto(),
         PUBLISHER_ALERT_CREATED);
 
-    NewTitleDto newTitleDto = TestUtils.createNewSimpleTitleDto();
+    var newTitleDto = TestUtils.createNewSimpleTitleDto();
     newTitleDto.getAuthors().add(TestUtils.createRefAuthorDto(authorId));
     newTitleDto.setPublisher(TestUtils.createRefPublisherDto(publisherId));
     Long id = createAndReturnId(TITLES_URI, newTitleDto, TITLE_ALERT_CREATED);
@@ -192,7 +187,7 @@ class TitleEndToEndTest extends AbstractTestEndToEnd {
     assertUpdateBadRequest(String.format(TITLES_ID_URI, id + 1), titleDto, TITLE_ALERT_BAD_REQUEST,
         String.valueOf(id));
 
-    final String path = String.format(TITLES_ID_URI, id);
+    final var path = String.format(TITLES_ID_URI, id);
 
     // Authors
     titleDto = TestUtils.createUpdatebleTitleDto(id);

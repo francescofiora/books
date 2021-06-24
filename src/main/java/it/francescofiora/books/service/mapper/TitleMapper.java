@@ -35,7 +35,7 @@ public interface TitleMapper {
     if (id == null) {
       return null;
     }
-    Title title = new Title();
+    var title = new Title();
     title.setId(id);
     return title;
   }

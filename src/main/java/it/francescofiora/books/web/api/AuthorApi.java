@@ -62,7 +62,7 @@ public class AuthorApi extends AbstractApi {
       @Parameter(description = "Add new Author") @Valid @RequestBody NewAuthorDto authorDto)
       throws URISyntaxException {
     log.debug("REST request to create Author : {}", authorDto);
-    AuthorDto result = authorService.create(authorDto);
+    var result = authorService.create(authorDto);
     return postResponse("/api/authors/" + result.getId(), result.getId());
   }
 

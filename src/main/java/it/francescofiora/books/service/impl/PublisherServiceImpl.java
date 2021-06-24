@@ -1,7 +1,5 @@
 package it.francescofiora.books.service.impl;
 
-import it.francescofiora.books.domain.Publisher;
-import it.francescofiora.books.domain.Title;
 import it.francescofiora.books.repository.PublisherRepository;
 import it.francescofiora.books.repository.TitleRepository;
 import it.francescofiora.books.service.PublisherService;
@@ -47,7 +45,7 @@ public class PublisherServiceImpl implements PublisherService {
   @Override
   public PublisherDto create(NewPublisherDto publisherDto) {
     log.debug("Request to create a new Publisher : {}", publisherDto);
-    Publisher publisher = publisherMapper.toEntity(publisherDto);
+    var publisher = publisherMapper.toEntity(publisherDto);
     publisher = publisherRepository.save(publisher);
     return publisherMapper.toDto(publisher);
   }
@@ -55,12 +53,12 @@ public class PublisherServiceImpl implements PublisherService {
   @Override
   public void update(PublisherDto publisherDto) {
     log.debug("Request to save Publisher : {}", publisherDto);
-    Optional<Publisher> publisherOpt = publisherRepository.findById(publisherDto.getId());
+    var publisherOpt = publisherRepository.findById(publisherDto.getId());
     if (!publisherOpt.isPresent()) {
-      final String id = String.valueOf(publisherDto.getId());
+      final var id = String.valueOf(publisherDto.getId());
       throw new NotFoundAlertException(ENTITY_NAME, id, ENTITY_NAME + " not found with id " + id);
     }
-    Publisher publisher = publisherOpt.get();
+    var publisher = publisherOpt.get();
     publisherMapper.updateEntityFromDto(publisherDto, publisher);
     publisherRepository.save(publisher);
   }
@@ -82,7 +80,7 @@ public class PublisherServiceImpl implements PublisherService {
   @Override
   public void delete(Long id) {
     log.debug("Request to delete Publisher : {}", id);
-    Optional<Title> titleOpt = titleRepository.findOneWithPublisherRelationships(id);
+    var titleOpt = titleRepository.findOneWithPublisherRelationships(id);
     if (titleOpt.isPresent()) {
       throw new BadRequestAlertException(ENTITY_NAME, String.valueOf(id),
           "Almost a Title is using this publisher");

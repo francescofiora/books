@@ -23,7 +23,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -47,83 +46,82 @@ class AuthorServiceTest {
 
   @BeforeEach
   void setUp() {
-    authorService =
-        new AuthorServiceImpl(authorRepository, authorMapper, titleMapper);
+    authorService = new AuthorServiceImpl(authorRepository, authorMapper, titleMapper);
   }
 
   @Test
   void testCreate() throws Exception {
-    Author author = new Author();
+    var author = new Author();
     when(authorMapper.toEntity(any(NewAuthorDto.class))).thenReturn(author);
     when(authorRepository.save(any(Author.class))).thenReturn(author);
 
-    AuthorDto expected = new AuthorDto();
+    var expected = new AuthorDto();
     when(authorMapper.toDto(any(Author.class))).thenReturn(expected);
 
-    NewAuthorDto authorDto = new NewAuthorDto();
-    AuthorDto actual = authorService.create(authorDto);
+    var authorDto = new NewAuthorDto();
+    var actual = authorService.create(authorDto);
     assertThat(actual).isEqualTo(expected);
   }
 
   @Test
   void testUpdateNotFound() throws Exception {
-    AuthorDto authorDto = new AuthorDto();
+    var authorDto = new AuthorDto();
     assertThrows(NotFoundAlertException.class, () -> authorService.update(authorDto));
   }
 
   @Test
   void testUpdate() throws Exception {
-    Author author = new Author();
+    var author = new Author();
     when(authorRepository.findById(eq(ID))).thenReturn(Optional.of(author));
 
-    AuthorDto authorDto = new AuthorDto();
+    var authorDto = new AuthorDto();
     authorDto.setId(ID);
     authorService.update(authorDto);
   }
 
   @Test
   void testFindAll() throws Exception {
-    Author author = new Author();
+    var author = new Author();
     when(authorRepository.findAll(any(Pageable.class)))
         .thenReturn(new PageImpl<Author>(singletonList(author)));
-    AuthorDto expected = new AuthorDto();
+    var expected = new AuthorDto();
     when(authorMapper.toDto(any(Author.class))).thenReturn(expected);
-    Pageable pageable = PageRequest.of(1, 1);
-    Page<AuthorDto> page = authorService.findAll(pageable);
+    var pageable = PageRequest.of(1, 1);
+    var page = authorService.findAll(pageable);
     assertThat(page.getContent().get(0)).isEqualTo(expected);
   }
 
   @Test
   void testFindOneNotFound() throws Exception {
-    Optional<AuthorDto> authorOpt = authorService.findOne(ID);
+    var authorOpt = authorService.findOne(ID);
     assertThat(authorOpt).isNotPresent();
   }
 
   @Test
   void testFindOne() throws Exception {
-    Author author = new Author();
+    var author = new Author();
     author.setId(ID);
     when(authorRepository.findById(eq(author.getId()))).thenReturn(Optional.of(author));
-    AuthorDto expected = new AuthorDto();
+    var expected = new AuthorDto();
     when(authorMapper.toDto(any(Author.class))).thenReturn(expected);
 
-    Optional<AuthorDto> authorOpt = authorService.findOne(ID);
+    var authorOpt = authorService.findOne(ID);
     assertThat(authorOpt).isPresent();
-    AuthorDto actual = authorOpt.get();
+    var actual = authorOpt.get();
     assertThat(actual).isEqualTo(expected);
   }
 
   @Test
   void testFindTitlesByAuthorId() throws Exception {
-    Author author = new Author();
+    var author = new Author();
     author.getTitles().add(new Title());
     author.setId(ID);
     when(authorRepository.findById(eq(author.getId()))).thenReturn(Optional.of(author));
 
-    TitleDto expected = new TitleDto();
+    var expected = new TitleDto();
     when(titleMapper.toDto(anyList())).thenReturn(singletonList(expected));
-    Pageable pageable = PageRequest.of(1, 1);
-    Page<TitleDto> page = authorService.findTitlesByAuthorId(pageable, ID);
+    var pageable = PageRequest.of(1, 1);
+    var page = authorService.findTitlesByAuthorId(pageable, ID);
     assertThat(page.getContent().get(0)).isEqualTo(expected);
   }
 

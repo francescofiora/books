@@ -1,6 +1,5 @@
 package it.francescofiora.books.service.impl;
 
-import it.francescofiora.books.domain.Title;
 import it.francescofiora.books.repository.AuthorRepository;
 import it.francescofiora.books.repository.PublisherRepository;
 import it.francescofiora.books.repository.TitleRepository;
@@ -8,7 +7,6 @@ import it.francescofiora.books.service.AuthorService;
 import it.francescofiora.books.service.PublisherService;
 import it.francescofiora.books.service.TitleService;
 import it.francescofiora.books.service.dto.NewTitleDto;
-import it.francescofiora.books.service.dto.RefAuthorDto;
 import it.francescofiora.books.service.dto.TitleDto;
 import it.francescofiora.books.service.dto.UpdatebleTitleDto;
 import it.francescofiora.books.service.mapper.TitleMapper;
@@ -58,20 +56,20 @@ public class TitleServiceImpl implements TitleService {
     log.debug("Request to create Title : {}", titleDto);
 
     if (!publisherRepository.findById(titleDto.getPublisher().getId()).isPresent()) {
-      final String id = String.valueOf(titleDto.getPublisher().getId());
+      final var id = String.valueOf(titleDto.getPublisher().getId());
       throw new NotFoundAlertException(PublisherService.ENTITY_NAME, id,
           PublisherService.ENTITY_NAME + " not found with id " + id);
     }
 
-    for (RefAuthorDto authorDto : titleDto.getAuthors()) {
+    for (var authorDto : titleDto.getAuthors()) {
       if (!authorRepository.findById(authorDto.getId()).isPresent()) {
-        final String id = String.valueOf(authorDto.getId());
+        final var id = String.valueOf(authorDto.getId());
         throw new NotFoundAlertException(AuthorService.ENTITY_NAME, id,
             AuthorService.ENTITY_NAME + " not found with id " + id);
       }
     }
 
-    Title title = titleMapper.toEntity(titleDto);
+    var title = titleMapper.toEntity(titleDto);
     title = titleRepository.save(title);
     return titleMapper.toDto(title);
   }
@@ -79,12 +77,12 @@ public class TitleServiceImpl implements TitleService {
   @Override
   public void update(UpdatebleTitleDto titleDto) {
     log.debug("Request to update Title : {}", titleDto);
-    Optional<Title> titleOpt = titleRepository.findById(titleDto.getId());
+    var titleOpt = titleRepository.findById(titleDto.getId());
     if (!titleOpt.isPresent()) {
-      final String id = String.valueOf(titleDto.getId());
+      final var id = String.valueOf(titleDto.getId());
       throw new NotFoundAlertException(ENTITY_NAME, id, ENTITY_NAME + " not found with id " + id);
     }
-    Title title = titleOpt.get();
+    var title = titleOpt.get();
     titleMapper.updateEntityFromDto(titleDto, title);
     titleRepository.save(title);
   }

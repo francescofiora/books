@@ -1,8 +1,6 @@
 package it.francescofiora.books.service.dto;
 
-import com.openpojo.reflection.PojoClass;
 import com.openpojo.reflection.impl.PojoClassFactory;
-import com.openpojo.validation.Validator;
 import com.openpojo.validation.ValidatorBuilder;
 import com.openpojo.validation.affirm.Affirm;
 import com.openpojo.validation.rule.impl.GetterMustExistRule;
@@ -11,7 +9,6 @@ import com.openpojo.validation.test.impl.GetterTester;
 import com.openpojo.validation.test.impl.SetterTester;
 import it.francescofiora.books.util.DtoEqualsTester;
 import it.francescofiora.books.util.FilterPackageInfo;
-import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class DtoTest {
@@ -23,15 +20,14 @@ class DtoTest {
 
   @Test
   void ensureExpectedCount() {
-    List<PojoClass> classes =
-        PojoClassFactory.getPojoClasses(DTO_PACKAGE, new FilterPackageInfo());
+    var classes = PojoClassFactory.getPojoClasses(DTO_PACKAGE, new FilterPackageInfo());
     Affirm.affirmEquals("Classes added / removed?", EXPECTED_CLASS_COUNT, classes.size());
   }
 
   @Test
   void testStructureAndBehavior() {
     // @formatter:off
-    Validator validator = ValidatorBuilder.create()
+    var validator = ValidatorBuilder.create()
         .with(new GetterMustExistRule())
         .with(new SetterMustExistRule())
         .with(new SetterTester())

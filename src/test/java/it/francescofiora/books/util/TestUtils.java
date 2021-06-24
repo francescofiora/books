@@ -28,7 +28,7 @@ public interface TestUtils {
    * @return Author
    */
   static Author createAuthor1() {
-    Author author = new Author();
+    var author = new Author();
     author.setFirstName("John");
     author.setLastName("Smith");
     return author;
@@ -40,7 +40,7 @@ public interface TestUtils {
    * @return Author
    */
   static Author createAuthor2() {
-    Author author = new Author();
+    var author = new Author();
     author.setFirstName("Sophia");
     author.setLastName("Brown");
     return author;
@@ -52,7 +52,7 @@ public interface TestUtils {
    * @return Author
    */
   static Author createAuthor3() {
-    Author author = new Author();
+    var author = new Author();
     author.setFirstName("William");
     author.setLastName("Wilson");
     return author;
@@ -64,7 +64,7 @@ public interface TestUtils {
    * @return Publisher
    */
   static Publisher createPublisher1() {
-    Publisher publisher = new Publisher();
+    var publisher = new Publisher();
     publisher.setPublisherName("Small Publisher Ltd");
     return publisher;
   }
@@ -75,7 +75,7 @@ public interface TestUtils {
    * @return Publisher
    */
   static Publisher createPublisher2() {
-    Publisher publisher = new Publisher();
+    var publisher = new Publisher();
     publisher.setPublisherName("Publisher Ltd");
     return publisher;
   }
@@ -86,7 +86,7 @@ public interface TestUtils {
    * @return Publisher
    */
   static Publisher createPublisher3() {
-    Publisher publisher = new Publisher();
+    var publisher = new Publisher();
     publisher.setPublisherName("Big Publisher Ltd");
     return publisher;
   }
@@ -97,7 +97,7 @@ public interface TestUtils {
    * @return Title
    */
   static Title createTitle1() {
-    Title title = new Title();
+    var title = new Title();
     title.getAuthors().add(createAuthor1());
     title.setCopyright(2020);
     title.setEditionNumber(1L);
@@ -115,7 +115,7 @@ public interface TestUtils {
    * @return Title
    */
   static Title createTitle2() {
-    Title title = new Title();
+    var title = new Title();
     title.getAuthors().add(createAuthor2());
     title.setCopyright(2019);
     title.setEditionNumber(2L);
@@ -133,7 +133,7 @@ public interface TestUtils {
    * @return Title
    */
   static Title createTitle3() {
-    Title title = new Title();
+    var title = new Title();
     title.setCopyright(2018);
     title.setEditionNumber(3L);
     title.setImageFile("image00.gif");
@@ -189,7 +189,7 @@ public interface TestUtils {
    * @return AuthorDto
    */
   static AuthorDto createAuthorDto(final Long id) {
-    AuthorDto authorDto = new AuthorDto();
+    var authorDto = new AuthorDto();
     authorDto.setId(id);
     authorDto.setFirstName("John");
     authorDto.setLastName("Smith");
@@ -203,7 +203,7 @@ public interface TestUtils {
    * @return PublisherDto
    */
   static PublisherDto createPublisherDto(final Long id) {
-    PublisherDto publisherDto = new PublisherDto();
+    var publisherDto = new PublisherDto();
     publisherDto.setId(id);
     publisherDto.setPublisherName("Peter");
     return publisherDto;
@@ -215,7 +215,7 @@ public interface TestUtils {
    * @return NewAuthorDto
    */
   static NewAuthorDto createNewAuthorDto() {
-    NewAuthorDto authorDto = new NewAuthorDto();
+    var authorDto = new NewAuthorDto();
     authorDto.setFirstName("Robert");
     authorDto.setLastName("Smith");
     return authorDto;
@@ -227,7 +227,7 @@ public interface TestUtils {
    * @return NewPublisherDto
    */
   static NewPublisherDto createNewPublisherDto() {
-    NewPublisherDto publisherDto = new NewPublisherDto();
+    var publisherDto = new NewPublisherDto();
     publisherDto.setPublisherName("Publisher");
     return publisherDto;
   }
@@ -238,7 +238,7 @@ public interface TestUtils {
    * @return NewTitleDto
    */
   static NewTitleDto createNewTitleDto() {
-    NewTitleDto titleDto = createNewSimpleTitleDto();
+    var titleDto = createNewSimpleTitleDto();
     titleDto.setPublisher(createRefPublisherDto(1L));
     titleDto.getAuthors().add(createRefAuthorDto(1L));
     return titleDto;
@@ -250,7 +250,7 @@ public interface TestUtils {
    * @return NewTitleDto
    */
   static NewTitleDto createNewSimpleTitleDto() {
-    NewTitleDto titleDto = new NewTitleDto();
+    var titleDto = new NewTitleDto();
     titleDto.setTitle("The Title");
     titleDto.setCopyright(2020);
     titleDto.setEditionNumber(10L);
@@ -267,7 +267,7 @@ public interface TestUtils {
    * @return RefAuthorDto
    */
   static RefAuthorDto createRefAuthorDto(final Long id) {
-    RefAuthorDto authorDto = new RefAuthorDto();
+    var authorDto = new RefAuthorDto();
     authorDto.setId(id);
     return authorDto;
   }
@@ -279,7 +279,7 @@ public interface TestUtils {
    * @return RefPublisherDto
    */
   static RefPublisherDto createRefPublisherDto(final Long id) {
-    RefPublisherDto publisherDto = new RefPublisherDto();
+    var publisherDto = new RefPublisherDto();
     publisherDto.setId(id);
     return publisherDto;
   }
@@ -291,7 +291,7 @@ public interface TestUtils {
    * @return TitleDto
    */
   static TitleDto createTitleDto(final Long id) {
-    TitleDto titleDto = new TitleDto();
+    var titleDto = new TitleDto();
     titleDto.setId(id);
     titleDto.setTitle("One Title");
     titleDto.setCopyright(2021);
@@ -311,7 +311,7 @@ public interface TestUtils {
    * @return UpdatebleTitleDto
    */
   static UpdatebleTitleDto createUpdatebleTitleDto(final Long id) {
-    UpdatebleTitleDto titleDto = createSimpleUpdatebleTitleDto(id);
+    var titleDto = createSimpleUpdatebleTitleDto(id);
     titleDto.setPublisher(createRefPublisherDto(3L));
     titleDto.getAuthors().add(createRefAuthorDto(3L));
     return titleDto;
@@ -324,7 +324,7 @@ public interface TestUtils {
    * @return UpdatebleTitleDto
    */
   static UpdatebleTitleDto createSimpleUpdatebleTitleDto(final Long id) {
-    UpdatebleTitleDto titleDto = new UpdatebleTitleDto();
+    var titleDto = new UpdatebleTitleDto();
     titleDto.setId(id);
     titleDto.setTitle("Simple Title");
     titleDto.setCopyright(2019);

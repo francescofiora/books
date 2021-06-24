@@ -1,6 +1,5 @@
 package it.francescofiora.books.service.impl;
 
-import it.francescofiora.books.domain.Author;
 import it.francescofiora.books.repository.AuthorRepository;
 import it.francescofiora.books.service.AuthorService;
 import it.francescofiora.books.service.dto.AuthorDto;
@@ -48,7 +47,7 @@ public class AuthorServiceImpl implements AuthorService {
   @Override
   public AuthorDto create(NewAuthorDto authorDto) {
     log.debug("Request to create a new Author : {}", authorDto);
-    Author author = authorMapper.toEntity(authorDto);
+    var author = authorMapper.toEntity(authorDto);
     author = authorRepository.save(author);
     return authorMapper.toDto(author);
   }
@@ -56,12 +55,12 @@ public class AuthorServiceImpl implements AuthorService {
   @Override
   public void update(AuthorDto authorDto) {
     log.debug("Request to update Author : {}", authorDto);
-    Optional<Author> authorOpt = authorRepository.findById(authorDto.getId());
+    var authorOpt = authorRepository.findById(authorDto.getId());
     if (!authorOpt.isPresent()) {
-      String id = String.valueOf(authorDto.getId());
+      var id = String.valueOf(authorDto.getId());
       throw new NotFoundAlertException(ENTITY_NAME, id, ENTITY_NAME + " not found with id " + id);
     }
-    Author author = authorOpt.get();
+    var author = authorOpt.get();
     authorMapper.updateEntityFromDto(authorDto, author);
     authorRepository.save(author);
   }
@@ -83,7 +82,7 @@ public class AuthorServiceImpl implements AuthorService {
   @Override
   public void delete(Long id) {
     log.debug("Request to delete Author : {}", id);
-    Optional<Author> authorOpt = authorRepository.findById(id);
+    var authorOpt = authorRepository.findById(id);
     if (authorOpt.isPresent() && !authorOpt.get().getTitles().isEmpty()) {
       throw new BadRequestAlertException(ENTITY_NAME, String.valueOf(id),
           "Almost a Title is using this author");
@@ -95,12 +94,12 @@ public class AuthorServiceImpl implements AuthorService {
   @Transactional(readOnly = true)
   public Page<TitleDto> findTitlesByAuthorId(Pageable pageable, Long id) {
     log.debug("Request to get Ttitles by Author id: {}", id);
-    Optional<Author> authorOpt = authorRepository.findById(id);
+    var authorOpt = authorRepository.findById(id);
     if (!authorOpt.isPresent()) {
       throw new NotFoundAlertException(ENTITY_NAME, String.valueOf(id),
           "Author Not Found with id " + id);
     }
-    Author author = authorOpt.get();
+    var author = authorOpt.get();
     return new PageImpl<TitleDto>(
         titleMapper.toDto(author.getTitles().stream().collect(Collectors.toList())));
   }

@@ -20,7 +20,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -50,63 +49,63 @@ class PublisherServiceTest {
 
   @Test
   void testCreate() throws Exception {
-    Publisher publisher = new Publisher();
+    var publisher = new Publisher();
     when(publisherMapper.toEntity(any(NewPublisherDto.class))).thenReturn(publisher);
     when(publisherRepository.save(any(Publisher.class))).thenReturn(publisher);
 
-    PublisherDto expected = new PublisherDto();
+    var expected = new PublisherDto();
     when(publisherMapper.toDto(any(Publisher.class))).thenReturn(expected);
 
-    NewPublisherDto publisherDto = new NewPublisherDto();
-    PublisherDto actual = publisherService.create(publisherDto);
+    var publisherDto = new NewPublisherDto();
+    var actual = publisherService.create(publisherDto);
     assertThat(actual).isEqualTo(expected);
   }
 
   @Test
   void testUpdateNotFound() throws Exception {
-    PublisherDto publisherDto = new PublisherDto();
+    var publisherDto = new PublisherDto();
     assertThrows(NotFoundAlertException.class, () -> publisherService.update(publisherDto));
   }
 
   @Test
   void testUpdate() throws Exception {
-    Publisher publisher = new Publisher();
+    var publisher = new Publisher();
     when(publisherRepository.findById(eq(ID))).thenReturn(Optional.of(publisher));
 
-    PublisherDto publisherDto = new PublisherDto();
+    var publisherDto = new PublisherDto();
     publisherDto.setId(ID);
     publisherService.update(publisherDto);
   }
 
   @Test
   void testFindAll() throws Exception {
-    Publisher publisher = new Publisher();
+    var publisher = new Publisher();
     when(publisherRepository.findAll(any(Pageable.class)))
         .thenReturn(new PageImpl<Publisher>(singletonList(publisher)));
-    PublisherDto expected = new PublisherDto();
+    var expected = new PublisherDto();
     when(publisherMapper.toDto(any(Publisher.class))).thenReturn(expected);
-    Pageable pageable = PageRequest.of(1, 1);
-    Page<PublisherDto> page = publisherService.findAll(pageable);
+    var pageable = PageRequest.of(1, 1);
+    var page = publisherService.findAll(pageable);
     assertThat(page.getContent().get(0)).isEqualTo(expected);
   }
 
   @Test
   void testFindOneNotFound() throws Exception {
-    Optional<PublisherDto> publisherOpt = publisherService.findOne(ID);
+    var publisherOpt = publisherService.findOne(ID);
     assertThat(publisherOpt).isNotPresent();
   }
 
   @Test
   void testFindOne() throws Exception {
-    Publisher publisher = new Publisher();
+    var publisher = new Publisher();
     publisher.setId(ID);
     when(publisherRepository.findById(eq(publisher.getId()))).thenReturn(Optional.of(publisher));
-    PublisherDto expected = new PublisherDto();
+    var expected = new PublisherDto();
     when(publisherMapper.toDto(any(Publisher.class))).thenReturn(expected);
 
-    Optional<PublisherDto> publisherOpt = publisherService.findOne(ID);
+    var publisherOpt = publisherService.findOne(ID);
     assertThat(publisherOpt).isPresent();
-    PublisherDto actual = publisherOpt.get();
+    var actual = publisherOpt.get();
     assertThat(actual).isEqualTo(expected);
   }
 

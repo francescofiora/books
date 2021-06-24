@@ -18,7 +18,7 @@ class TitleMapperTest {
 
   @Test
   void testEntityFromId() {
-    Long id = 1L;
+    var id = 1L;
     assertThat(titleMapper.fromId(id).getId()).isEqualTo(id);
     assertThat(titleMapper.fromId(null)).isNull();
   }

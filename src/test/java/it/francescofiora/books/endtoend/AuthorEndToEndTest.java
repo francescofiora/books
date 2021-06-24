@@ -3,9 +3,7 @@ package it.francescofiora.books.endtoend;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import it.francescofiora.books.service.dto.AuthorDto;
-import it.francescofiora.books.service.dto.NewAuthorDto;
 import it.francescofiora.books.util.TestUtils;
-import java.util.Optional;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,23 +43,23 @@ class AuthorEndToEndTest extends AbstractTestEndToEnd {
 
   @Test
   void testCreate() throws Exception {
-    NewAuthorDto newAuthorDto = TestUtils.createNewAuthorDto();
-    Long authorId = createAndReturnId(AUTHORS_URI, newAuthorDto, ALERT_CREATED);
+    var newAuthorDto = TestUtils.createNewAuthorDto();
+    var authorId = createAndReturnId(AUTHORS_URI, newAuthorDto, ALERT_CREATED);
 
-    final String authorsIdUri = String.format(AUTHORS_ID_URI, authorId);
+    final var authorsIdUri = String.format(AUTHORS_ID_URI, authorId);
 
-    AuthorDto authorDto = TestUtils.createAuthorDto(authorId);
+    var authorDto = TestUtils.createAuthorDto(authorId);
     update(authorsIdUri, authorDto, ALERT_UPDATED, String.valueOf(authorId));
 
-    AuthorDto actual = get(authorsIdUri, AuthorDto.class, ALERT_GET, String.valueOf(authorId));
+    var actual = get(authorsIdUri, AuthorDto.class, ALERT_GET, String.valueOf(authorId));
     assertThat(actual).isEqualTo(authorDto);
     assertThat(actual.getFirstName()).isEqualTo(authorDto.getFirstName());
     assertThat(actual.getLastName()).isEqualTo(authorDto.getLastName());
 
-    AuthorDto[] authors =
+    var authors =
         get(AUTHORS_URI, PageRequest.of(1, 1), AuthorDto[].class, ALERT_GET, PARAM_PAGE_20);
     assertThat(authors).isNotEmpty();
-    Optional<AuthorDto> option =
+    var option =
         Stream.of(authors).filter(author -> author.getId().equals(authorId)).findAny();
     assertThat(option).isPresent();
     assertThat(option.get()).isEqualTo(authorDto);
@@ -83,15 +81,15 @@ class AuthorEndToEndTest extends AbstractTestEndToEnd {
     assertUpdateBadRequest(String.format(AUTHORS_ID_URI, 1L), TestUtils.createAuthorDto(null),
         ALERT_BAD_REQUEST, PARAM_ID_NOT_NULL);
 
-    Long id = createAndReturnId(AUTHORS_URI, TestUtils.createNewAuthorDto(), ALERT_CREATED);
+    var id = createAndReturnId(AUTHORS_URI, TestUtils.createNewAuthorDto(), ALERT_CREATED);
 
     assertUpdateBadRequest(String.format(AUTHORS_ID_URI, (id + 1)), TestUtils.createAuthorDto(id),
         ALERT_BAD_REQUEST, String.valueOf(id));
 
-    final String path = String.format(AUTHORS_ID_URI, id);
+    final var path = String.format(AUTHORS_ID_URI, id);
 
     // firstName
-    AuthorDto authorDto = TestUtils.createAuthorDto(id);
+    var authorDto = TestUtils.createAuthorDto(id);
     authorDto.setFirstName(null);
     assertUpdateBadRequest(path, authorDto, ALERT_BAD_REQUEST, PARAM_FIRST_NAME_NOT_BLANK);
 

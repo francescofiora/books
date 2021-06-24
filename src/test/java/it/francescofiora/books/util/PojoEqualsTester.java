@@ -24,8 +24,8 @@ public class PojoEqualsTester implements Rule {
   }
 
   private <T> void equalsVerifier(Class<T> clazz) throws Exception {
-    T domainObj1 = clazz.getConstructor().newInstance();
-    T domainObj2 = clazz.getConstructor().newInstance();
+    var domainObj1 = clazz.getConstructor().newInstance();
+    var domainObj2 = clazz.getConstructor().newInstance();
 
     // Test equals
     assertThat(domainObj1.equals(domainObj2)).isFalse();
@@ -41,12 +41,12 @@ public class PojoEqualsTester implements Rule {
   }
 
   private <T> void domainIdentifierVerifier(Class<T> clazz) throws Exception {
-    DomainIdentifier domainObj1 = (DomainIdentifier) clazz.getConstructor().newInstance();
+    var domainObj1 = (DomainIdentifier) clazz.getConstructor().newInstance();
     domainObj1.setId(1L);
     assertThat(domainObj1.equals(null)).isFalse();
     assertThat(domainObj1.equals(new Object())).isFalse();
 
-    DomainIdentifier domainObj2 = (DomainIdentifier) clazz.getConstructor().newInstance();
+    var domainObj2 = (DomainIdentifier) clazz.getConstructor().newInstance();
     assertThat(domainObj1.equals(domainObj2)).isFalse();
 
     domainObj2.setId(2L);

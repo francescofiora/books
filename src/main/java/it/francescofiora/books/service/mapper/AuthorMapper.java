@@ -39,7 +39,7 @@ public interface AuthorMapper {
     if (id == null) {
       return null;
     }
-    Author author = new Author();
+    var author = new Author();
     author.setId(id);
     return author;
   }
