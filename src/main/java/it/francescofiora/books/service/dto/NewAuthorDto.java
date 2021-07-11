@@ -9,6 +9,9 @@ import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Author Dto for create new Author.
+ */
 @Getter
 @Setter
 public class NewAuthorDto implements Serializable {

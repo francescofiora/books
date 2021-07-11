@@ -8,6 +8,9 @@ import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Publisher Dto.
+ */
 @Getter
 @Setter
 public class PublisherDto extends NewPublisherDto implements DtoIdentifier {

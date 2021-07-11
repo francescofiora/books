@@ -8,6 +8,9 @@ import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Author Dto.
+ */
 @Getter
 @Setter
 public class AuthorDto extends NewAuthorDto implements DtoIdentifier {

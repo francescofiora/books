@@ -12,6 +12,9 @@ import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Title Dto for create new Title.
+ */
 @Getter
 @Setter
 public class NewTitleDto extends BaseTitleDto implements Serializable {

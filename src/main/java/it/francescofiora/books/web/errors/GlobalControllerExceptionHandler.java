@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+/**
+ * Global Controller Exception Handler.
+ */
 @RestControllerAdvice
 public class GlobalControllerExceptionHandler {
 

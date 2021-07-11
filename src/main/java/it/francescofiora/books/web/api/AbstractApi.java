@@ -11,6 +11,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 
+/**
+ * Abstract Api RestController.
+ */
 public abstract class AbstractApi {
 
   private final String entityName;

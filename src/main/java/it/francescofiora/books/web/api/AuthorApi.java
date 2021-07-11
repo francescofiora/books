@@ -29,6 +29,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Author Api RestController.
+ */
 @RestController
 @Tag(name = "author", description = "Author Rest API")
 @RequestMapping("/api")

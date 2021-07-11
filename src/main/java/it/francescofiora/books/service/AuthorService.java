@@ -7,6 +7,9 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+/**
+ * Author Service.
+ */
 public interface AuthorService {
 
   String ENTITY_NAME = "AuthorDto";

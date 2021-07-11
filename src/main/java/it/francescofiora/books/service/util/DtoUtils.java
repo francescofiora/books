@@ -3,6 +3,9 @@ package it.francescofiora.books.service.util;
 import it.francescofiora.books.service.dto.DtoIdentifier;
 import java.util.Objects;
 
+/**
+ * Dto Utils.
+ */
 public interface DtoUtils {
 
   /**

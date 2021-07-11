@@ -9,6 +9,9 @@ import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Publisher Dto for create new Publisher.
+ */
 @Getter
 @Setter
 public class NewPublisherDto implements Serializable {

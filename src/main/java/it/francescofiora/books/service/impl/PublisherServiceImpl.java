@@ -16,6 +16,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * PublisherService Impl class.
+ */
 @Service
 @Transactional
 public class PublisherServiceImpl implements PublisherService {

@@ -10,6 +10,9 @@ import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Abstract Title Dto.
+ */
 @Getter
 @Setter
 public abstract class BaseTitleDto {

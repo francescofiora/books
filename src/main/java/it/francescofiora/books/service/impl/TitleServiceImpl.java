@@ -19,6 +19,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * TitleService Impl class.
+ */
 @Service
 @Transactional
 public class TitleServiceImpl implements TitleService {
@@ -37,7 +40,7 @@ public class TitleServiceImpl implements TitleService {
 
   /**
    * Constructor.
-   * 
+   *
    * @param titleRepository TitleRepository
    * @param titleMapper TitleMapper
    * @param authorRepository AuthorRepository

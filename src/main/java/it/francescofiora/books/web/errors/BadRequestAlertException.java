@@ -3,6 +3,9 @@ package it.francescofiora.books.web.errors;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
+/**
+ * Bad Request Exception.
+ */
 public class BadRequestAlertException extends ResponseStatusException {
 
   private static final long serialVersionUID = 1L;

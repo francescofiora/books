@@ -19,6 +19,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * AuthorService Impl class.
+ */
 @Service
 @Transactional
 public class AuthorServiceImpl implements AuthorService {
@@ -33,7 +36,7 @@ public class AuthorServiceImpl implements AuthorService {
 
   /**
    * Constructor.
-   * 
+   *
    * @param authorRepository AuthorRepository
    * @param authorMapper AuthorMapper
    */

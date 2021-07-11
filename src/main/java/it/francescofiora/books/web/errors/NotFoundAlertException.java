@@ -3,6 +3,9 @@ package it.francescofiora.books.web.errors;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
+/**
+ * Not Found Alert Exception.
+ */
 public class NotFoundAlertException extends ResponseStatusException {
 
   private static final long serialVersionUID = 1L;

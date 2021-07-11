@@ -6,6 +6,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
+/**
+ * Pagination Util.
+ */
 public final class PaginationUtil {
   private static final String HEADER_X_TOTAL_COUNT = "X-Total-Count";
   private static final String HEADER_LINK_FORMAT = "<{0}>; rel=\"{1}\"";

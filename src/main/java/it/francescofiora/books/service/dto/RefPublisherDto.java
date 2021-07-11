@@ -9,6 +9,9 @@ import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Ref Publisher Dto.
+ */
 @Getter
 @Setter
 public class RefPublisherDto implements Serializable, DtoIdentifier {

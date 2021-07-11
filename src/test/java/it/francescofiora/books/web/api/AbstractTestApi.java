@@ -20,6 +20,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
+/**
+ * Abstract Test Api for RestController tests.
+ */
 public abstract class AbstractTestApi {
 
   @Autowired

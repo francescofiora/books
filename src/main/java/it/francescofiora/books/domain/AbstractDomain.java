@@ -2,6 +2,9 @@ package it.francescofiora.books.domain;
 
 import java.util.Objects;
 
+/**
+ * Abstract Domain Identifier impl.
+ */
 public abstract class AbstractDomain implements DomainIdentifier {
 
   @Override

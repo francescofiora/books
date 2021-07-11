@@ -7,6 +7,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+/**
+ * Abstract Test for Repository tests.
+ */
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
 @TestPropertySource(locations = { "classpath:application_test.properties" })

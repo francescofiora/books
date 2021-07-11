@@ -13,6 +13,9 @@ import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Title Dto.
+ */
 @Getter
 @Setter
 public class TitleDto extends BaseTitleDto implements Serializable, DtoIdentifier {

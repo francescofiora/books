@@ -4,6 +4,9 @@ import com.openpojo.reflection.PojoClass;
 import com.openpojo.reflection.PojoClassFilter;
 import com.openpojo.reflection.java.Java;
 
+/**
+ * Filter Package Info for Pojo/Dto test.
+ */
 public class FilterPackageInfo implements PojoClassFilter {
 
   @Override

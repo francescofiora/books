@@ -3,6 +3,9 @@ package it.francescofiora.books.web.util;
 import java.util.List;
 import org.springframework.http.HttpHeaders;
 
+/**
+ * Header Util.
+ */
 public interface HeaderUtil {
 
   String X_ALERT = "X-alert";

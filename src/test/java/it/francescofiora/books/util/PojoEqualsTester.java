@@ -7,6 +7,9 @@ import com.openpojo.reflection.PojoClass;
 import com.openpojo.validation.rule.Rule;
 import it.francescofiora.books.domain.DomainIdentifier;
 
+/**
+ * Pojo Equals Tester Rule.
+ */
 public class PojoEqualsTester implements Rule {
 
   @Override

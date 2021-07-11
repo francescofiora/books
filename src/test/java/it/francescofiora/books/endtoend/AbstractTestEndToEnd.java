@@ -15,6 +15,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+/**
+ * Abstract Test class for EndToEnd tests.
+ */
 public class AbstractTestEndToEnd {
 
   @LocalServerPort
