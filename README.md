@@ -21,7 +21,7 @@ Yes, yet another tutorial with "book, author and publisher" as entities.
 
 # Getting Started
 ## Using Docker to simplify development
-The purpose of this tutorial is a Spring Boot tutorial, however I have inserted and a Dockerfile for MySql and phpMyAdmin. So you not need to install and configure them, with Docker that Dockerfile is sufficient.
+The purpose of this tutorial is a Spring Boot tutorial, however I have added a Dockerfile for MySql and phpMyAdmin to simplify development and manual tests.
 
     cd docker
     ./create_certificate.sh
@@ -39,6 +39,9 @@ The purpose of this tutorial is a Spring Boot tutorial, however I have inserted 
 ## compile
     ./gradlew clean build
 
+## Dependency-Check
+    ./gradlew dependencyCheckAnalyze --info
+
 ## Pitest
     ./gradlew pitest
 
@@ -47,6 +50,7 @@ The purpose of this tutorial is a Spring Boot tutorial, however I have inserted 
     build/reports/checkstyle/test.html
     build/reports/tests/test/index.html
     build/reports/jacoco/test/html/index.html
+    build/reports/dependency-check-report.html
     build/reports/pitest/index.html
 
 
@@ -85,5 +89,7 @@ https://localhost:8081/books/swagger-ui.html
 - [Mockito](https://site.mockito.org/)
 - [JUnit 5](https://junit.org/junit5/)
 - [OpenPojo 0.8](https://github.com/OpenPojo)
+- [CheckStyle 8.44](https://checkstyle.sourceforge.io/)
+- [Owasp Dependency Check 6.2](https://owasp.org/www-project-dependency-check/)
 - [Jacoco 0.8](https://www.jacoco.org/)
 - [Pitest 1.5](https://pitest.org/)
