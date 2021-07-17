@@ -1,6 +1,5 @@
 package it.francescofiora.books.service;
 
-import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -18,6 +17,7 @@ import it.francescofiora.books.service.impl.AuthorServiceImpl;
 import it.francescofiora.books.service.mapper.AuthorMapper;
 import it.francescofiora.books.service.mapper.TitleMapper;
 import it.francescofiora.books.web.errors.NotFoundAlertException;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -83,7 +83,7 @@ class AuthorServiceTest {
   void testFindAll() throws Exception {
     var author = new Author();
     when(authorRepository.findAll(any(Pageable.class)))
-        .thenReturn(new PageImpl<Author>(singletonList(author)));
+        .thenReturn(new PageImpl<Author>(List.of(author)));
     var expected = new AuthorDto();
     when(authorMapper.toDto(any(Author.class))).thenReturn(expected);
     var pageable = PageRequest.of(1, 1);
@@ -119,7 +119,7 @@ class AuthorServiceTest {
     when(authorRepository.findById(eq(author.getId()))).thenReturn(Optional.of(author));
 
     var expected = new TitleDto();
-    when(titleMapper.toDto(anyList())).thenReturn(singletonList(expected));
+    when(titleMapper.toDto(anyList())).thenReturn(List.of(expected));
     var pageable = PageRequest.of(1, 1);
     var page = authorService.findTitlesByAuthorId(pageable, ID);
     assertThat(page.getContent().get(0)).isEqualTo(expected);

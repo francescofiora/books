@@ -11,7 +11,6 @@ import it.francescofiora.books.service.TitleService;
 import it.francescofiora.books.service.dto.NewTitleDto;
 import it.francescofiora.books.service.dto.TitleDto;
 import it.francescofiora.books.util.TestUtils;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -183,7 +182,7 @@ class TitleApiTest extends AbstractTestApi {
     var expected = new TitleDto();
     expected.setId(ID);
     given(titleService.findAll(any(Pageable.class)))
-        .willReturn(new PageImpl<TitleDto>(Collections.singletonList(expected)));
+        .willReturn(new PageImpl<TitleDto>(List.of(expected)));
     var result = performGet(TITLES_URI, pageable).andExpect(status().isOk()).andReturn();
     var list = readValue(result, new TypeReference<List<TitleDto>>() {});
     assertThat(list).isNotNull().isNotEmpty();

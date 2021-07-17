@@ -12,7 +12,6 @@ import it.francescofiora.books.service.dto.AuthorDto;
 import it.francescofiora.books.service.dto.NewAuthorDto;
 import it.francescofiora.books.service.dto.TitleDto;
 import it.francescofiora.books.util.TestUtils;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -97,7 +96,7 @@ class AuthorApiTest extends AbstractTestApi {
     var pageable = PageRequest.of(1, 1);
     var expected = TestUtils.createAuthorDto(ID);
     given(authorService.findAll(any(Pageable.class)))
-        .willReturn(new PageImpl<AuthorDto>(Collections.singletonList(expected)));
+        .willReturn(new PageImpl<AuthorDto>(List.of(expected)));
 
     var result = performGet(AUTHORS_URI, pageable).andExpect(status().isOk()).andReturn();
     var list = readValue(result, new TypeReference<List<AuthorDto>>() {});
@@ -118,7 +117,7 @@ class AuthorApiTest extends AbstractTestApi {
   void testGetTitlesByAuthor() throws Exception {
     var expected = TestUtils.createTitleDto(ID);
     given(authorService.findTitlesByAuthorId(any(Pageable.class), eq(ID)))
-        .willReturn(new PageImpl<TitleDto>(Collections.singletonList(expected)));
+        .willReturn(new PageImpl<TitleDto>(List.of(expected)));
 
     var pageable = PageRequest.of(1, 1);
     var result =

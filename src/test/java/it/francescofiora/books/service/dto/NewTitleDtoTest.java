@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import it.francescofiora.books.domain.enumeration.Language;
 import it.francescofiora.books.util.TestUtils;
-import java.util.Collections;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class NewTitleDtoTest {
@@ -46,7 +46,7 @@ class NewTitleDtoTest {
     TestUtils.checkNotEqualHashAndToString(titleDto1, titleDto2);
 
     titleDto2 = TestUtils.createNewTitleDto();
-    titleDto2.setAuthors(Collections.singletonList(new RefAuthorDto()));
+    titleDto2.setAuthors(List.of(new RefAuthorDto()));
     TestUtils.checkNotEqualHashAndToString(titleDto1, titleDto2);
   }
 }

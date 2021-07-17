@@ -9,6 +9,7 @@ import it.francescofiora.books.service.mapper.PublisherMapper;
 import it.francescofiora.books.web.errors.BadRequestAlertException;
 import it.francescofiora.books.web.errors.NotFoundAlertException;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -21,29 +22,14 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
+@AllArgsConstructor
 public class PublisherServiceImpl implements PublisherService {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
   private final PublisherRepository publisherRepository;
-
-  private final TitleRepository titleRepository;
-
   private final PublisherMapper publisherMapper;
-
-  /**
-   * Constructor.
-   *
-   * @param publisherRepository PublisherRepository
-   * @param publisherMapper PublisherMapper
-   * @param titleRepository TitleRepository
-   */
-  public PublisherServiceImpl(PublisherRepository publisherRepository,
-      PublisherMapper publisherMapper, TitleRepository titleRepository) {
-    this.publisherRepository = publisherRepository;
-    this.publisherMapper = publisherMapper;
-    this.titleRepository = titleRepository;
-  }
+  private final TitleRepository titleRepository;
 
   @Override
   public PublisherDto create(NewPublisherDto publisherDto) {

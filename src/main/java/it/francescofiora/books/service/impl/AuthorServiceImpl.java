@@ -11,6 +11,7 @@ import it.francescofiora.books.web.errors.BadRequestAlertException;
 import it.francescofiora.books.web.errors.NotFoundAlertException;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -24,28 +25,14 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
+@AllArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
   private final AuthorRepository authorRepository;
-
   private final AuthorMapper authorMapper;
-
   private final TitleMapper titleMapper;
-
-  /**
-   * Constructor.
-   *
-   * @param authorRepository AuthorRepository
-   * @param authorMapper AuthorMapper
-   */
-  public AuthorServiceImpl(AuthorRepository authorRepository, AuthorMapper authorMapper,
-      TitleMapper titleMapper) {
-    this.authorRepository = authorRepository;
-    this.authorMapper = authorMapper;
-    this.titleMapper = titleMapper;
-  }
 
   @Override
   public AuthorDto create(NewAuthorDto authorDto) {

@@ -12,6 +12,7 @@ import it.francescofiora.books.service.dto.UpdatebleTitleDto;
 import it.francescofiora.books.service.mapper.TitleMapper;
 import it.francescofiora.books.web.errors.NotFoundAlertException;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
+@AllArgsConstructor
 public class TitleServiceImpl implements TitleService {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
@@ -31,28 +33,9 @@ public class TitleServiceImpl implements TitleService {
   private static final String ENTITY_NAME = "TitleDto";
 
   private final TitleRepository titleRepository;
-
   private final TitleMapper titleMapper;
-
   private final AuthorRepository authorRepository;
-
   private final PublisherRepository publisherRepository;
-
-  /**
-   * Constructor.
-   *
-   * @param titleRepository TitleRepository
-   * @param titleMapper TitleMapper
-   * @param authorRepository AuthorRepository
-   * @param publisherRepository PublisherRepository
-   */
-  public TitleServiceImpl(TitleRepository titleRepository, TitleMapper titleMapper,
-      AuthorRepository authorRepository, PublisherRepository publisherRepository) {
-    this.titleRepository = titleRepository;
-    this.titleMapper = titleMapper;
-    this.authorRepository = authorRepository;
-    this.publisherRepository = publisherRepository;
-  }
 
   @Override
   public TitleDto create(NewTitleDto titleDto) {

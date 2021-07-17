@@ -11,7 +11,6 @@ import it.francescofiora.books.service.PublisherService;
 import it.francescofiora.books.service.dto.NewPublisherDto;
 import it.francescofiora.books.service.dto.PublisherDto;
 import it.francescofiora.books.util.TestUtils;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -78,7 +77,7 @@ class PublisherApiTest extends AbstractTestApi {
     var pageable = PageRequest.of(1, 1);
     var expected = TestUtils.createPublisherDto(ID);
     given(publisherService.findAll(any(Pageable.class)))
-        .willReturn(new PageImpl<PublisherDto>(Collections.singletonList(expected)));
+        .willReturn(new PageImpl<PublisherDto>(List.of(expected)));
     var result = performGet(PUBLISHERS_URI, pageable).andExpect(status().isOk()).andReturn();
     var list = readValue(result, new TypeReference<List<PublisherDto>>() {});
     assertThat(list).isNotNull().isNotEmpty();

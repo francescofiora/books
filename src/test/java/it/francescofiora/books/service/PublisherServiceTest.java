@@ -1,6 +1,5 @@
 package it.francescofiora.books.service;
 
-import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -15,6 +14,7 @@ import it.francescofiora.books.service.dto.PublisherDto;
 import it.francescofiora.books.service.impl.PublisherServiceImpl;
 import it.francescofiora.books.service.mapper.PublisherMapper;
 import it.francescofiora.books.web.errors.NotFoundAlertException;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -81,7 +81,7 @@ class PublisherServiceTest {
   void testFindAll() throws Exception {
     var publisher = new Publisher();
     when(publisherRepository.findAll(any(Pageable.class)))
-        .thenReturn(new PageImpl<Publisher>(singletonList(publisher)));
+        .thenReturn(new PageImpl<Publisher>(List.of(publisher)));
     var expected = new PublisherDto();
     when(publisherMapper.toDto(any(Publisher.class))).thenReturn(expected);
     var pageable = PageRequest.of(1, 1);

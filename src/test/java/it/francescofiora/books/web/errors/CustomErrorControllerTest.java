@@ -6,7 +6,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.Collections;
+import java.util.Map;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Test;
@@ -37,7 +37,7 @@ class CustomErrorControllerTest {
     var errorAttributes = mock(ErrorAttributes.class);
     when(
         errorAttributes.getErrorAttributes(any(WebRequest.class), any(ErrorAttributeOptions.class)))
-            .thenReturn(Collections.singletonMap("error", "Error Message"));
+            .thenReturn(Map.of("error", "Error Message"));
     var ex = new CustomErrorController(errorAttributes);
 
     var request = mock(HttpServletRequest.class);
@@ -48,7 +48,7 @@ class CustomErrorControllerTest {
 
     when(
         errorAttributes.getErrorAttributes(any(WebRequest.class), any(ErrorAttributeOptions.class)))
-            .thenReturn(Collections.singletonMap("message", "Message"));
+            .thenReturn(Map.of("message", "Message"));
 
     response = ex.handleError(request);
     assertThat(response.getHeaders().get("X-error"))
