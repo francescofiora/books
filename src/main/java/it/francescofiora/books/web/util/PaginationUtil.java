@@ -1,6 +1,8 @@
 package it.francescofiora.books.web.util;
 
 import java.text.MessageFormat;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -9,11 +11,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 /**
  * Pagination Util.
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class PaginationUtil {
   private static final String HEADER_X_TOTAL_COUNT = "X-Total-Count";
   private static final String HEADER_LINK_FORMAT = "<{0}>; rel=\"{1}\"";
-
-  private PaginationUtil() {}
 
   /**
    * Generate pagination headers for a Spring Data {@link org.springframework.data.domain.Page}

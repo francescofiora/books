@@ -5,6 +5,7 @@ import it.francescofiora.books.web.util.HeaderUtil;
 import java.util.Map;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.boot.web.servlet.error.ErrorController;
@@ -20,13 +21,10 @@ import org.springframework.web.context.request.ServletWebRequest;
  */
 @Controller
 @Hidden
+@AllArgsConstructor
 public class CustomErrorController implements ErrorController {
 
   private final ErrorAttributes errorAttributes;
-
-  public CustomErrorController(ErrorAttributes errorAttributes) {
-    this.errorAttributes = errorAttributes;
-  }
 
   protected Map<String, Object> getErrorAttributes(HttpServletRequest request,
       ErrorAttributeOptions options) {
