@@ -8,12 +8,14 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Publisher Dto for create new Publisher.
  */
 @Getter
 @Setter
+@ToString(callSuper = true, includeFieldNames = true)
 public class NewPublisherDto implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -38,10 +40,5 @@ public class NewPublisherDto implements Serializable {
       return false;
     }
     return Objects.equals(getPublisherName(), ((NewPublisherDto) obj).getPublisherName());
-  }
-
-  @Override
-  public String toString() {
-    return "NewPublisherDto {publisherName='" + getPublisherName() + "'}";
   }
 }

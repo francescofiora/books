@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -20,6 +21,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "publisher")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@ToString(callSuper = true, includeFieldNames = true)
 public class Publisher extends AbstractDomain implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -30,9 +32,4 @@ public class Publisher extends AbstractDomain implements Serializable {
 
   @Column(name = "publisher_name")
   private String publisherName;
-
-  @Override
-  public String toString() {
-    return "Publisher{" + "id=" + getId() + ", publisherName='" + getPublisherName() + "'" + "}";
-  }
 }

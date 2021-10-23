@@ -11,12 +11,14 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Title Dto for create new Title.
  */
 @Getter
 @Setter
+@ToString(callSuper = true, includeFieldNames = true)
 public class NewTitleDto extends BaseTitleDto implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -56,13 +58,5 @@ public class NewTitleDto extends BaseTitleDto implements Serializable {
         && Objects.equals(getPrice(), other.getPrice())
         && Objects.equals(getPublisher(), other.getPublisher())
         && Objects.equals(getTitle(), other.getTitle());
-  }
-
-  @Override
-  public String toString() {
-    return "TitleDto{title='" + getTitle() + "'" + ", editionNumber=" + getEditionNumber()
-        + ", language='" + getLanguage() + "'" + ", copyright=" + getCopyright() + ", imageFile='"
-        + getImageFile() + "'" + ", price=" + getPrice() + ", publisher=" + getPublisher()
-        + ", authors='" + getAuthors() + "'" + "}";
   }
 }

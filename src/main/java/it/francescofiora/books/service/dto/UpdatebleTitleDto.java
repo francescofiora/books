@@ -12,12 +12,14 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Title Dto for update Title.
  */
 @Getter
 @Setter
+@ToString(callSuper = true, includeFieldNames = true)
 public class UpdatebleTitleDto extends BaseTitleDto implements Serializable, DtoIdentifier {
 
   private static final long serialVersionUID = 1L;
@@ -47,13 +49,5 @@ public class UpdatebleTitleDto extends BaseTitleDto implements Serializable, Dto
   @Override
   public int hashCode() {
     return Objects.hashCode(getId());
-  }
-
-  @Override
-  public String toString() {
-    return "UpdatebleTitleDto{" + "id=" + getId() + ", title='" + getTitle() + "'"
-        + ", editionNumber=" + getEditionNumber() + ", language='" + getLanguage() + "'"
-        + ", copyright=" + getCopyright() + ", imageFile='" + getImageFile() + "'" + ", price="
-        + getPrice() + ", publisher=" + getPublisher() + ", authors='" + getAuthors() + "'" + "}";
   }
 }

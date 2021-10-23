@@ -8,12 +8,14 @@ import java.util.Objects;
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Ref Author Dto.
  */
 @Getter
 @Setter
+@ToString(callSuper = true, includeFieldNames = true)
 public class RefAuthorDto implements Serializable, DtoIdentifier {
 
   private static final long serialVersionUID = 1L;
@@ -31,10 +33,5 @@ public class RefAuthorDto implements Serializable, DtoIdentifier {
   @Override
   public boolean equals(Object obj) {
     return DtoUtils.equals(this, obj);
-  }
-
-  @Override
-  public String toString() {
-    return "RefAuthorDto{id=" + getId() + "}";
   }
 }

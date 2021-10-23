@@ -7,12 +7,14 @@ import java.util.Objects;
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Publisher Dto.
  */
 @Getter
 @Setter
+@ToString(callSuper = true, includeFieldNames = true)
 public class PublisherDto extends NewPublisherDto implements DtoIdentifier {
 
   private static final long serialVersionUID = 1L;
@@ -30,10 +32,5 @@ public class PublisherDto extends NewPublisherDto implements DtoIdentifier {
   @Override
   public int hashCode() {
     return Objects.hashCode(getId());
-  }
-
-  @Override
-  public String toString() {
-    return "PublisherDto{id=" + getId() + ", publisherName='" + getPublisherName() + "'}";
   }
 }

@@ -18,6 +18,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -29,6 +30,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "title")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@ToString(callSuper = true, includeFieldNames = true)
 public class Title extends AbstractDomain implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -62,16 +64,8 @@ public class Title extends AbstractDomain implements Serializable {
 
   @ManyToMany
   @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-  @JoinTable(
-      name = "title_author",
+  @JoinTable(name = "title_author",
       joinColumns = @JoinColumn(name = "title_id", referencedColumnName = "id"),
       inverseJoinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"))
   private Set<Author> authors = new HashSet<>();
-
-  @Override
-  public String toString() {
-    return "Title{" + "id=" + getId() + ", title='" + getTitle() + "'" + ", editionNumber="
-        + getEditionNumber() + ", language='" + getLanguage() + "'" + ", copyright="
-        + getCopyright() + ", imageFile='" + getImageFile() + "'" + ", price=" + getPrice() + "}";
-  }
 }

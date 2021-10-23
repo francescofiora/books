@@ -12,6 +12,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -23,6 +24,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "author")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@ToString(callSuper = true, includeFieldNames = true)
 public class Author extends AbstractDomain implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -40,10 +42,4 @@ public class Author extends AbstractDomain implements Serializable {
   @ManyToMany(mappedBy = "authors")
   @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
   private Set<Title> titles = new HashSet<>();
-
-  @Override
-  public String toString() {
-    return "Author{" + "id=" + getId() + ", firstName='" + getFirstName() + "'" + ", lastName='"
-        + getLastName() + "'" + "}";
-  }
 }

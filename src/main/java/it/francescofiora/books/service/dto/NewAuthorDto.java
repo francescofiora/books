@@ -8,12 +8,14 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Author Dto for create new Author.
  */
 @Getter
 @Setter
+@ToString(callSuper = true, includeFieldNames = true)
 public class NewAuthorDto implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -46,10 +48,5 @@ public class NewAuthorDto implements Serializable {
     var other = (NewAuthorDto) obj;
     return Objects.equals(getFirstName(), other.getFirstName())
         && Objects.equals(getLastName(), other.getLastName());
-  }
-
-  @Override
-  public String toString() {
-    return "NewAuthorDto {firstName='" + getFirstName() + "', lastName='" + getLastName() + "'}";
   }
 }
