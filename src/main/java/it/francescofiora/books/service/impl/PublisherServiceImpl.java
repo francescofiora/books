@@ -10,8 +10,7 @@ import it.francescofiora.books.web.errors.BadRequestAlertException;
 import it.francescofiora.books.web.errors.NotFoundAlertException;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,12 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * PublisherService Impl class.
  */
+@Slf4j
 @Service
 @Transactional
 @AllArgsConstructor
 public class PublisherServiceImpl implements PublisherService {
-
-  private final Logger log = LoggerFactory.getLogger(this.getClass());
 
   private final PublisherRepository publisherRepository;
   private final PublisherMapper publisherMapper;

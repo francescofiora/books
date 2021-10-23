@@ -12,8 +12,7 @@ import it.francescofiora.books.web.errors.NotFoundAlertException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -23,12 +22,11 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * AuthorService Impl class.
  */
+@Slf4j
 @Service
 @Transactional
 @AllArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
-
-  private final Logger log = LoggerFactory.getLogger(this.getClass());
 
   private final AuthorRepository authorRepository;
   private final AuthorMapper authorMapper;

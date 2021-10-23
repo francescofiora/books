@@ -13,8 +13,7 @@ import it.francescofiora.books.service.mapper.TitleMapper;
 import it.francescofiora.books.web.errors.NotFoundAlertException;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,12 +22,11 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * TitleService Impl class.
  */
+@Slf4j
 @Service
 @Transactional
 @AllArgsConstructor
 public class TitleServiceImpl implements TitleService {
-
-  private final Logger log = LoggerFactory.getLogger(this.getClass());
 
   private static final String ENTITY_NAME = "TitleDto";
 
