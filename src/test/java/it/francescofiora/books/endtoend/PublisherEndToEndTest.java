@@ -42,15 +42,18 @@ class PublisherEndToEndTest extends AbstractTestEndToEnd {
 
   @Test
   void testCreate() throws Exception {
-    var publisherId =
-        createAndReturnId(PUBLISHERS_URI, TestUtils.createNewPublisherDto(), ALERT_CREATED);
+    var newPublisherDto = TestUtils.createNewPublisherDto();
+    var publisherId = createAndReturnId(PUBLISHERS_URI, newPublisherDto, ALERT_CREATED);
 
     final var publishersIdUri = String.format(PUBLISHERS_ID_URI, publisherId);
+
+    var actual = get(publishersIdUri, PublisherDto.class, ALERT_GET, String.valueOf(publisherId));
+    assertThat(actual.getPublisherName()).isEqualTo(newPublisherDto.getPublisherName());
 
     var publisherDto = TestUtils.createPublisherDto(publisherId);
     update(publishersIdUri, publisherDto, ALERT_UPDATED, String.valueOf(publisherId));
 
-    var actual = get(publishersIdUri, PublisherDto.class, ALERT_GET, String.valueOf(publisherId));
+    actual = get(publishersIdUri, PublisherDto.class, ALERT_GET, String.valueOf(publisherId));
     assertThat(actual).isEqualTo(publisherDto);
     assertThat(actual.getPublisherName()).isEqualTo(publisherDto.getPublisherName());
 

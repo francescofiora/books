@@ -101,7 +101,7 @@ public interface TestUtils {
     title.getAuthors().add(createAuthor1());
     title.setCopyright(2020);
     title.setEditionNumber(1L);
-    title.setImageFile("image.jpg");
+    title.setImageFile("image1.jpg");
     title.setLanguage(Language.ENGLISH);
     title.setPrice(10L);
     title.setPublisher(createPublisher1());
@@ -119,7 +119,7 @@ public interface TestUtils {
     title.getAuthors().add(createAuthor2());
     title.setCopyright(2019);
     title.setEditionNumber(2L);
-    title.setImageFile("image.gif");
+    title.setImageFile("image2.gif");
     title.setLanguage(Language.ITALIAN);
     title.setPrice(12L);
     title.setPublisher(createPublisher2());
@@ -192,7 +192,7 @@ public interface TestUtils {
     var authorDto = new AuthorDto();
     authorDto.setId(id);
     authorDto.setFirstName("John");
-    authorDto.setLastName("Smith");
+    authorDto.setLastName("Anderson");
     return authorDto;
   }
 
@@ -254,7 +254,7 @@ public interface TestUtils {
     titleDto.setTitle("The Title");
     titleDto.setCopyright(2020);
     titleDto.setEditionNumber(10L);
-    titleDto.setImageFile("path_image");
+    titleDto.setImageFile("image3.gif");
     titleDto.setLanguage(Language.ENGLISH);
     titleDto.setPrice(15L);
     return titleDto;
@@ -296,7 +296,7 @@ public interface TestUtils {
     titleDto.setTitle("One Title");
     titleDto.setCopyright(2021);
     titleDto.setEditionNumber(2L);
-    titleDto.setImageFile("path_image");
+    titleDto.setImageFile("image4.jpg");
     titleDto.setLanguage(Language.ITALIAN);
     titleDto.setPrice(12L);
     titleDto.setPublisher(createPublisherDto(2L));

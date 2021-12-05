@@ -84,15 +84,29 @@ class TitleEndToEndTest extends AbstractTestEndToEnd {
     newTitleDto.setPublisher(TestUtils.createRefPublisherDto(publisherId));
     var titleId = createAndReturnId(TITLES_URI, newTitleDto, TITLE_ALERT_CREATED);
 
+    final var titlesIdUri = String.format(TITLES_ID_URI, titleId);
+
+    var titleDto = get(titlesIdUri, TitleDto.class, ALERT_GET, String.valueOf(titleId));
+    assertThat(titleDto.getId()).isEqualTo(titleId);
+    assertThat(titleDto.getTitle()).isEqualTo(newTitleDto.getTitle());
+    assertThat(titleDto.getCopyright()).isEqualTo(newTitleDto.getCopyright());
+    assertThat(titleDto.getEditionNumber()).isEqualTo(newTitleDto.getEditionNumber());
+    assertThat(titleDto.getImageFile()).isEqualTo(newTitleDto.getImageFile());
+    assertThat(titleDto.getLanguage()).isEqualTo(newTitleDto.getLanguage());
+    assertThat(titleDto.getPrice()).isEqualTo(newTitleDto.getPrice());
+    assertThat(titleDto.getPublisher().getId()).isEqualTo(publisherId);
+    assertThat(titleDto.getAuthors()).hasSize(1);
+    assertThat(titleDto.getAuthors().get(0).getId()).isEqualTo(authorId);
+
+    authorId = createAndReturnId(AUTHORS_URI, TestUtils.createNewAuthorDto(), AUTHOR_ALERT_CREATED);
+
     var updatebleTitleDto = TestUtils.createSimpleUpdatebleTitleDto(titleId);
     updatebleTitleDto.getAuthors().add(TestUtils.createRefAuthorDto(authorId));
     updatebleTitleDto.setPublisher(TestUtils.createRefPublisherDto(publisherId));
 
-    final var titlesIdUri = String.format(TITLES_ID_URI, titleId);
-
     update(titlesIdUri, updatebleTitleDto, ALERT_UPDATED, String.valueOf(titleId));
 
-    var titleDto = get(titlesIdUri, TitleDto.class, ALERT_GET, String.valueOf(titleId));
+    titleDto = get(titlesIdUri, TitleDto.class, ALERT_GET, String.valueOf(titleId));
     assertThat(titleDto.getId()).isEqualTo(updatebleTitleDto.getId());
     assertThat(titleDto.getTitle()).isEqualTo(updatebleTitleDto.getTitle());
     assertThat(titleDto.getCopyright()).isEqualTo(updatebleTitleDto.getCopyright());
@@ -101,6 +115,7 @@ class TitleEndToEndTest extends AbstractTestEndToEnd {
     assertThat(titleDto.getLanguage()).isEqualTo(updatebleTitleDto.getLanguage());
     assertThat(titleDto.getPrice()).isEqualTo(updatebleTitleDto.getPrice());
     assertThat(titleDto.getPublisher().getId()).isEqualTo(publisherId);
+    assertThat(titleDto.getAuthors()).hasSize(1);
     assertThat(titleDto.getAuthors().get(0).getId()).isEqualTo(authorId);
 
     var pageable = PageRequest.of(1, 1);

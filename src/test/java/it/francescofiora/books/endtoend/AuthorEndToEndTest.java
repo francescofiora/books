@@ -48,10 +48,14 @@ class AuthorEndToEndTest extends AbstractTestEndToEnd {
 
     final var authorsIdUri = String.format(AUTHORS_ID_URI, authorId);
 
+    var actual = get(authorsIdUri, AuthorDto.class, ALERT_GET, String.valueOf(authorId));
+    assertThat(actual.getFirstName()).isEqualTo(newAuthorDto.getFirstName());
+    assertThat(actual.getLastName()).isEqualTo(newAuthorDto.getLastName());
+
     var authorDto = TestUtils.createAuthorDto(authorId);
     update(authorsIdUri, authorDto, ALERT_UPDATED, String.valueOf(authorId));
 
-    var actual = get(authorsIdUri, AuthorDto.class, ALERT_GET, String.valueOf(authorId));
+    actual = get(authorsIdUri, AuthorDto.class, ALERT_GET, String.valueOf(authorId));
     assertThat(actual).isEqualTo(authorDto);
     assertThat(actual.getFirstName()).isEqualTo(authorDto.getFirstName());
     assertThat(actual.getLastName()).isEqualTo(authorDto.getLastName());
@@ -59,8 +63,7 @@ class AuthorEndToEndTest extends AbstractTestEndToEnd {
     var authors =
         get(AUTHORS_URI, PageRequest.of(1, 1), AuthorDto[].class, ALERT_GET, PARAM_PAGE_20);
     assertThat(authors).isNotEmpty();
-    var option =
-        Stream.of(authors).filter(author -> author.getId().equals(authorId)).findAny();
+    var option = Stream.of(authors).filter(author -> author.getId().equals(authorId)).findAny();
     assertThat(option).isPresent();
     assertThat(option.get()).isEqualTo(authorDto);
 
