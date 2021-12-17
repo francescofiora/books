@@ -1,11 +1,11 @@
 plugins {
   id 'java'
   id 'eclipse-wtp'
-  id 'org.springframework.boot' version '2.5.6'
+  id 'org.springframework.boot' version '2.6.1'
   id 'io.spring.dependency-management' version '1.0.11.RELEASE'
   id 'checkstyle'
   id 'jacoco'
-  id 'info.solidsoft.pitest' version '1.5.1'
+  id 'info.solidsoft.pitest' version '1.7.0'
   id 'org.owasp.dependencycheck' version '6.2.2'
  }
 
@@ -25,6 +25,7 @@ def mapstruct_version = property('mapstruct.version')
 def lombok_version = property('lombok.version')
 def mysql_connector_version = property('mysql_connector.version')
 def logback_version = property('logback.version')
+def log4j_version = property('log4j.version')
 def openpojo_version = property('openpojo.version')
 
 dependencies {
@@ -35,6 +36,8 @@ dependencies {
   implementation 'org.springframework.boot:spring-boot-starter-security'
   implementation 'org.springframework.boot:spring-boot-devtools'
 
+  implementation "org.apache.logging.log4j:log4j-api:${log4j_version}"
+  implementation "org.apache.logging.log4j:log4j-to-slf4j:${log4j_version}"
   implementation "ch.qos.logback:logback-classic:${logback_version}"
 
   implementation "org.springdoc:springdoc-openapi-ui:${springdoc_openapi_version}"
@@ -47,19 +50,13 @@ dependencies {
 
   annotationProcessor "org.projectlombok:lombok:${lombok_version}"
   annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
-  
+
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
   testImplementation 'org.springframework.security:spring-security-test'
   testImplementation 'org.hsqldb:hsqldb'
   testImplementation "com.openpojo:openpojo:$openpojo_version"
   testImplementation "org.projectlombok:lombok:${lombok_version}"
   testAnnotationProcessor "org.projectlombok:lombok:${lombok_version}"
-}
-
-tasks.withType(JavaCompile) {
-    options.compilerArgs = [
-       '-Amapstruct.defaultComponentModel=spring'
-    ]
 }
 
 task cleanResources(type: Delete) {
@@ -69,7 +66,7 @@ task cleanResources(type: Delete) {
 defaultTasks "bootRun"
 
 springBoot {
-    mainClassName = "it.francescofiora.books.Application"
+    mainClass.set("it.francescofiora.books.Application")
 }
 
 
@@ -129,7 +126,7 @@ jacocoTestReport {
 
 pitest {
   timestampedReports = false
-  junit5PluginVersion = '0.12'
+  junit5PluginVersion = '0.15'
 }
 
 wrapper {

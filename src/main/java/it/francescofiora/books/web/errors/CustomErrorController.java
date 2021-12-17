@@ -50,7 +50,7 @@ public class CustomErrorController implements ErrorController {
    * @param request rest request
    * @return handle Error
    */
-  @RequestMapping(value = "{$server.error.path}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @RequestMapping(value = "{$errorPath}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Void> handleError(HttpServletRequest request) {
     var status = getStatus(request);
     var map = getErrorAttributes(request, ErrorAttributeOptions.defaults());
