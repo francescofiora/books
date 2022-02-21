@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @Tag(name = "author", description = "Author Rest API")
-@RequestMapping("/api")
+@RequestMapping("/books/api/v1")
 public class AuthorApi extends AbstractApi {
 
   private static final String ENTITY_NAME = "AuthorDto";
@@ -64,7 +64,7 @@ public class AuthorApi extends AbstractApi {
       throws URISyntaxException {
     log.debug("REST request to create Author : {}", authorDto);
     var result = authorService.create(authorDto);
-    return postResponse("/api/authors/" + result.getId(), result.getId());
+    return postResponse("/books/api/v1/authors/" + result.getId(), result.getId());
   }
 
   /**

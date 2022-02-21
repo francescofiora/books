@@ -18,7 +18,7 @@ public abstract class AbstractTestRepository {
   @Autowired
   private TestEntityManager entityManager;
 
-  public TestEntityManager getEntityManager() {
+  protected TestEntityManager getEntityManager() {
     return entityManager;
   }
 }

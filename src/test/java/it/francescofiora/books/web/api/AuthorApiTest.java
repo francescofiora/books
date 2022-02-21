@@ -31,10 +31,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 class AuthorApiTest extends AbstractTestApi {
 
   private static final Long ID = 1L;
-  private static final String AUTHORS_URI = "/api/authors";
-  private static final String AUTHORS_ID_URI = "/api/authors/{id}";
-  private static final String AUTHORS_TITLES_URI = "/api/authors/{id}/titles";
-  private static final String WRONG_URI = "/api/wrong";
+  private static final String AUTHORS_URI = "/books/api/v1/authors";
+  private static final String AUTHORS_ID_URI = "/books/api/v1/authors/{id}";
+  private static final String AUTHORS_TITLES_URI = "/books/api/v1/authors/{id}/titles";
+  private static final String WRONG_URI = "/books/api/v1/wrong";
 
   @MockBean
   private AuthorService authorService;

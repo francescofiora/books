@@ -29,12 +29,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- *  Title Api RestController.
+ * Title Api RestController.
  */
 @Slf4j
 @RestController
 @Tag(name = "title", description = "Title Rest API")
-@RequestMapping("/api")
+@RequestMapping("/books/api/v1")
 public class TitleApi extends AbstractApi {
 
   private static final String ENTITY_NAME = "TitleDto";
@@ -64,7 +64,7 @@ public class TitleApi extends AbstractApi {
       throws URISyntaxException {
     log.debug("REST request to save Title : {}", titleDto);
     var result = titleService.create(titleDto);
-    return postResponse("/api/titles/" + result.getId(), result.getId());
+    return postResponse("/books/api/v1/titles/" + result.getId(), result.getId());
   }
 
   /**

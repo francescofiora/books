@@ -30,9 +30,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 class TitleApiTest extends AbstractTestApi {
 
   private static final Long ID = 1L;
-  private static final String TITLES_URI = "/api/titles";
-  private static final String TITLES_ID_URI = "/api/titles/{id}";
-  private static final String WRONG_URI = "/api/wrong";
+  private static final String TITLES_URI = "/books/api/v1/titles";
+  private static final String TITLES_ID_URI = "/books/api/v1/titles/{id}";
+  private static final String WRONG_URI = "/books/api/v1/wrong";
 
   @MockBean
   private TitleService titleService;
