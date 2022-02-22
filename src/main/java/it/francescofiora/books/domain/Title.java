@@ -3,6 +3,7 @@ package it.francescofiora.books.domain;
 import it.francescofiora.books.domain.enumeration.Language;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,10 +29,10 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Getter
 @Setter
 @Entity
+@ToString
 @Table(name = "title")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@ToString(callSuper = true, includeFieldNames = true)
-public class Title extends AbstractDomain implements Serializable {
+public class Title implements DomainIdentifier, Serializable {
 
   private static final long serialVersionUID = 1L;
 
@@ -68,4 +69,20 @@ public class Title extends AbstractDomain implements Serializable {
       joinColumns = @JoinColumn(name = "title_id", referencedColumnName = "id"),
       inverseJoinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"))
   private Set<Author> authors = new HashSet<>();
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (getId() == null || obj == null || getClass() != obj.getClass()) {
+      return false;
+    }
+    return Objects.equals(getId(), ((DomainIdentifier) obj).getId());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(getId());
+  }
 }

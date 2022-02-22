@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import it.francescofiora.books.domain.Author;
@@ -89,6 +90,8 @@ class TitleServiceTest {
     var titleDto = new UpdatebleTitleDto();
     titleDto.setId(ID);
     titleService.update(titleDto);
+    verify(titleMapper).updateEntityFromDto(titleDto, title);
+    verify(titleRepository).save(title);
   }
 
   @Test
@@ -126,6 +129,6 @@ class TitleServiceTest {
   @Test
   void testDelete() throws Exception {
     titleService.delete(ID);
+    verify(titleRepository).deleteById(ID);
   }
-
 }

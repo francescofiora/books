@@ -63,7 +63,7 @@ class PublisherEndToEndTest extends AbstractTestEndToEnd {
     var option =
         Stream.of(publishers).filter(publisher -> publisher.getId().equals(publisherId)).findAny();
     assertThat(option).isPresent();
-    assertThat(option.get()).isEqualTo(publisherDto);
+    assertThat(option).contains(publisherDto);
 
     delete(publishersIdUri, ALERT_DELETED, String.valueOf(publisherId));
 

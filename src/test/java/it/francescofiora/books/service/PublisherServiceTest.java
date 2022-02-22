@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import it.francescofiora.books.domain.Publisher;
@@ -75,6 +76,8 @@ class PublisherServiceTest {
     var publisherDto = new PublisherDto();
     publisherDto.setId(ID);
     publisherService.update(publisherDto);
+    verify(publisherMapper).updateEntityFromDto(publisherDto, publisher);
+    verify(publisherRepository).save(publisher);
   }
 
   @Test
@@ -112,5 +115,6 @@ class PublisherServiceTest {
   @Test
   void testDelete() throws Exception {
     publisherService.delete(ID);
+    verify(publisherRepository).deleteById(ID);
   }
 }

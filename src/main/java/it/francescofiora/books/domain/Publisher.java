@@ -1,6 +1,7 @@
 package it.francescofiora.books.domain;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,10 +20,10 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Getter
 @Setter
 @Entity
+@ToString
 @Table(name = "publisher")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@ToString(callSuper = true, includeFieldNames = true)
-public class Publisher extends AbstractDomain implements Serializable {
+public class Publisher implements DomainIdentifier, Serializable {
 
   private static final long serialVersionUID = 1L;
 
@@ -32,4 +33,20 @@ public class Publisher extends AbstractDomain implements Serializable {
 
   @Column(name = "publisher_name")
   private String publisherName;
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (getId() == null || obj == null || getClass() != obj.getClass()) {
+      return false;
+    }
+    return Objects.equals(getId(), ((DomainIdentifier) obj).getId());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(getId());
+  }
 }

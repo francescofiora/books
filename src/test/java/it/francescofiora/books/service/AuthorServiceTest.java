@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import it.francescofiora.books.domain.Author;
@@ -77,6 +78,8 @@ class AuthorServiceTest {
     var authorDto = new AuthorDto();
     authorDto.setId(ID);
     authorService.update(authorDto);
+    verify(authorMapper).updateEntityFromDto(authorDto, author);
+    verify(authorRepository).save(author);
   }
 
   @Test
@@ -128,5 +131,6 @@ class AuthorServiceTest {
   @Test
   void testDelete() throws Exception {
     authorService.delete(ID);
+    verify(authorRepository).deleteById(ID);
   }
 }
