@@ -3,7 +3,6 @@ package it.francescofiora.books.domain;
 import it.francescofiora.books.domain.enumeration.Language;
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,8 +30,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @ToString
 @Table(name = "title")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Title implements DomainIdentifier, Serializable {
+public class Title extends AbstractDomain implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
@@ -40,23 +38,23 @@ public class Title implements DomainIdentifier, Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(name = "title")
-  private String title;
+  @Column
+  private String name;
 
   @Column(name = "edition_number")
   private Long editionNumber;
 
   @Enumerated(EnumType.STRING)
-  @Column(name = "language")
+  @Column
   private Language language;
 
-  @Column(name = "copyright")
+  @Column
   private Integer copyright;
 
   @Column(name = "image_file")
   private String imageFile;
 
-  @Column(name = "price")
+  @Column
   private Long price;
 
   @OneToOne
@@ -72,17 +70,11 @@ public class Title implements DomainIdentifier, Serializable {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (getId() == null || obj == null || getClass() != obj.getClass()) {
-      return false;
-    }
-    return Objects.equals(getId(), ((DomainIdentifier) obj).getId());
+    return super.equals(obj);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(getId());
+    return super.hashCode();
   }
 }

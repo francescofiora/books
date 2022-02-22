@@ -63,7 +63,7 @@ class TitleEndToEndTest extends AbstractTestEndToEnd {
   private static final String PARAM_LANGUAGE_NOT_EMPTY = "[updatebleTitleDto.language - NotNull]";
   private static final String PARAM_PRICE_NOT_EMPTY = "[updatebleTitleDto.price - NotNull]";
   private static final String PARAM_PRICE_POSITIVE = "[updatebleTitleDto.price - Positive]";
-  private static final String PARAM_TITLE_NOT_BLANK = "[updatebleTitleDto.title - NotBlank]";
+  private static final String PARAM_NAME_NOT_BLANK = "[updatebleTitleDto.name - NotBlank]";
 
   @Test
   void testAuth() throws Exception {
@@ -87,7 +87,7 @@ class TitleEndToEndTest extends AbstractTestEndToEnd {
 
     var titleDto = get(titlesIdUri, TitleDto.class, ALERT_GET, String.valueOf(titleId));
     assertThat(titleDto.getId()).isEqualTo(titleId);
-    assertThat(titleDto.getTitle()).isEqualTo(newTitleDto.getTitle());
+    assertThat(titleDto.getName()).isEqualTo(newTitleDto.getName());
     assertThat(titleDto.getCopyright()).isEqualTo(newTitleDto.getCopyright());
     assertThat(titleDto.getEditionNumber()).isEqualTo(newTitleDto.getEditionNumber());
     assertThat(titleDto.getImageFile()).isEqualTo(newTitleDto.getImageFile());
@@ -107,7 +107,7 @@ class TitleEndToEndTest extends AbstractTestEndToEnd {
 
     titleDto = get(titlesIdUri, TitleDto.class, ALERT_GET, String.valueOf(titleId));
     assertThat(titleDto.getId()).isEqualTo(updatebleTitleDto.getId());
-    assertThat(titleDto.getTitle()).isEqualTo(updatebleTitleDto.getTitle());
+    assertThat(titleDto.getName()).isEqualTo(updatebleTitleDto.getName());
     assertThat(titleDto.getCopyright()).isEqualTo(updatebleTitleDto.getCopyright());
     assertThat(titleDto.getEditionNumber()).isEqualTo(updatebleTitleDto.getEditionNumber());
     assertThat(titleDto.getImageFile()).isEqualTo(updatebleTitleDto.getImageFile());
@@ -252,12 +252,12 @@ class TitleEndToEndTest extends AbstractTestEndToEnd {
 
     // title
     titleDto = TestUtils.createUpdatebleTitleDto(id);
-    titleDto.setTitle(null);
-    assertUpdateBadRequest(path, titleDto, TITLE_ALERT_BEAN_BAD_REQUEST, PARAM_TITLE_NOT_BLANK);
+    titleDto.setName(null);
+    assertUpdateBadRequest(path, titleDto, TITLE_ALERT_BEAN_BAD_REQUEST, PARAM_NAME_NOT_BLANK);
 
     titleDto = TestUtils.createUpdatebleTitleDto(id);
-    titleDto.setTitle("  ");
-    assertUpdateBadRequest(path, titleDto, TITLE_ALERT_BEAN_BAD_REQUEST, PARAM_TITLE_NOT_BLANK);
+    titleDto.setName("  ");
+    assertUpdateBadRequest(path, titleDto, TITLE_ALERT_BEAN_BAD_REQUEST, PARAM_NAME_NOT_BLANK);
   }
 
   @Test

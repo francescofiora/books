@@ -105,7 +105,7 @@ public interface TestUtils {
     title.setLanguage(Language.ENGLISH);
     title.setPrice(10L);
     title.setPublisher(createPublisher1());
-    title.setTitle("The Book");
+    title.setName("The Book");
     return title;
   }
 
@@ -123,7 +123,7 @@ public interface TestUtils {
     title.setLanguage(Language.ITALIAN);
     title.setPrice(12L);
     title.setPublisher(createPublisher2());
-    title.setTitle("The Big Book");
+    title.setName("The Big Book");
     return title;
   }
 
@@ -139,7 +139,7 @@ public interface TestUtils {
     title.setImageFile("image00.gif");
     title.setLanguage(Language.SPANISH);
     title.setPrice(12L);
-    title.setTitle("The Small Book");
+    title.setName("The Small Book");
     return title;
   }
 
@@ -179,7 +179,7 @@ public interface TestUtils {
         && Objects.equals(expected.getImageFile(), actual.getImageFile())
         && Objects.equals(expected.getLanguage(), actual.getLanguage())
         && Objects.equals(expected.getPrice(), actual.getPrice())
-        && Objects.equals(expected.getTitle(), actual.getTitle());
+        && Objects.equals(expected.getName(), actual.getName());
   }
 
   /**
@@ -251,7 +251,7 @@ public interface TestUtils {
    */
   static NewTitleDto createNewSimpleTitleDto() {
     var titleDto = new NewTitleDto();
-    titleDto.setTitle("The Title");
+    titleDto.setName("The Title");
     titleDto.setCopyright(2020);
     titleDto.setEditionNumber(10L);
     titleDto.setImageFile("image3.gif");
@@ -293,7 +293,7 @@ public interface TestUtils {
   static TitleDto createTitleDto(final Long id) {
     var titleDto = new TitleDto();
     titleDto.setId(id);
-    titleDto.setTitle("One Title");
+    titleDto.setName("One Title");
     titleDto.setCopyright(2021);
     titleDto.setEditionNumber(2L);
     titleDto.setImageFile("image4.jpg");
@@ -326,7 +326,7 @@ public interface TestUtils {
   static UpdatebleTitleDto createSimpleUpdatebleTitleDto(final Long id) {
     var titleDto = new UpdatebleTitleDto();
     titleDto.setId(id);
-    titleDto.setTitle("Simple Title");
+    titleDto.setName("Simple Title");
     titleDto.setCopyright(2019);
     titleDto.setEditionNumber(8L);
     titleDto.setImageFile("path_image");

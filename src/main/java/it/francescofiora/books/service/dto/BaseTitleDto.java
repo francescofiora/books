@@ -17,11 +17,11 @@ import lombok.Setter;
 @Setter
 public abstract class BaseTitleDto {
 
-  @Schema(description = "Book's Title", required = true)
-  @JsonProperty("title")
+  @Schema(description = "Book's Name", example = "My prefer Book", required = true)
+  @JsonProperty("name")
   @NotBlank
   @Size(min = 3, max = 20)
-  private String title;
+  private String name;
 
   @Schema(description = "Edition Number", required = true)
   @JsonProperty("editionNumber")

@@ -99,11 +99,11 @@ class TitleApiTest extends AbstractTestApi {
 
     // title
     titleDto = TestUtils.createNewTitleDto();
-    titleDto.setTitle(null);
+    titleDto.setName(null);
     performPost(TITLES_URI, titleDto).andExpect(status().isBadRequest());
 
     titleDto = TestUtils.createNewTitleDto();
-    titleDto.setTitle("  ");
+    titleDto.setName("  ");
     performPost(TITLES_URI, titleDto).andExpect(status().isBadRequest());
   }
 
@@ -162,11 +162,11 @@ class TitleApiTest extends AbstractTestApi {
 
     // title
     titleDto = TestUtils.createUpdatebleTitleDto(ID);
-    titleDto.setTitle(null);
+    titleDto.setName(null);
     performPut(TITLES_ID_URI, ID, titleDto).andExpect(status().isBadRequest());
 
     titleDto = TestUtils.createUpdatebleTitleDto(ID);
-    titleDto.setTitle("  ");
+    titleDto.setName("  ");
     performPut(TITLES_ID_URI, ID, titleDto).andExpect(status().isBadRequest());
   }
 

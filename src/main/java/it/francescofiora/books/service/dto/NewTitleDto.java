@@ -38,7 +38,7 @@ public class NewTitleDto extends BaseTitleDto implements Serializable {
   @Override
   public int hashCode() {
     return Objects.hash(getAuthors(), getCopyright(), getEditionNumber(), getImageFile(),
-        getLanguage(), getPrice(), getPublisher(), getTitle());
+        getLanguage(), getPrice(), getPublisher(), getName());
   }
 
   @Override
@@ -57,6 +57,6 @@ public class NewTitleDto extends BaseTitleDto implements Serializable {
         && Objects.equals(getLanguage(), other.getLanguage())
         && Objects.equals(getPrice(), other.getPrice())
         && Objects.equals(getPublisher(), other.getPublisher())
-        && Objects.equals(getTitle(), other.getTitle());
+        && Objects.equals(getName(), other.getName());
   }
 }

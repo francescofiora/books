@@ -37,7 +37,7 @@ class TitleRepositoryTest extends AbstractTestRepository {
     title.setCopyright(expected3.getCopyright());
     title.setEditionNumber(expected3.getEditionNumber());
     title.setImageFile(expected3.getImageFile());
-    title.setTitle(expected3.getTitle());
+    title.setName(expected3.getName());
     title.setLanguage(expected3.getLanguage());
     title.setPrice(expected3.getPrice());
     titleRepository.save(title);

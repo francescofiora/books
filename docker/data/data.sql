@@ -27,7 +27,7 @@ create table title (
         image_file varchar(255),
         language varchar(255),
         price bigint,
-        title varchar(255),
+        name varchar(255),
         publisher_id bigint,
         primary key (id)
     ) ENGINE=InnoDB;

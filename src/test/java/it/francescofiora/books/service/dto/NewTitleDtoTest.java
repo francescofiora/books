@@ -42,7 +42,7 @@ class NewTitleDtoTest {
     TestUtils.checkNotEqualHashAndToString(titleDto1, titleDto2);
 
     titleDto2 = TestUtils.createNewTitleDto();
-    titleDto2.setTitle("TitleDiff");
+    titleDto2.setName("NameDiff");
     TestUtils.checkNotEqualHashAndToString(titleDto1, titleDto2);
 
     titleDto2 = TestUtils.createNewTitleDto();
