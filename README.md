@@ -26,7 +26,10 @@ The purpose of this tutorial is a Spring Boot tutorial, however I have added a D
     cd docker
     ./create_certificate.sh
     docker-compose up
- - you can use phpMyAdmin (http://localhost:8080/)
+ - phpMyAdmin (http://localhost:8080/)
+ - Sonarqube (http://localhost:9000/)
+
+For SonarQube configuration follow this link: [Try Out SonarQube](https://docs.sonarqube.org/latest/setup/get-started-2-minutes/)
 
 ## Useful Docker command
 
@@ -44,6 +47,12 @@ The purpose of this tutorial is a Spring Boot tutorial, however I have added a D
 
 ## Pitest
     ./gradlew pitest
+
+## SonarQube
+    ./gradlew sonarqube \
+    -Dsonar.projectKey=yourProjectKey \
+    -Dsonar.host.url=http://localhost:9000 \
+    -Dsonar.login=yourAuthenticationToken
 
 ## reports
     build/reports/checkstyle/main.html

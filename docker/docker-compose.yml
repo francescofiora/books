@@ -24,5 +24,12 @@ services:
     ports:
       - "8080:80"
 
+  sonarqube-books:
+    image: sonarqube:8.9.7-community
+    environment:
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+    ports:
+      - "9000:9000"
+
 volumes:
   mysql-books-data:
