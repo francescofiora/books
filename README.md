@@ -51,7 +51,6 @@ For SonarQube configuration follow this link: [Try Out SonarQube](https://docs.s
 ## SonarQube
     ./gradlew sonarqube \
     -Dsonar.projectKey=yourProjectKey \
-    -Dsonar.host.url=http://localhost:9000 \
     -Dsonar.login=yourAuthenticationToken
 
 ## reports

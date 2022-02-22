@@ -60,19 +60,21 @@ dependencies {
 }
 
 task cleanResources(type: Delete) {
-    delete "build/resources"
+  delete "build/resources"
 }
 
 defaultTasks "bootRun"
 
 springBoot {
-    mainClass.set("it.francescofiora.books.Application")
+  mainClass.set("it.francescofiora.books.Application")
 }
 
 sonarqube {
-    properties {
-        property "sonar.sourceEncoding", "UTF-8"
-    }
+  properties {
+    property "sonar.sourceEncoding", "UTF-8"
+    property 'sonar.core.codeCoveragePlugin', 'jacoco'
+    property 'sonar.coverage.jacoco.xmlReportPaths', "${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+  }
 }
 
 sourceSets {
@@ -127,6 +129,12 @@ test {
 
 jacocoTestReport {
   dependsOn test
+  reports {
+    xml.enabled true
+    csv.enabled false
+    html.destination file("${buildDir}/reports/jacoco/test")
+    xml.destination  file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+  }
 }
 
 pitest {
