@@ -76,7 +76,7 @@ public abstract class AbstractApi {
    */
   protected <T> ResponseEntity<List<T>> getResponse(final String refEntityName,
       final Page<T> page) {
-    HttpHeaders headers = PaginationUtil.getHttpHeadersfromPagination(refEntityName, page);
+    var headers = PaginationUtil.getHttpHeadersfromPagination(refEntityName, page);
     // @formatter:off
     return ResponseEntity
         .ok()

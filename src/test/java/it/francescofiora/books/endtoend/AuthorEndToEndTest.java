@@ -64,8 +64,7 @@ class AuthorEndToEndTest extends AbstractTestEndToEnd {
         get(AUTHORS_URI, PageRequest.of(1, 1), AuthorDto[].class, ALERT_GET, PARAM_PAGE_20);
     assertThat(authors).isNotEmpty();
     var option = Stream.of(authors).filter(author -> author.getId().equals(authorId)).findAny();
-    assertThat(option).isPresent();
-    assertThat(option.get()).isEqualTo(authorDto);
+    assertThat(option).isPresent().contains(authorDto);
 
     delete(authorsIdUri, ALERT_DELETED, String.valueOf(authorId));
 

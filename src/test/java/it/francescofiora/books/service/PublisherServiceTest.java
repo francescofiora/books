@@ -3,7 +3,6 @@ package it.francescofiora.books.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -71,7 +70,7 @@ class PublisherServiceTest {
   @Test
   void testUpdate() throws Exception {
     var publisher = new Publisher();
-    when(publisherRepository.findById(eq(ID))).thenReturn(Optional.of(publisher));
+    when(publisherRepository.findById(ID)).thenReturn(Optional.of(publisher));
 
     var publisherDto = new PublisherDto();
     publisherDto.setId(ID);
@@ -102,7 +101,7 @@ class PublisherServiceTest {
   void testFindOne() throws Exception {
     var publisher = new Publisher();
     publisher.setId(ID);
-    when(publisherRepository.findById(eq(publisher.getId()))).thenReturn(Optional.of(publisher));
+    when(publisherRepository.findById(publisher.getId())).thenReturn(Optional.of(publisher));
     var expected = new PublisherDto();
     when(publisherMapper.toDto(any(Publisher.class))).thenReturn(expected);
 

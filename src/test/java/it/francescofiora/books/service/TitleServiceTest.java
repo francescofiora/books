@@ -3,7 +3,6 @@ package it.francescofiora.books.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -66,10 +65,10 @@ class TitleServiceTest {
     when(titleMapper.toDto(any(Title.class))).thenReturn(expected);
 
     var titleDto = TestUtils.createNewTitleDto();
-    when(authorRepository.findById(eq(titleDto.getAuthors().get(0).getId())))
+    when(authorRepository.findById(titleDto.getAuthors().get(0).getId()))
         .thenReturn(Optional.of(new Author()));
 
-    when(publisherRepository.findById(eq(titleDto.getPublisher().getId())))
+    when(publisherRepository.findById(titleDto.getPublisher().getId()))
         .thenReturn(Optional.of(new Publisher()));
 
     var actual = titleService.create(titleDto);
@@ -85,7 +84,7 @@ class TitleServiceTest {
   @Test
   void testUpdate() throws Exception {
     var title = new Title();
-    when(titleRepository.findById(eq(ID))).thenReturn(Optional.of(title));
+    when(titleRepository.findById(ID)).thenReturn(Optional.of(title));
 
     var titleDto = new UpdatebleTitleDto();
     titleDto.setId(ID);
@@ -116,7 +115,7 @@ class TitleServiceTest {
   void testFindOne() throws Exception {
     var title = new Title();
     title.setId(ID);
-    when(titleRepository.findById(eq(title.getId()))).thenReturn(Optional.of(title));
+    when(titleRepository.findById(title.getId())).thenReturn(Optional.of(title));
     var expected = new TitleDto();
     when(titleMapper.toDto(any(Title.class))).thenReturn(expected);
 

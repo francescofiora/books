@@ -107,7 +107,7 @@ class AuthorApiTest extends AbstractTestApi {
   @Test
   void testGetAuthor() throws Exception {
     var expected = TestUtils.createAuthorDto(ID);
-    given(authorService.findOne(eq(ID))).willReturn(Optional.of(expected));
+    given(authorService.findOne(ID)).willReturn(Optional.of(expected));
     var result = performGet(AUTHORS_ID_URI, ID).andExpect(status().isOk()).andReturn();
     var actual = readValue(result, new TypeReference<AuthorDto>() {});
     assertThat(actual).isNotNull().isEqualTo(expected);

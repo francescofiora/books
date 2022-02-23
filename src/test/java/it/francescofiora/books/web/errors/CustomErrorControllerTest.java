@@ -2,7 +2,6 @@ package it.francescofiora.books.web.errors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -25,10 +24,10 @@ class CustomErrorControllerTest {
 
     assertThat(ex.getStatus(request)).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
 
-    when(request.getAttribute(eq(RequestDispatcher.ERROR_STATUS_CODE))).thenReturn(400);
+    when(request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE)).thenReturn(400);
     assertThat(ex.getStatus(request)).isEqualTo(HttpStatus.BAD_REQUEST);
 
-    when(request.getAttribute(eq(RequestDispatcher.ERROR_STATUS_CODE))).thenReturn(600);
+    when(request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE)).thenReturn(600);
     assertThat(ex.getStatus(request)).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
   }
 

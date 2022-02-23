@@ -87,7 +87,7 @@ class PublisherApiTest extends AbstractTestApi {
   @Test
   void testGetPublisher() throws Exception {
     var expected = TestUtils.createPublisherDto(ID);
-    given(publisherService.findOne(eq(ID))).willReturn(Optional.of(expected));
+    given(publisherService.findOne(ID)).willReturn(Optional.of(expected));
     var result = performGet(PUBLISHERS_ID_URI, ID).andExpect(status().isOk()).andReturn();
     var actual = readValue(result, new TypeReference<PublisherDto>() {});
     assertThat(actual).isNotNull().isEqualTo(expected);

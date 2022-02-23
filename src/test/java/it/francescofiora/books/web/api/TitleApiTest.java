@@ -2,7 +2,6 @@ package it.francescofiora.books.web.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -193,7 +192,7 @@ class TitleApiTest extends AbstractTestApi {
   void testGetTitle() throws Exception {
     var expected = new TitleDto();
     expected.setId(ID);
-    given(titleService.findOne(eq(ID))).willReturn(Optional.of(expected));
+    given(titleService.findOne(ID)).willReturn(Optional.of(expected));
     var result = performGet(TITLES_ID_URI, ID).andExpect(status().isOk()).andReturn();
     var actual = readValue(result, new TypeReference<TitleDto>() {});
     assertThat(actual).isNotNull().isEqualTo(expected);

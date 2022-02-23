@@ -88,7 +88,7 @@ public class AuthorServiceImpl implements AuthorService {
           "Author Not Found with id " + id);
     }
     var author = authorOpt.get();
-    return new PageImpl<TitleDto>(
+    return new PageImpl<>(
         titleMapper.toDto(author.getTitles().stream().collect(Collectors.toList())));
   }
 }

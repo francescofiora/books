@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -73,7 +72,7 @@ class AuthorServiceTest {
   @Test
   void testUpdate() throws Exception {
     var author = new Author();
-    when(authorRepository.findById(eq(ID))).thenReturn(Optional.of(author));
+    when(authorRepository.findById(ID)).thenReturn(Optional.of(author));
 
     var authorDto = new AuthorDto();
     authorDto.setId(ID);
@@ -104,7 +103,7 @@ class AuthorServiceTest {
   void testFindOne() throws Exception {
     var author = new Author();
     author.setId(ID);
-    when(authorRepository.findById(eq(author.getId()))).thenReturn(Optional.of(author));
+    when(authorRepository.findById(author.getId())).thenReturn(Optional.of(author));
     var expected = new AuthorDto();
     when(authorMapper.toDto(any(Author.class))).thenReturn(expected);
 
@@ -119,7 +118,7 @@ class AuthorServiceTest {
     var author = new Author();
     author.getTitles().add(new Title());
     author.setId(ID);
-    when(authorRepository.findById(eq(author.getId()))).thenReturn(Optional.of(author));
+    when(authorRepository.findById(author.getId())).thenReturn(Optional.of(author));
 
     var expected = new TitleDto();
     when(titleMapper.toDto(anyList())).thenReturn(List.of(expected));
