@@ -38,7 +38,7 @@ class PaginationUtilTest {
   }
 
   @Test
-  public void testConstructorIsPrivate() throws NoSuchMethodException, IllegalAccessException,
+  void testConstructorIsPrivate() throws NoSuchMethodException, IllegalAccessException,
       InvocationTargetException, InstantiationException {
     Constructor<PaginationUtil> constructor = PaginationUtil.class.getDeclaredConstructor();
     assertTrue(Modifier.isPrivate(constructor.getModifiers()));

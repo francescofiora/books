@@ -8,7 +8,6 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 
 /**
