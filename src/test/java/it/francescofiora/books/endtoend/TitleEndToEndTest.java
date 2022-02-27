@@ -2,6 +2,7 @@ package it.francescofiora.books.endtoend;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import it.francescofiora.books.service.dto.BaseTitleDto;
 import it.francescofiora.books.service.dto.TitleDto;
 import it.francescofiora.books.util.TestUtils;
 import java.util.stream.Stream;
@@ -87,12 +88,7 @@ class TitleEndToEndTest extends AbstractTestEndToEnd {
 
     var titleDto = get(titlesIdUri, TitleDto.class, ALERT_GET, String.valueOf(titleId));
     assertThat(titleDto.getId()).isEqualTo(titleId);
-    assertThat(titleDto.getName()).isEqualTo(newTitleDto.getName());
-    assertThat(titleDto.getCopyright()).isEqualTo(newTitleDto.getCopyright());
-    assertThat(titleDto.getEditionNumber()).isEqualTo(newTitleDto.getEditionNumber());
-    assertThat(titleDto.getImageFile()).isEqualTo(newTitleDto.getImageFile());
-    assertThat(titleDto.getLanguage()).isEqualTo(newTitleDto.getLanguage());
-    assertThat(titleDto.getPrice()).isEqualTo(newTitleDto.getPrice());
+    checkTitleDto(titleDto, newTitleDto);
     assertThat(titleDto.getPublisher().getId()).isEqualTo(publisherId);
     assertThat(titleDto.getAuthors()).hasSize(1);
     assertThat(titleDto.getAuthors().get(0).getId()).isEqualTo(authorId);
@@ -107,12 +103,7 @@ class TitleEndToEndTest extends AbstractTestEndToEnd {
 
     titleDto = get(titlesIdUri, TitleDto.class, ALERT_GET, String.valueOf(titleId));
     assertThat(titleDto.getId()).isEqualTo(updatebleTitleDto.getId());
-    assertThat(titleDto.getName()).isEqualTo(updatebleTitleDto.getName());
-    assertThat(titleDto.getCopyright()).isEqualTo(updatebleTitleDto.getCopyright());
-    assertThat(titleDto.getEditionNumber()).isEqualTo(updatebleTitleDto.getEditionNumber());
-    assertThat(titleDto.getImageFile()).isEqualTo(updatebleTitleDto.getImageFile());
-    assertThat(titleDto.getLanguage()).isEqualTo(updatebleTitleDto.getLanguage());
-    assertThat(titleDto.getPrice()).isEqualTo(updatebleTitleDto.getPrice());
+    checkTitleDto(titleDto, updatebleTitleDto);
     assertThat(titleDto.getPublisher().getId()).isEqualTo(publisherId);
     assertThat(titleDto.getAuthors()).hasSize(1);
     assertThat(titleDto.getAuthors().get(0).getId()).isEqualTo(authorId);
@@ -146,6 +137,15 @@ class TitleEndToEndTest extends AbstractTestEndToEnd {
 
     assertGetNotFound(String.format(AUTHORS_TITLES_URI, authorId), pageable, TitleDto[].class,
         AUTHOR_ALERT_NOT_FOUND, String.valueOf(authorId));
+  }
+
+  void checkTitleDto(TitleDto titleDto, BaseTitleDto baseTitleDto) {
+    assertThat(titleDto.getName()).isEqualTo(baseTitleDto.getName());
+    assertThat(titleDto.getCopyright()).isEqualTo(baseTitleDto.getCopyright());
+    assertThat(titleDto.getEditionNumber()).isEqualTo(baseTitleDto.getEditionNumber());
+    assertThat(titleDto.getImageFile()).isEqualTo(baseTitleDto.getImageFile());
+    assertThat(titleDto.getLanguage()).isEqualTo(baseTitleDto.getLanguage());
+    assertThat(titleDto.getPrice()).isEqualTo(baseTitleDto.getPrice());
   }
 
   @Test

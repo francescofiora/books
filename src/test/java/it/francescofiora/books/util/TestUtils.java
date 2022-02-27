@@ -3,10 +3,12 @@ package it.francescofiora.books.util;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import it.francescofiora.books.domain.Author;
+import it.francescofiora.books.domain.DomainIdentifier;
 import it.francescofiora.books.domain.Publisher;
 import it.francescofiora.books.domain.Title;
 import it.francescofiora.books.domain.enumeration.Language;
 import it.francescofiora.books.service.dto.AuthorDto;
+import it.francescofiora.books.service.dto.DtoIdentifier;
 import it.francescofiora.books.service.dto.NewAuthorDto;
 import it.francescofiora.books.service.dto.NewPublisherDto;
 import it.francescofiora.books.service.dto.NewTitleDto;
@@ -16,18 +18,21 @@ import it.francescofiora.books.service.dto.RefPublisherDto;
 import it.francescofiora.books.service.dto.TitleDto;
 import it.francescofiora.books.service.dto.UpdatebleTitleDto;
 import java.util.Objects;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * Utility for testing.
  */
-public interface TestUtils {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class TestUtils {
 
   /**
    * Create first example of Author.
    *
    * @return Author
    */
-  static Author createAuthor1() {
+  public static Author createAuthor1() {
     var author = new Author();
     author.setFirstName("John");
     author.setLastName("Smith");
@@ -39,7 +44,7 @@ public interface TestUtils {
    *
    * @return Author
    */
-  static Author createAuthor2() {
+  public static Author createAuthor2() {
     var author = new Author();
     author.setFirstName("Sophia");
     author.setLastName("Brown");
@@ -51,7 +56,7 @@ public interface TestUtils {
    *
    * @return Author
    */
-  static Author createAuthor3() {
+  public static Author createAuthor3() {
     var author = new Author();
     author.setFirstName("William");
     author.setLastName("Wilson");
@@ -63,7 +68,7 @@ public interface TestUtils {
    *
    * @return Publisher
    */
-  static Publisher createPublisher1() {
+  public static Publisher createPublisher1() {
     var publisher = new Publisher();
     publisher.setPublisherName("Small Publisher Ltd");
     return publisher;
@@ -74,7 +79,7 @@ public interface TestUtils {
    *
    * @return Publisher
    */
-  static Publisher createPublisher2() {
+  public static Publisher createPublisher2() {
     var publisher = new Publisher();
     publisher.setPublisherName("Publisher Ltd");
     return publisher;
@@ -85,7 +90,7 @@ public interface TestUtils {
    *
    * @return Publisher
    */
-  static Publisher createPublisher3() {
+  public static Publisher createPublisher3() {
     var publisher = new Publisher();
     publisher.setPublisherName("Big Publisher Ltd");
     return publisher;
@@ -96,7 +101,7 @@ public interface TestUtils {
    *
    * @return Title
    */
-  static Title createTitle1() {
+  public static Title createTitle1() {
     var title = new Title();
     title.getAuthors().add(createAuthor1());
     title.setCopyright(2020);
@@ -114,7 +119,7 @@ public interface TestUtils {
    *
    * @return Title
    */
-  static Title createTitle2() {
+  public static Title createTitle2() {
     var title = new Title();
     title.getAuthors().add(createAuthor2());
     title.setCopyright(2019);
@@ -132,7 +137,7 @@ public interface TestUtils {
    *
    * @return Title
    */
-  static Title createTitle3() {
+  public static Title createTitle3() {
     var title = new Title();
     title.setCopyright(2018);
     title.setEditionNumber(3L);
@@ -150,7 +155,7 @@ public interface TestUtils {
    * @param actual Author
    * @return true if actual contains same data then expected
    */
-  static boolean dataEquals(Author expected, Author actual) {
+  public static boolean dataEquals(Author expected, Author actual) {
     return Objects.equals(expected.getFirstName(), actual.getFirstName())
         && Objects.equals(expected.getLastName(), actual.getLastName());
   }
@@ -162,7 +167,7 @@ public interface TestUtils {
    * @param actual Publisher
    * @return true if actual contains same data then expected
    */
-  static boolean dataEquals(Publisher expected, Publisher actual) {
+  public static boolean dataEquals(Publisher expected, Publisher actual) {
     return Objects.equals(expected.getPublisherName(), actual.getPublisherName());
   }
 
@@ -173,7 +178,7 @@ public interface TestUtils {
    * @param actual Title
    * @return true if actual contains same data then expected
    */
-  static boolean dataEquals(Title expected, Title actual) {
+  public static boolean dataEquals(Title expected, Title actual) {
     return Objects.equals(expected.getCopyright(), actual.getCopyright())
         && Objects.equals(expected.getEditionNumber(), actual.getEditionNumber())
         && Objects.equals(expected.getImageFile(), actual.getImageFile())
@@ -188,7 +193,7 @@ public interface TestUtils {
    * @param id ID
    * @return AuthorDto
    */
-  static AuthorDto createAuthorDto(final Long id) {
+  public static AuthorDto createAuthorDto(final Long id) {
     var authorDto = new AuthorDto();
     authorDto.setId(id);
     authorDto.setFirstName("John");
@@ -202,7 +207,7 @@ public interface TestUtils {
    * @param id ID
    * @return PublisherDto
    */
-  static PublisherDto createPublisherDto(final Long id) {
+  public static PublisherDto createPublisherDto(final Long id) {
     var publisherDto = new PublisherDto();
     publisherDto.setId(id);
     publisherDto.setPublisherName("Peter");
@@ -214,7 +219,7 @@ public interface TestUtils {
    *
    * @return NewAuthorDto
    */
-  static NewAuthorDto createNewAuthorDto() {
+  public static NewAuthorDto createNewAuthorDto() {
     var authorDto = new NewAuthorDto();
     authorDto.setFirstName("Robert");
     authorDto.setLastName("Smith");
@@ -226,7 +231,7 @@ public interface TestUtils {
    *
    * @return NewPublisherDto
    */
-  static NewPublisherDto createNewPublisherDto() {
+  public static NewPublisherDto createNewPublisherDto() {
     var publisherDto = new NewPublisherDto();
     publisherDto.setPublisherName("Publisher");
     return publisherDto;
@@ -237,7 +242,7 @@ public interface TestUtils {
    *
    * @return NewTitleDto
    */
-  static NewTitleDto createNewTitleDto() {
+  public static NewTitleDto createNewTitleDto() {
     var titleDto = createNewSimpleTitleDto();
     titleDto.setPublisher(createRefPublisherDto(1L));
     titleDto.getAuthors().add(createRefAuthorDto(1L));
@@ -249,7 +254,7 @@ public interface TestUtils {
    *
    * @return NewTitleDto
    */
-  static NewTitleDto createNewSimpleTitleDto() {
+  public static NewTitleDto createNewSimpleTitleDto() {
     var titleDto = new NewTitleDto();
     titleDto.setName("The Title");
     titleDto.setCopyright(2020);
@@ -266,7 +271,7 @@ public interface TestUtils {
    * @param id ID
    * @return RefAuthorDto
    */
-  static RefAuthorDto createRefAuthorDto(final Long id) {
+  public static RefAuthorDto createRefAuthorDto(final Long id) {
     var authorDto = new RefAuthorDto();
     authorDto.setId(id);
     return authorDto;
@@ -278,7 +283,7 @@ public interface TestUtils {
    * @param id ID
    * @return RefPublisherDto
    */
-  static RefPublisherDto createRefPublisherDto(final Long id) {
+  public static RefPublisherDto createRefPublisherDto(final Long id) {
     var publisherDto = new RefPublisherDto();
     publisherDto.setId(id);
     return publisherDto;
@@ -290,7 +295,7 @@ public interface TestUtils {
    * @param id ID
    * @return TitleDto
    */
-  static TitleDto createTitleDto(final Long id) {
+  public static TitleDto createTitleDto(final Long id) {
     var titleDto = new TitleDto();
     titleDto.setId(id);
     titleDto.setName("One Title");
@@ -310,7 +315,7 @@ public interface TestUtils {
    * @param id ID
    * @return UpdatebleTitleDto
    */
-  static UpdatebleTitleDto createUpdatebleTitleDto(final Long id) {
+  public static UpdatebleTitleDto createUpdatebleTitleDto(final Long id) {
     var titleDto = createSimpleUpdatebleTitleDto(id);
     titleDto.setPublisher(createRefPublisherDto(3L));
     titleDto.getAuthors().add(createRefAuthorDto(3L));
@@ -323,7 +328,7 @@ public interface TestUtils {
    * @param id ID
    * @return UpdatebleTitleDto
    */
-  static UpdatebleTitleDto createSimpleUpdatebleTitleDto(final Long id) {
+  public static UpdatebleTitleDto createSimpleUpdatebleTitleDto(final Long id) {
     var titleDto = new UpdatebleTitleDto();
     titleDto.setId(id);
     titleDto.setName("Simple Title");
@@ -341,10 +346,10 @@ public interface TestUtils {
    * @param obj1 the Object to compare
    * @param obj2 the Object to compare
    */
-  static void checkEqualHashAndToString(final Object obj1, final Object obj2) {
-    assertThat(obj1.equals(obj2)).isTrue();
-    assertThat(obj1.hashCode()).isEqualTo(obj2.hashCode());
-    assertThat(obj1.toString()).isEqualTo(obj2.toString());
+  public static void checkEqualHashAndToString(final Object obj1, final Object obj2) {
+    assertThat(obj1).isEqualTo(obj2);
+    assertThat(obj1).hasSameHashCodeAs(obj2.hashCode());
+    assertThat(obj1).hasToString(obj2.toString());
   }
 
   /**
@@ -353,9 +358,37 @@ public interface TestUtils {
    * @param obj1 the Object to compare
    * @param obj2 the Object to compare
    */
-  static void checkNotEqualHashAndToString(final Object obj1, final Object obj2) {
-    assertThat(obj1.equals(obj2)).isFalse();
+  public static void checkNotEqualHashAndToString(final Object obj1, final Object obj2) {
+    assertThat(obj1).isNotEqualTo(obj2);
     assertThat(obj1.hashCode()).isNotEqualTo(obj2.hashCode());
     assertThat(obj1.toString()).isNotEqualTo(obj2.toString());
+  }
+
+  /**
+   * create new DomainIdentifier.
+   *
+   * @param clazz the DomainIdentifier class.
+   * @param id the id
+   * @return a new DomainIdentifier Object
+   * @throws Exception if error occurs
+   */
+  public static <T> Object createNewDomain(Class<T> clazz, Long id) throws Exception {
+    var domainObj = (DomainIdentifier) clazz.getConstructor().newInstance();
+    domainObj.setId(id);
+    return domainObj;
+  }
+
+  /**
+   * create new DtoIdentifier.
+   *
+   * @param clazz the DomainIdentifier class.
+   * @param id the id
+   * @return a new DomainIdentifier Object
+   * @throws Exception if error occurs
+   */
+  public static <T> Object createNewDtoIdentifier(Class<T> clazz, Long id) throws Exception {
+    var dtoObj = (DtoIdentifier) clazz.getConstructor().newInstance();
+    dtoObj.setId(id);
+    return dtoObj;
   }
 }

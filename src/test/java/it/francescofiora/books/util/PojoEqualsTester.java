@@ -27,38 +27,38 @@ public class PojoEqualsTester implements Rule {
   }
 
   private <T> void equalsVerifier(Class<T> clazz) throws Exception {
-    var domainObj1 = clazz.getConstructor().newInstance();
-    var domainObj2 = clazz.getConstructor().newInstance();
+    var domainObj1 = (Object) clazz.getConstructor().newInstance();
+    var domainObj2 = (Object) clazz.getConstructor().newInstance();
+    Object domainObj3 = null;
 
     // Test equals
-    assertThat(domainObj1.equals(domainObj2)).isFalse();
-    assertThat(domainObj1.equals(domainObj1)).isTrue();
-    assertThat(domainObj1.equals(null)).isFalse();
-    assertThat(domainObj1.equals(new Object())).isFalse();
+    assertThat(domainObj1).isNotEqualTo(domainObj2);
+    assertThat(domainObj1).isEqualTo(domainObj1);
+    assertThat(domainObj1).isNotEqualTo(domainObj3);
+    assertThat(domainObj1).isNotEqualTo(new Object());
 
     // Test toString
     assertThat(domainObj1.toString()).isNotNull();
 
     // Test hashCode
-    assertThat(domainObj1.hashCode()).isEqualTo(domainObj2.hashCode());
+    assertThat(domainObj1).hasSameHashCodeAs(domainObj2.hashCode());
   }
 
   private <T> void domainIdentifierVerifier(Class<T> clazz) throws Exception {
-    var domainObj1 = (DomainIdentifier) clazz.getConstructor().newInstance();
-    domainObj1.setId(1L);
-    assertThat(domainObj1.equals(null)).isFalse();
-    assertThat(domainObj1.equals(new Object())).isFalse();
+    var domainObj1 = TestUtils.createNewDomain(clazz, 1L);
+    Object domainObj2 = null;
 
-    var domainObj2 = (DomainIdentifier) clazz.getConstructor().newInstance();
-    assertThat(domainObj1.equals(domainObj2)).isFalse();
+    assertThat(domainObj1).isNotEqualTo(domainObj2);
+    assertThat(domainObj1).isNotEqualTo(new Object());
 
-    domainObj2.setId(2L);
-    TestUtils.checkNotEqualHashAndToString(domainObj1, domainObj2);
+    var domainObj3 = TestUtils.createNewDomain(clazz, null);
+    assertThat(domainObj1).isNotEqualTo(domainObj3);
+    TestUtils.checkNotEqualHashAndToString(domainObj3, domainObj1);
 
-    domainObj2.setId(domainObj1.getId());
-    TestUtils.checkEqualHashAndToString(domainObj1, domainObj2);
+    domainObj3 = TestUtils.createNewDomain(clazz, 2L);
+    TestUtils.checkNotEqualHashAndToString(domainObj1, domainObj3);
 
-    domainObj1.setId(null);
-    TestUtils.checkNotEqualHashAndToString(domainObj1, domainObj2);
+    domainObj3 = TestUtils.createNewDomain(clazz, 1L);
+    TestUtils.checkEqualHashAndToString(domainObj1, domainObj3);
   }
 }

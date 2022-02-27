@@ -1,11 +1,24 @@
 package it.francescofiora.books.service.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import it.francescofiora.books.service.dto.DtoIdentifier;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import org.junit.jupiter.api.Test;
 
 class DtoUtilsTest {
+
+  @Test
+  void testConstructorIsPrivate() throws NoSuchMethodException, IllegalAccessException,
+      InvocationTargetException, InstantiationException {
+    Constructor<DtoUtils> constructor = DtoUtils.class.getDeclaredConstructor();
+    assertTrue(Modifier.isPrivate(constructor.getModifiers()));
+    constructor.setAccessible(true);
+    constructor.newInstance();
+  }
 
   static class DummyDto implements DtoIdentifier {
 
