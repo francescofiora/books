@@ -67,13 +67,26 @@ For SonarQube configuration follow this link: [Try Out SonarQube](https://docs.s
 - fat jar: java -jar ./build/libs/books-1.0-SNAPSHOT.jar
 - Eclipse: import "Existing Gradle project" and "Run Application"
 
-# How to execute with JMX support
-- fat jar: java -Dcom.sun.management.jmxremote.port=9999 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false  -jar ./build/libs/books-1.0-SNAPSHOT.jar
-- Eclipse: import "Existing Gradle project", "Run Configuration ..." add java JMX configuration on "VM arguments" then "Run Application"
+## Run the application with JMX support (Insecure connection)
+    java -Dcom.sun.management.jmxremote.port=9999 \
+    -Dcom.sun.management.jmxremote.authenticate=false \
+    -Dcom.sun.management.jmxremote.ssl=false \
+    -jar ./build/libs/books-1.0-SNAPSHOT.jar
 
-# url to connect with jconsole
-service:jmx:rmi:///jndi/rmi://localhost:9999/jmxrmi
+    jconsole service:jmx:rmi:///jndi/rmi://localhost:9999/jmxrmi
 
+## Run the application with JMX and SSL support
+    java -Dcom.sun.management.jmxremote.port=9999 \
+    -Dcom.sun.management.jmxremote.authenticate=false \
+    -Dcom.sun.management.jmxremote.ssl=true \
+    -Dcom.sun.management.jmxremote.ssl.need.client.auth=false \
+    -Djavax.net.ssl.keyStorePassword=mypass \
+    -Djavax.net.ssl.keyStore=./docker/certs/localhost-keystore.jks \
+    -jar ./build/libs/books-1.0-SNAPSHOT.jar
+
+    jconsole -J-Djavax.net.ssl.trustStore=./docker/certs/truststore.ts \
+    -J-Djavax.net.ssl.trustStorePassword=mypass \
+    service:jmx:rmi:///jndi/rmi://localhost:9999/jmxrmi
 
 # API documentation
 https://localhost:8081/books/swagger-ui.html
