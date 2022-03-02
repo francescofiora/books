@@ -15,7 +15,6 @@ import it.francescofiora.books.web.errors.BadRequestAlertException;
 import java.net.URISyntaxException;
 import java.util.List;
 import javax.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,7 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Publisher Api RestController.
  */
-@Slf4j
 @RestController
 @Tag(name = "publisher", description = "Publisher Rest API")
 @RequestMapping("/books/api/v1")
@@ -62,7 +60,6 @@ public class PublisherApi extends AbstractApi {
       @Parameter(
           description = "Add new Publisher") @Valid @RequestBody NewPublisherDto publisherDto)
       throws URISyntaxException {
-    log.debug("REST request to create Publisher : {}", publisherDto);
     var result = publisherService.create(publisherDto);
     return postResponse("/books/api/v1/publishers/" + result.getId(), result.getId());
   }
@@ -86,7 +83,6 @@ public class PublisherApi extends AbstractApi {
       @Parameter(description = "Publisher to update") @Valid @RequestBody PublisherDto publisherDto,
       @Parameter(description = "The id of the publisher to update", required = true,
           example = "1") @PathVariable("id") Long id) {
-    log.debug("REST request to update Publisher : {}", publisherDto);
     if (!id.equals(publisherDto.getId())) {
       throw new BadRequestAlertException(ENTITY_NAME, String.valueOf(publisherDto.getId()),
           "Invalid id");
@@ -113,7 +109,6 @@ public class PublisherApi extends AbstractApi {
       @ApiResponse(responseCode = "400", description = "Bad input parameter")})
   @GetMapping("/publishers")
   public ResponseEntity<List<PublisherDto>> getAllPublishers(Pageable pageable) {
-    log.debug("REST request to get a page of Publishers");
     return getResponse(publisherService.findAll(pageable));
   }
 
@@ -135,7 +130,6 @@ public class PublisherApi extends AbstractApi {
   public ResponseEntity<PublisherDto> getPublisher(
       @Parameter(description = "The id of the publisher to get", required = true,
           example = "1") @PathVariable("id") Long id) {
-    log.debug("REST request to get Publisher : {}", id);
     return getResponse(publisherService.findOne(id), id);
   }
 
@@ -153,7 +147,6 @@ public class PublisherApi extends AbstractApi {
   public ResponseEntity<Void> deletePublisher(
       @Parameter(description = "The id of the publisher to delete", required = true,
           example = "1") @PathVariable Long id) {
-    log.debug("REST request to delete Publisher : {}", id);
     publisherService.delete(id);
     return deleteResponse(id);
   }

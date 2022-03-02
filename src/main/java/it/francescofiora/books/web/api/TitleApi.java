@@ -16,7 +16,6 @@ import it.francescofiora.books.web.errors.BadRequestAlertException;
 import java.net.URISyntaxException;
 import java.util.List;
 import javax.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,7 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Title Api RestController.
  */
-@Slf4j
 @RestController
 @Tag(name = "title", description = "Title Rest API")
 @RequestMapping("/books/api/v1")
@@ -62,7 +60,6 @@ public class TitleApi extends AbstractApi {
   public ResponseEntity<Void> createTitle(
       @Parameter(description = "Add new Title") @Valid @RequestBody NewTitleDto titleDto)
       throws URISyntaxException {
-    log.debug("REST request to save Title : {}", titleDto);
     var result = titleService.create(titleDto);
     return postResponse("/books/api/v1/titles/" + result.getId(), result.getId());
   }
@@ -86,7 +83,6 @@ public class TitleApi extends AbstractApi {
       @Parameter(description = "Title to update") @Valid @RequestBody UpdatebleTitleDto titleDto,
       @Parameter(description = "The id of the title to update", required = true,
           example = "1") @PathVariable("id") Long id) {
-    log.debug("REST request to update Title : {}", titleDto);
     if (!id.equals(titleDto.getId())) {
       throw new BadRequestAlertException(ENTITY_NAME, String.valueOf(titleDto.getId()),
           "Invalid id");
@@ -112,7 +108,6 @@ public class TitleApi extends AbstractApi {
       @ApiResponse(responseCode = "400", description = "Bad input parameter")})
   @GetMapping("/titles")
   public ResponseEntity<List<TitleDto>> getAllTitles(Pageable pageable) {
-    log.debug("REST request to get a page of Titles");
     return getResponse(titleService.findAll(pageable));
   }
 
@@ -132,7 +127,6 @@ public class TitleApi extends AbstractApi {
       @ApiResponse(responseCode = "404", description = "Not found")})
   @GetMapping("/titles/{id}")
   public ResponseEntity<TitleDto> getTitle(@PathVariable Long id) {
-    log.debug("REST request to get Title : {}", id);
     return getResponse(titleService.findOne(id), id);
   }
 
@@ -148,7 +142,6 @@ public class TitleApi extends AbstractApi {
       @ApiResponse(responseCode = "400", description = "Bad input parameter")})
   @DeleteMapping("/titles/{id}")
   public ResponseEntity<Void> deleteTitle(@PathVariable Long id) {
-    log.debug("REST request to delete Title : {}", id);
     titleService.delete(id);
     return deleteResponse(id);
   }

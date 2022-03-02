@@ -16,7 +16,6 @@ import it.francescofiora.books.web.errors.BadRequestAlertException;
 import java.net.URISyntaxException;
 import java.util.List;
 import javax.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,7 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Author Api RestController.
  */
-@Slf4j
 @RestController
 @Tag(name = "author", description = "Author Rest API")
 @RequestMapping("/books/api/v1")
@@ -62,7 +60,6 @@ public class AuthorApi extends AbstractApi {
   public ResponseEntity<Void> createAuthor(
       @Parameter(description = "Add new Author") @Valid @RequestBody NewAuthorDto authorDto)
       throws URISyntaxException {
-    log.debug("REST request to create Author : {}", authorDto);
     var result = authorService.create(authorDto);
     return postResponse("/books/api/v1/authors/" + result.getId(), result.getId());
   }
@@ -86,7 +83,6 @@ public class AuthorApi extends AbstractApi {
       @Parameter(description = "Author to update") @Valid @RequestBody AuthorDto authorDto,
       @Parameter(description = "The id of the author to update", required = true,
           example = "1") @PathVariable("id") Long id) {
-    log.debug("REST request to update Author : {}", authorDto);
     if (!id.equals(authorDto.getId())) {
       throw new BadRequestAlertException(ENTITY_NAME, String.valueOf(authorDto.getId()),
           "Invalid id");
@@ -112,7 +108,6 @@ public class AuthorApi extends AbstractApi {
       @ApiResponse(responseCode = "400", description = "Bad input parameter")})
   @GetMapping("/authors")
   public ResponseEntity<List<AuthorDto>> getAllAuthors(Pageable pageable) {
-    log.debug("REST request to get a page of Authors");
     return getResponse(authorService.findAll(pageable));
   }
 
@@ -133,7 +128,6 @@ public class AuthorApi extends AbstractApi {
   @GetMapping("/authors/{id}")
   public ResponseEntity<AuthorDto> getAuthor(@Parameter(description = "The id of the author to get",
       required = true, example = "1") @PathVariable("id") Long id) {
-    log.debug("REST request to get Author : {}", id);
     return getResponse(authorService.findOne(id), id);
   }
 
@@ -156,7 +150,6 @@ public class AuthorApi extends AbstractApi {
   public ResponseEntity<List<TitleDto>> getTitlesByAuthor(Pageable pageable,
       @Parameter(description = "The id of the author", required = true,
           example = "1") @PathVariable("id") Long id) {
-    log.debug("REST request to get Titles of Author : {}", id);
     return getResponse("TitleDto", authorService.findTitlesByAuthorId(pageable, id));
   }
 
@@ -174,7 +167,6 @@ public class AuthorApi extends AbstractApi {
   public ResponseEntity<Void> deleteAuthor(
       @Parameter(description = "The id of the author to delete", required = true,
           example = "1") @PathVariable Long id) {
-    log.debug("REST request to delete Author : {}", id);
     authorService.delete(id);
     return deleteResponse(id);
   }
