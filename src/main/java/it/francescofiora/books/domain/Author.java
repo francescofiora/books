@@ -13,8 +13,6 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * Author Entity.
@@ -39,7 +37,6 @@ public class Author extends AbstractDomain implements Serializable {
   private String lastName;
 
   @ManyToMany(mappedBy = "authors")
-  @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
   private Set<Title> titles = new HashSet<>();
 
   @Override

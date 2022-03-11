@@ -19,8 +19,6 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * Title Entity.
@@ -62,7 +60,6 @@ public class Title extends AbstractDomain implements Serializable {
   private Publisher publisher;
 
   @ManyToMany
-  @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
   @JoinTable(name = "title_author",
       joinColumns = @JoinColumn(name = "title_id", referencedColumnName = "id"),
       inverseJoinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"))
