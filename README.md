@@ -89,7 +89,7 @@ For SonarQube configuration follow this link: [Try Out SonarQube](https://docs.s
     service:jmx:rmi:///jndi/rmi://localhost:9999/jmxrmi
 
 # API documentation
-https://localhost:8081/books/swagger-ui.html
+https://localhost:8081/swagger-ui.html
 
 # Security
  - HTTPS connection and Basic Authentication with (user/password)
