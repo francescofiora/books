@@ -43,11 +43,11 @@ public class OpenApiConfig {
 
     return (operation, handlerMethod) -> {
 
-      var missingParam1 =
+      var requestIdParam =
           new Parameter().in(ParameterIn.HEADER.toString()).schema(new StringSchema())
               .name(EndPointFilter.X_REQUEST_ID).description("Request ID").required(false);
 
-      operation.addParametersItem(missingParam1);
+      operation.addParametersItem(requestIdParam);
 
       return operation;
     };
