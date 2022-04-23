@@ -64,6 +64,7 @@ defaultTasks "bootRun"
 
 springBoot {
   mainClass.set("it.francescofiora.books.Application")
+  buildInfo()
 }
 
 sonarqube {

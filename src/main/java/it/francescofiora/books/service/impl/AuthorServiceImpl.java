@@ -81,7 +81,7 @@ public class AuthorServiceImpl implements AuthorService {
   @Override
   @Transactional(readOnly = true)
   public Page<TitleDto> findTitlesByAuthorId(Pageable pageable, Long id) {
-    log.debug("Request to get Ttitles by Author id: {}", id);
+    log.debug("Request to get Titles by Author id: {}", id);
     var authorOpt = authorRepository.findById(id);
     if (!authorOpt.isPresent()) {
       throw new NotFoundAlertException(ENTITY_NAME, String.valueOf(id),
