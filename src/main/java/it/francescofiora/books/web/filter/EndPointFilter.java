@@ -31,20 +31,18 @@ public class EndPointFilter implements Filter {
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
       throws IOException, ServletException {
 
-    if (request instanceof HttpServletRequest) {
+    if (request instanceof HttpServletRequest && response instanceof HttpServletResponse) {
       var req = (HttpServletRequest) request;
-
       var requestId = req.getHeader(X_REQUEST_ID);
       if (requestId == null) {
         requestId = UUID.randomUUID().toString();
       }
       MDC.put(X_REQUEST_ID, requestId);
-    }
 
-    if (response instanceof HttpServletResponse) {
       var res = (HttpServletResponse) response;
       res.addHeader(X_NAME, buildProperties.getName());
       res.addHeader(X_VERSION, buildProperties.getVersion());
+      res.addHeader(X_REQUEST_ID, requestId);
     }
     
     chain.doFilter(request, response);

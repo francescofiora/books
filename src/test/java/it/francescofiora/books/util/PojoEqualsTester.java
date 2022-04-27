@@ -18,6 +18,7 @@ public class PojoEqualsTester implements Rule {
       try {
         equalsVerifier(pojoClass.getClazz());
         if (pojoClass.extendz(DomainIdentifier.class)) {
+          domainObjectVerifier(pojoClass.getClazz());
           domainIdentifierVerifier(pojoClass.getClazz());
         }
       } catch (Exception e) {
@@ -44,21 +45,25 @@ public class PojoEqualsTester implements Rule {
     assertThat(domainObj1).hasSameHashCodeAs(domainObj2.hashCode());
   }
 
-  private <T> void domainIdentifierVerifier(Class<T> clazz) throws Exception {
-    var domainObj1 = TestUtils.createNewDomain(clazz, 1L);
+  private <T> void domainObjectVerifier(Class<T> clazz) throws Exception {
+    Object domainObj1 = TestUtils.createNewDomain(clazz, 1L);
     Object domainObj2 = null;
 
     assertThat(domainObj1).isNotEqualTo(domainObj2);
     assertThat(domainObj1).isNotEqualTo(new Object());
+  }
 
-    var domainObj3 = TestUtils.createNewDomain(clazz, null);
-    assertThat(domainObj1).isNotEqualTo(domainObj3);
-    TestUtils.checkNotEqualHashAndToString(domainObj3, domainObj1);
+  private <T> void domainIdentifierVerifier(Class<T> clazz) throws Exception {
+    var domainObj1 = TestUtils.createNewDomain(clazz, 1L);
+    var domainObj2 = TestUtils.createNewDomain(clazz, null);
 
-    domainObj3 = TestUtils.createNewDomain(clazz, 2L);
-    TestUtils.checkNotEqualHashAndToString(domainObj1, domainObj3);
+    assertThat(domainObj1).isNotEqualTo(domainObj2);
+    TestUtils.checkNotEqualHashAndToString(domainObj2, domainObj1);
 
-    domainObj3 = TestUtils.createNewDomain(clazz, 1L);
-    TestUtils.checkEqualHashAndToString(domainObj1, domainObj3);
+    domainObj2 = TestUtils.createNewDomain(clazz, 2L);
+    TestUtils.checkNotEqualHashAndToString(domainObj1, domainObj2);
+
+    domainObj2 = TestUtils.createNewDomain(clazz, 1L);
+    TestUtils.checkEqualHashAndToString(domainObj1, domainObj2);
   }
 }

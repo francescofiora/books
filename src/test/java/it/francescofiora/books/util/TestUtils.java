@@ -341,7 +341,7 @@ public final class TestUtils {
   }
 
   /**
-   * assert that obj1 is equal to obj2 and also their hashCode and ToString.
+   * Assert that obj1 is equal to obj2 and also their hashCode and ToString.
    *
    * @param obj1 the Object to compare
    * @param obj2 the Object to compare
@@ -353,7 +353,7 @@ public final class TestUtils {
   }
 
   /**
-   * assert that obj1 is not equal to obj2 and also their hashCode and ToString.
+   * Assert that obj1 is not equal to obj2 and also their hashCode and ToString.
    *
    * @param obj1 the Object to compare
    * @param obj2 the Object to compare
@@ -365,28 +365,28 @@ public final class TestUtils {
   }
 
   /**
-   * create new DomainIdentifier.
+   * Create new DomainIdentifier.
    *
    * @param clazz the DomainIdentifier class.
    * @param id the id
-   * @return a new DomainIdentifier Object
+   * @return a new DomainIdentifier
    * @throws Exception if error occurs
    */
-  public static <T> Object createNewDomain(Class<T> clazz, Long id) throws Exception {
+  public static <T> DomainIdentifier createNewDomain(Class<T> clazz, Long id) throws Exception {
     var domainObj = (DomainIdentifier) clazz.getConstructor().newInstance();
     domainObj.setId(id);
     return domainObj;
   }
 
   /**
-   * create new DtoIdentifier.
+   * Create new DtoIdentifier.
    *
-   * @param clazz the DomainIdentifier class.
+   * @param clazz the DtoIdentifier class.
    * @param id the id
-   * @return a new DomainIdentifier Object
+   * @return a new DtoIdentifier
    * @throws Exception if error occurs
    */
-  public static <T> Object createNewDtoIdentifier(Class<T> clazz, Long id) throws Exception {
+  public static <T> DtoIdentifier createNewDtoIdentifier(Class<T> clazz, Long id) throws Exception {
     var dtoObj = (DtoIdentifier) clazz.getConstructor().newInstance();
     dtoObj.setId(id);
     return dtoObj;
