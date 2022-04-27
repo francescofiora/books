@@ -2,7 +2,7 @@
 SpringBoot Rest Api tutorial with OpenApi 3.0 and Mysql.
 Yes, yet another tutorial with "book, author and publisher" as entities.
 
-# Topics covered
+### Topics covered
 - Spring Boot Rest Api
 - SSL connections
 - Swagger UI for visualizing APIs
@@ -14,46 +14,52 @@ Yes, yet another tutorial with "book, author and publisher" as entities.
     - Repositories using DataJpaTest
     - Services using Mockito
     - EndPoints using WebMvcTest
-    - Pojos and Dtos using OpenPojo
+    - POJOs and DTOs using OpenPojo
     - End to End Test with TestRestTemplate
 - JMX
 - Eclipse support
 
 # Getting Started
-## Using Docker to simplify development
-The purpose of this tutorial is a Spring Boot tutorial, however I have added a Dockerfile for MySql and phpMyAdmin to simplify development and manual tests.
+### Using Docker for tests
+There is a docker compose file to run MySql and phpMyAdmin.
 
     cd docker
     ./create_certificate.sh
     docker-compose up
  - phpMyAdmin (http://localhost:8080/)
+
+### Useful Docker command
+
+ - docker exec -it docker_dbbooks.francescofiora.it_1 bash
+
+### Check mysql SSL connection
+    openssl s_client -connect localhost:3306 -tls1_2
+
+### Compile
+    ./gradlew clean build
+
+### Dependency-Check
+    ./gradlew dependencyCheckAnalyze --info
+
+### Pitest
+    ./gradlew pitest
+
+### SonarQube
+Run SonarQube
+
+    docker-compose -f docker/docker-compose-sonar.yml up
+
  - Sonarqube (http://localhost:9000/)
 
 For SonarQube configuration follow this link: [Try Out SonarQube](https://docs.sonarqube.org/latest/setup/get-started-2-minutes/)
 
-## Useful Docker command
+Scan project
 
- - docker exec -it docker_dbbooks.francescofiora.it_1 bash
- - docker exec -it docker_myadmin.francescofiora.it_1 bash
-
-## check mysql SSL connection
-    openssl s_client -connect localhost:3306 -tls1_2
-
-## compile
-    ./gradlew clean build
-
-## Dependency-Check
-    ./gradlew dependencyCheckAnalyze --info
-
-## Pitest
-    ./gradlew pitest
-
-## SonarQube
     ./gradlew sonarqube \
     -Dsonar.projectKey=yourProjectKey \
     -Dsonar.login=yourAuthenticationToken
 
-## reports
+### Reports
     build/reports/checkstyle/main.html
     build/reports/checkstyle/test.html
     build/reports/tests/test/index.html
@@ -67,7 +73,7 @@ For SonarQube configuration follow this link: [Try Out SonarQube](https://docs.s
 - fat jar: java -jar ./build/libs/books-1.0-SNAPSHOT.jar
 - Eclipse: import "Existing Gradle project" and "Run Application"
 
-## Run the application with JMX support (Insecure connection)
+### Run the application with JMX support (Insecure connection)
     java -Dcom.sun.management.jmxremote.port=9999 \
     -Dcom.sun.management.jmxremote.authenticate=false \
     -Dcom.sun.management.jmxremote.ssl=false \
@@ -75,7 +81,7 @@ For SonarQube configuration follow this link: [Try Out SonarQube](https://docs.s
 
     jconsole service:jmx:rmi:///jndi/rmi://localhost:9999/jmxrmi
 
-## Run the application with JMX and SSL support
+### Run the application with JMX and SSL support
     java -Dcom.sun.management.jmxremote.port=9999 \
     -Dcom.sun.management.jmxremote.authenticate=false \
     -Dcom.sun.management.jmxremote.ssl=true \

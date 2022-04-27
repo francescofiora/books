@@ -1,9 +1,9 @@
 #!/bin/bash
-export OPENSSL_SUBJ="/C=IT/ST=Ireland/L=Cork"
+export OPENSSL_SUBJ="/C=IT/ST=Ireland/L=Athlone"
 export ENV OPENSSL_CA="${OPENSSL_SUBJ}/CN=ca.francescofiora.it"
-export ENV OPENSSL_SERVER="${OPENSSL_SUBJ}/CN=dbbooks.francescofiora.it"
-export ENV OPENSSL_MYSQL_CLIENT="${OPENSSL_SUBJ}/CN=dbbooks.francescofiora.it"
-export ENV OPENSSL_MYADMIN_CLIENT="${OPENSSL_SUBJ}/CN=myadmin.francescofiora.it"
+export ENV OPENSSL_SERVER="${OPENSSL_SUBJ}/CN=books-mysql"
+export ENV OPENSSL_MYSQL_CLIENT="${OPENSSL_SUBJ}/CN=books-mysql"
+export ENV OPENSSL_MYADMIN_CLIENT="${OPENSSL_SUBJ}/CN=books-myadmin"
 export ENV OPENSSL_CLIENT="${OPENSSL_SUBJ}/CN=localhost"
 
 # Generate new CA certificate ca.pem file.

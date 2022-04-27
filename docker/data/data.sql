@@ -5,6 +5,9 @@ SET time_zone = "+00:00";
 CREATE DATABASE IF NOT EXISTS `books` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 USE `books`;
 
+CREATE USER 'japp'@'%' IDENTIFIED BY 'secret';
+GRANT SELECT, INSERT, UPDATE, DELETE ON `books`.* TO 'japp'@'%';
+FLUSH PRIVILEGES;
 
 create table author (
        id bigint not null auto_increment,
@@ -41,18 +44,18 @@ create table title_author (
 ALTER TABLE `title` ADD INDEX(`publisher_id`);
 
 alter table title 
-       add constraint FKcy7tb4c5xk6k4axdpvjlaf870 
+       add constraint FK1_title
        foreign key (publisher_id) 
        references publisher (id);
 
 alter table title_author 
-       add constraint FKiwj28xlhljidb17bwomt8uvpc 
+       add constraint FK1_title_author
        foreign key (author_id) 
        references author (id);
        
        
 alter table title_author 
-       add constraint FKb28pyr5do2ek8cgjqc55sh5v3 
+       add constraint FK2_title_author
        foreign key (title_id) 
        references title (id);       
 

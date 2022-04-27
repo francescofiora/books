@@ -20,7 +20,7 @@ spring:
       password: password
   datasource:
     url: jdbc:mysql://localhost:3306/books?verifyServerCertificate=true&useSSL=true&requireSSL=true&clientCertificateKeyStoreUrl=file:./docker/certs/localhost-keystore.jks&clientCertificateKeyStorePassword=mypass&trustCertificateKeyStoreUrl=file:./docker/certs/truststore.ts&trustCertificateKeyStorePassword=mypass
-    username: root
+    username: japp
     password: secret
     hikari:
       connectionTimeout: 30000
