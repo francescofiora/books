@@ -35,6 +35,10 @@ spring:
         format_sql: true
         id:
           new_generator_mappings: false
+  liquibase:
+    user: jadmin
+    password: moresecret
+    change-log: classpath:changelog/db.changelog.sql
 
 endpoints:
   jmx:
