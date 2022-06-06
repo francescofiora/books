@@ -112,6 +112,7 @@ https://localhost:8081/swagger-ui.html
 - [Spring Data JPA](https://projects.spring.io/spring-data-jpa)
 - [Mysql connector 8.0](https://www.mysql.com/products/connector/)
 - [HsqlDb](http://hsqldb.org/)
+- [Liquibase](https://www.liquibase.com/)
 - [LogBack 1.2](https://logback.qos.ch/)
 - [Mockito](https://site.mockito.org/)
 - [JUnit 5](https://junit.org/junit5/)
