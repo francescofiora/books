@@ -44,7 +44,7 @@ public class EndPointFilter implements Filter {
       res.addHeader(X_VERSION, buildProperties.getVersion());
       res.addHeader(X_REQUEST_ID, requestId);
     }
-    
+
     chain.doFilter(request, response);
 
     MDC.put(X_REQUEST_ID, "");
