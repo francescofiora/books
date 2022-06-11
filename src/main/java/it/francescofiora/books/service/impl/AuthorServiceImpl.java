@@ -46,7 +46,8 @@ public class AuthorServiceImpl implements AuthorService {
     var authorOpt = authorRepository.findById(authorDto.getId());
     if (!authorOpt.isPresent()) {
       var id = String.valueOf(authorDto.getId());
-      throw new NotFoundAlertException(ENTITY_NAME, id, ENTITY_NAME + " not found with id " + id);
+      throw new NotFoundAlertException(ENTITY_NAME, id,
+          String.format(NotFoundAlertException.MSG_NOT_FOUND_WITH_ID, ENTITY_NAME, id));
     }
     var author = authorOpt.get();
     authorMapper.updateEntityFromDto(authorDto, author);
@@ -85,7 +86,7 @@ public class AuthorServiceImpl implements AuthorService {
     var authorOpt = authorRepository.findById(id);
     if (!authorOpt.isPresent()) {
       throw new NotFoundAlertException(ENTITY_NAME, String.valueOf(id),
-          "Author Not Found with id " + id);
+          String.format(NotFoundAlertException.MSG_NOT_FOUND_WITH_ID, ENTITY_NAME, id));
     }
     var author = authorOpt.get();
     return new PageImpl<>(

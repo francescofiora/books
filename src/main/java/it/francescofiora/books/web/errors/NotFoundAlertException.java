@@ -8,6 +8,8 @@ import org.springframework.web.server.ResponseStatusException;
  */
 public class NotFoundAlertException extends ResponseStatusException {
 
+  public static final String MSG_NOT_FOUND_WITH_ID = "%s not found with id %s";
+
   private static final long serialVersionUID = 1L;
 
   private final String entityName;

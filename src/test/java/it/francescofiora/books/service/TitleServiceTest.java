@@ -86,8 +86,12 @@ class TitleServiceTest {
     var title = new Title();
     when(titleRepository.findById(ID)).thenReturn(Optional.of(title));
 
-    var titleDto = new UpdatebleTitleDto();
-    titleDto.setId(ID);
+    var titleDto = TestUtils.createUpdatebleTitleDto(ID);
+    when(authorRepository.findById(titleDto.getAuthors().get(0).getId()))
+        .thenReturn(Optional.of(new Author()));
+    when(publisherRepository.findById(titleDto.getPublisher().getId()))
+        .thenReturn(Optional.of(new Publisher()));
+
     titleService.update(titleDto);
     verify(titleMapper).updateEntityFromDto(titleDto, title);
     verify(titleRepository).save(title);

@@ -43,7 +43,8 @@ public class PublisherServiceImpl implements PublisherService {
     var publisherOpt = publisherRepository.findById(publisherDto.getId());
     if (!publisherOpt.isPresent()) {
       final var id = String.valueOf(publisherDto.getId());
-      throw new NotFoundAlertException(ENTITY_NAME, id, ENTITY_NAME + " not found with id " + id);
+      throw new NotFoundAlertException(ENTITY_NAME, id,
+          String.format(NotFoundAlertException.MSG_NOT_FOUND_WITH_ID, ENTITY_NAME, id));
     }
     var publisher = publisherOpt.get();
     publisherMapper.updateEntityFromDto(publisherDto, publisher);
