@@ -18,6 +18,7 @@ import java.util.List;
 import javax.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,6 +58,7 @@ public class TitleApi extends AbstractApi {
       @ApiResponse(responseCode = "400", description = "Invalid input, object invalid"),
       @ApiResponse(responseCode = "409", description = "An existing Title already exists")})
   @PostMapping("/titles")
+  @PreAuthorize(AUTHORIZE_BOOK_UPDATE)
   public ResponseEntity<Void> createTitle(
       @Parameter(description = "Add new Title") @Valid @RequestBody NewTitleDto titleDto)
       throws URISyntaxException {
@@ -79,6 +81,7 @@ public class TitleApi extends AbstractApi {
       @ApiResponse(responseCode = "400", description = "Invalid input, object invalid"),
       @ApiResponse(responseCode = "404", description = "Not found")})
   @PutMapping("/titles/{id}")
+  @PreAuthorize(AUTHORIZE_BOOK_UPDATE)
   public ResponseEntity<Void> updateTitle(
       @Parameter(description = "Title to update") @Valid @RequestBody UpdatebleTitleDto titleDto,
       @Parameter(description = "The id of the title to update", required = true,
@@ -107,6 +110,7 @@ public class TitleApi extends AbstractApi {
               array = @ArraySchema(schema = @Schema(implementation = TitleDto.class)))),
       @ApiResponse(responseCode = "400", description = "Bad input parameter")})
   @GetMapping("/titles")
+  @PreAuthorize(AUTHORIZE_BOOK_READ)
   public ResponseEntity<List<TitleDto>> getAllTitles(Pageable pageable) {
     return getResponse(titleService.findAll(pageable));
   }
@@ -126,6 +130,7 @@ public class TitleApi extends AbstractApi {
       @ApiResponse(responseCode = "400", description = "Bad input parameter"),
       @ApiResponse(responseCode = "404", description = "Not found")})
   @GetMapping("/titles/{id}")
+  @PreAuthorize(AUTHORIZE_BOOK_READ)
   public ResponseEntity<TitleDto> getTitle(@PathVariable Long id) {
     return getResponse(titleService.findOne(id), id);
   }
@@ -141,6 +146,7 @@ public class TitleApi extends AbstractApi {
   @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "Title deleted"),
       @ApiResponse(responseCode = "400", description = "Bad input parameter")})
   @DeleteMapping("/titles/{id}")
+  @PreAuthorize(AUTHORIZE_BOOK_UPDATE)
   public ResponseEntity<Void> deleteTitle(@PathVariable Long id) {
     titleService.delete(id);
     return deleteResponse(id);

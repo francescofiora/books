@@ -14,8 +14,10 @@ class PermissionRepositoryTest extends AbstractTestRepository {
 
   @Test
   void testCrud() throws Exception {
-    var expected1 = UserUtils.createPermissionUserUpdate();
-    var expected2 = UserUtils.createPermissionUserRead();
+    var expected1 =
+        UserUtils.createPermission(UserUtils.OP_USER_UPDATE, UserUtils.OP_USER_UPDATE_DESCR);
+    var expected2 =
+        UserUtils.createPermission(UserUtils.OP_USER_READ, UserUtils.OP_USER_READ_DESCR);
     permissionRepository.save(expected1);
     permissionRepository.save(expected2);
 
@@ -28,7 +30,8 @@ class PermissionRepositoryTest extends AbstractTestRepository {
           .isTrue();
     }
 
-    var expected3 = UserUtils.createPermissionUserUpdate();
+    var expected3 =
+        UserUtils.createPermission(UserUtils.OP_USER_UPDATE, UserUtils.OP_USER_UPDATE_DESCR);
     var permission = permissions.getContent().get(0);
     permission.setName(expected3.getName());
     permission.setDescription(expected3.getDescription());

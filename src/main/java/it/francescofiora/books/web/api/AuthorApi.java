@@ -18,6 +18,7 @@ import java.util.List;
 import javax.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,6 +58,7 @@ public class AuthorApi extends AbstractApi {
       @ApiResponse(responseCode = "400", description = "Invalid input, object invalid"),
       @ApiResponse(responseCode = "409", description = "An existing Author already exists")})
   @PostMapping("/authors")
+  @PreAuthorize(AUTHORIZE_BOOK_UPDATE)
   public ResponseEntity<Void> createAuthor(
       @Parameter(description = "Add new Author") @Valid @RequestBody NewAuthorDto authorDto)
       throws URISyntaxException {
@@ -79,6 +81,7 @@ public class AuthorApi extends AbstractApi {
       @ApiResponse(responseCode = "400", description = "Invalid input, object invalid"),
       @ApiResponse(responseCode = "404", description = "Not found")})
   @PutMapping("/authors/{id}")
+  @PreAuthorize(AUTHORIZE_BOOK_UPDATE)
   public ResponseEntity<Void> updateAuthor(
       @Parameter(description = "Author to update") @Valid @RequestBody AuthorDto authorDto,
       @Parameter(description = "The id of the author to update", required = true,
@@ -107,6 +110,7 @@ public class AuthorApi extends AbstractApi {
               array = @ArraySchema(schema = @Schema(implementation = AuthorDto.class)))),
       @ApiResponse(responseCode = "400", description = "Bad input parameter")})
   @GetMapping("/authors")
+  @PreAuthorize(AUTHORIZE_BOOK_READ)
   public ResponseEntity<List<AuthorDto>> getAllAuthors(Pageable pageable) {
     return getResponse(authorService.findAll(pageable));
   }
@@ -126,6 +130,7 @@ public class AuthorApi extends AbstractApi {
       @ApiResponse(responseCode = "400", description = "Bad input parameter"),
       @ApiResponse(responseCode = "404", description = "Not found")})
   @GetMapping("/authors/{id}")
+  @PreAuthorize(AUTHORIZE_BOOK_READ)
   public ResponseEntity<AuthorDto> getAuthor(@Parameter(description = "The id of the author to get",
       required = true, example = "1") @PathVariable("id") Long id) {
     return getResponse(authorService.findOne(id), id);
@@ -147,6 +152,7 @@ public class AuthorApi extends AbstractApi {
       @ApiResponse(responseCode = "400", description = "Bad input parameter"),
       @ApiResponse(responseCode = "404", description = "Not found")})
   @GetMapping("/authors/{id}/titles")
+  @PreAuthorize(AUTHORIZE_BOOK_READ)
   public ResponseEntity<List<TitleDto>> getTitlesByAuthor(Pageable pageable,
       @Parameter(description = "The id of the author", required = true,
           example = "1") @PathVariable("id") Long id) {
@@ -164,6 +170,7 @@ public class AuthorApi extends AbstractApi {
   @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "Author deleted"),
       @ApiResponse(responseCode = "400", description = "Bad input parameter")})
   @DeleteMapping("/authors/{id}")
+  @PreAuthorize(AUTHORIZE_BOOK_UPDATE)
   public ResponseEntity<Void> deleteAuthor(
       @Parameter(description = "The id of the author to delete", required = true,
           example = "1") @PathVariable Long id) {

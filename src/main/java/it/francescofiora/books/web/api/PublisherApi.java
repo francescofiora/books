@@ -17,6 +17,7 @@ import java.util.List;
 import javax.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -56,6 +57,7 @@ public class PublisherApi extends AbstractApi {
       @ApiResponse(responseCode = "400", description = "Invalid input, object invalid"),
       @ApiResponse(responseCode = "409", description = "An existing Publisher already exists")})
   @PostMapping("/publishers")
+  @PreAuthorize(AUTHORIZE_BOOK_UPDATE)
   public ResponseEntity<Void> createPublisher(
       @Parameter(
           description = "Add new Publisher") @Valid @RequestBody NewPublisherDto publisherDto)
@@ -79,6 +81,7 @@ public class PublisherApi extends AbstractApi {
       @ApiResponse(responseCode = "400", description = "Invalid input, object invalid"),
       @ApiResponse(responseCode = "404", description = "Not found")})
   @PutMapping("/publishers/{id}")
+  @PreAuthorize(AUTHORIZE_BOOK_UPDATE)
   public ResponseEntity<Void> updatePublisher(
       @Parameter(description = "Publisher to update") @Valid @RequestBody PublisherDto publisherDto,
       @Parameter(description = "The id of the publisher to update", required = true,
@@ -108,6 +111,7 @@ public class PublisherApi extends AbstractApi {
               array = @ArraySchema(schema = @Schema(implementation = PublisherDto.class)))),
       @ApiResponse(responseCode = "400", description = "Bad input parameter")})
   @GetMapping("/publishers")
+  @PreAuthorize(AUTHORIZE_BOOK_READ)
   public ResponseEntity<List<PublisherDto>> getAllPublishers(Pageable pageable) {
     return getResponse(publisherService.findAll(pageable));
   }
@@ -127,6 +131,7 @@ public class PublisherApi extends AbstractApi {
       @ApiResponse(responseCode = "400", description = "Bad input parameter"),
       @ApiResponse(responseCode = "404", description = "not found")})
   @GetMapping("/publishers/{id}")
+  @PreAuthorize(AUTHORIZE_BOOK_READ)
   public ResponseEntity<PublisherDto> getPublisher(
       @Parameter(description = "The id of the publisher to get", required = true,
           example = "1") @PathVariable("id") Long id) {
@@ -144,6 +149,7 @@ public class PublisherApi extends AbstractApi {
   @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "Publisher deleted"),
       @ApiResponse(responseCode = "400", description = "Bad input parameter")})
   @DeleteMapping("/publishers/{id}")
+  @PreAuthorize(AUTHORIZE_BOOK_UPDATE)
   public ResponseEntity<Void> deletePublisher(
       @Parameter(description = "The id of the publisher to delete", required = true,
           example = "1") @PathVariable Long id) {

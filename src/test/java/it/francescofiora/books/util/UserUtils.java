@@ -9,6 +9,7 @@ import it.francescofiora.books.service.dto.PermissionDto;
 import it.francescofiora.books.service.dto.RoleDto;
 import it.francescofiora.books.service.dto.UserDto;
 import java.util.Objects;
+import java.util.Random;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -62,60 +63,6 @@ public final class UserUtils {
   public static final String USER = "user";
 
   /**
-   * Create OP_ROLE_UPDATE Permission.
-   *
-   * @return Permission
-   */
-  public static Permission createPermissionRoleUpdate() {
-    return createPermission(OP_ROLE_UPDATE, OP_ROLE_UPDATE_DESCR);
-  }
-
-  /**
-   * Create OP_ROLE_READ Permission.
-   *
-   * @return Permission
-   */
-  public static Permission createPermissionRoleRead() {
-    return createPermission(OP_ROLE_READ, OP_ROLE_READ_DESCR);
-  }
-
-  /**
-   * Create OP_USER_UPDATE Permission.
-   *
-   * @return Permission
-   */
-  public static Permission createPermissionUserUpdate() {
-    return createPermission(OP_USER_UPDATE, OP_USER_UPDATE_DESCR);
-  }
-
-  /**
-   * Create OP_USER_READ Permission.
-   *
-   * @return Permission
-   */
-  public static Permission createPermissionUserRead() {
-    return createPermission(OP_USER_READ, OP_USER_READ_DESCR);
-  }
-
-  /**
-   * Create OP_BOOK_UPDATE Permission.
-   *
-   * @return Permission
-   */
-  public static Permission createPermissionBookUpdate() {
-    return createPermission(OP_BOOK_UPDATE, OP_BOOK_UPDATE_DESCR);
-  }
-
-  /**
-   * Create OP_BOOK_READ Permission.
-   *
-   * @return Permission
-   */
-  public static Permission createPermissionBookRead() {
-    return createPermission(OP_BOOK_READ, OP_BOOK_READ_DESCR);
-  }
-
-  /**
    * Create Permission.
    *
    * @param name the name
@@ -138,8 +85,8 @@ public final class UserUtils {
     var role = new Role();
     role.setName(ROLE_PERMISSION_ADMIN);
     role.setDescription(ROLE_PERMISSION_ADMIN_DESCR);
-    role.getPermissions().add(createPermissionRoleUpdate());
-    role.getPermissions().add(createPermissionRoleRead());
+    role.getPermissions().add(createPermission(OP_ROLE_UPDATE, OP_ROLE_UPDATE_DESCR));
+    role.getPermissions().add(createPermission(OP_ROLE_READ, OP_ROLE_READ_DESCR));
     return role;
   }
 
@@ -152,9 +99,9 @@ public final class UserUtils {
     var role = new Role();
     role.setName(ROLE_USER_ADMIN);
     role.setDescription(ROLE_USER_ADMIN_DESCR);
-    role.getPermissions().add(createPermissionRoleRead());
-    role.getPermissions().add(createPermissionUserUpdate());
-    role.getPermissions().add(createPermissionUserRead());
+    role.getPermissions().add(createPermission(OP_ROLE_READ, OP_ROLE_READ_DESCR));
+    role.getPermissions().add(createPermission(OP_USER_UPDATE, OP_USER_UPDATE_DESCR));
+    role.getPermissions().add(createPermission(OP_USER_READ, OP_USER_READ_DESCR));
     return role;
   }
 
@@ -167,8 +114,8 @@ public final class UserUtils {
     var role = new Role();
     role.setName(ROLE_BOOK_ADMIN);
     role.setDescription(ROLE_BOOK_ADMIN_DESCR);
-    role.getPermissions().add(createPermissionBookUpdate());
-    role.getPermissions().add(createPermissionBookRead());
+    role.getPermissions().add(createPermission(OP_BOOK_UPDATE, OP_BOOK_UPDATE_DESCR));
+    role.getPermissions().add(createPermission(OP_BOOK_READ, OP_BOOK_READ_DESCR));
     return role;
   }
 
@@ -181,7 +128,7 @@ public final class UserUtils {
     var role = new Role();
     role.setName(ROLE_BOOK_READ);
     role.setDescription(ROLE_BOOK_READ_DESCR);
-    role.getPermissions().add(createPermissionBookRead());
+    role.getPermissions().add(createPermission(OP_BOOK_READ, OP_BOOK_READ_DESCR));
     return role;
   }
 
@@ -252,74 +199,6 @@ public final class UserUtils {
   }
 
   /**
-   * Create OP_ROLE_UPDATE PermissionDto.
-   *
-   * @return PermissionDto
-   */
-  public static PermissionDto createPermissionDtoRoleUpdate() {
-    return createPermissionDto(OP_ROLE_UPDATE, OP_ROLE_UPDATE_DESCR);
-  }
-
-  /**
-   * Create OP_ROLE_READ PermissionDto.
-   *
-   * @return PermissionDto
-   */
-  public static PermissionDto createPermissionDtoRoleRead() {
-    return createPermissionDto(OP_ROLE_READ, OP_ROLE_READ_DESCR);
-  }
-
-  /**
-   * Create OP_USER_UPDATE PermissionDto.
-   *
-   * @return PermissionDto
-   */
-  public static PermissionDto createPermissionDtoUserUpdate() {
-    return createPermissionDto(OP_USER_UPDATE, OP_USER_UPDATE_DESCR);
-  }
-
-  /**
-   * Create OP_USER_READ PermissionDto.
-   *
-   * @return PermissionDto
-   */
-  public static PermissionDto createPermissionDtoUserRead() {
-    return createPermissionDto(OP_USER_READ, OP_USER_READ_DESCR);
-  }
-
-  /**
-   * Create OP_BOOK_UPDATE PermissionDto.
-   *
-   * @return PermissionDto
-   */
-  public static PermissionDto createPermissionDtoBookUpdate() {
-    return createPermissionDto(OP_BOOK_UPDATE, OP_BOOK_UPDATE_DESCR);
-  }
-
-  /**
-   * Create OP_BOOK_READ PermissionDto.
-   *
-   * @return PermissionDto
-   */
-  public static PermissionDto createPermissionDtoBookRead() {
-    return createPermissionDto(OP_BOOK_READ, OP_BOOK_READ_DESCR);
-  }
-
-  /**
-   * Create RoleDto.
-   *
-   * @param name the name
-   * @param description the description
-   * @return RoleDto
-   */
-  public static RoleDto createRoleDto(String name, String description) {
-    var role = new RoleDto();
-    role.setName(name);
-    role.setDescription(description);
-    return role;
-  }
-
-  /**
    * Create RoleDto.
    *
    * @param id the id
@@ -333,40 +212,10 @@ public final class UserUtils {
     return role;
   }
 
-  /**
-   * Create ROLE_PERMISSION_ADMIN RoleDto.
-   *
-   * @return RoleDto
-   */
-  public static RoleDto createRoleDtoPermissionAdmin() {
-    return createRoleDto(ROLE_PERMISSION_ADMIN, ROLE_PERMISSION_ADMIN_DESCR);
-  }
-
-  /**
-   * Create ROLE_USER_ADMIN RoleDto.
-   *
-   * @return RoleDto
-   */
-  public static RoleDto createRoleDtoUserAdmin() {
-    return createRoleDto(ROLE_USER_ADMIN, ROLE_USER_ADMIN_DESCR);
-  }
-
-  /**
-   * Create ROLE_BOOK_ADMIN RoleDto.
-   *
-   * @return RoleDto
-   */
-  public static RoleDto createRoleDtoBookAdmin() {
-    return createRoleDto(ROLE_BOOK_ADMIN, ROLE_BOOK_ADMIN_DESCR);
-  }
-
-  /**
-   * Create book_administration RoleDto.
-   *
-   * @return RoleDto
-   */
-  public static RoleDto createRoleDtoBookRead() {
-    return createRoleDto(ROLE_BOOK_READ, ROLE_BOOK_READ_DESCR);
+  private static String generateRandomString(long maxSize) {
+    return new Random().ints(97, 123).limit(maxSize)
+        .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+        .toString();
   }
 
   /**
@@ -375,10 +224,7 @@ public final class UserUtils {
    * @return NewUserDto
    */
   public static NewUserDto createNewUserDto() {
-    var user = new NewUserDto();
-    user.setUsername(USER);
-    user.setPassword(PASSWORD);
-    return user;
+    return createNewUserDto(generateRandomString(8));
   }
 
   /**
@@ -399,42 +245,6 @@ public final class UserUtils {
   }
 
   /**
-   * Create ROLE_ADMIN NewUserDto.
-   *
-   * @return NewUserDto
-   */
-  public static NewUserDto createNewUserDtoRoleAdmin() {
-    return createNewUserDto(ROLE_ADMIN);
-  }
-
-  /**
-   * Create USER_ADMIN NewUserDto.
-   *
-   * @return NewUserDto
-   */
-  public static NewUserDto createNewUserDtoAdmin() {
-    return createNewUserDto(USER_ADMIN);
-  }
-
-  /**
-   * Create BOOK_ADMIN NewUserDto.
-   *
-   * @return NewUserDto
-   */
-  public static NewUserDto createUserDtoBookAdmin() {
-    return createNewUserDto(BOOK_ADMIN);
-  }
-
-  /**
-   * Create bookAdmin NewUserDto.
-   *
-   * @return NewUserDto
-   */
-  public static NewUserDto createNewUserDtoBookReader() {
-    return createNewUserDto(USER);
-  }
-
-  /**
    * Create UserDto.
    *
    * @param id the id
@@ -442,7 +252,7 @@ public final class UserUtils {
    */
   public static UserDto createUserDto(Long id) {
     var user = new UserDto();
-    user.setUsername("user_diff");
+    user.setUsername(generateRandomString(8));
     user.setAccountNonExpired(true);
     user.setAccountNonLocked(true);
     user.setCredentialsNonExpired(true);
@@ -452,26 +262,16 @@ public final class UserUtils {
   }
 
   /**
-   * Create NewRoleDto ROLE_BOOK_ADMIN.
+   * Create NewRoleDto.
    *
+   * @param name the name
+   * @param description the description
    * @return NewRoleDto
    */
-  public static NewRoleDto createNewRoleDto() {
+  public static NewRoleDto createNewRoleDto(String name, String description) {
     var role = new NewRoleDto();
-    role.setName(ROLE_BOOK_ADMIN);
-    role.setDescription(ROLE_BOOK_ADMIN_DESCR);
-    return role;
-  }
-
-  /**
-   * Create NewRoleDto ROLE_BOOK_READ.
-   *
-   * @return NewRoleDto
-   */
-  public static NewRoleDto createNewRoleDtoBookRead() {
-    var role = new NewRoleDto();
-    role.setName(ROLE_BOOK_READ);
-    role.setDescription(ROLE_BOOK_READ_DESCR);
+    role.setName(name);
+    role.setDescription(description);
     return role;
   }
 

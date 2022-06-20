@@ -15,6 +15,20 @@ import org.springframework.http.ResponseEntity;
  */
 public abstract class AbstractApi {
 
+  public static final String OP_ROLE_UPDATE = "OP_ROLE_UPDATE";
+  public static final String OP_ROLE_READ = "OP_ROLE_READ";
+  public static final String OP_USER_UPDATE = "OP_USER_UPDATE";
+  public static final String OP_USER_READ = "OP_USER_READ";
+  public static final String OP_BOOK_UPDATE = "OP_BOOK_UPDATE";
+  public static final String OP_BOOK_READ = "OP_BOOK_READ";
+
+  protected static final String AUTHORIZE_ROLE_UPDATE = "hasAuthority('" + OP_ROLE_UPDATE + "')";
+  protected static final String AUTHORIZE_ROLE_READ = "hasAuthority('" + OP_ROLE_READ + "')";
+  protected static final String AUTHORIZE_USER_UPDATE = "hasAuthority('" + OP_USER_UPDATE + "')";
+  protected static final String AUTHORIZE_USER_READ = "hasAuthority('" + OP_USER_READ + "')";
+  protected static final String AUTHORIZE_BOOK_UPDATE = "hasAuthority('" + OP_BOOK_UPDATE + "')";
+  protected static final String AUTHORIZE_BOOK_READ = "hasAuthority('" + OP_BOOK_READ + "')";
+
   private final String entityName;
 
   protected AbstractApi(String entityName) {
@@ -101,7 +115,7 @@ public abstract class AbstractApi {
             .headers(HeaderUtil.createEntityGetAlert(entityName, String.valueOf(id)))
             .body(response))
         .orElseThrow(() -> new NotFoundAlertException(entityName, String.valueOf(id),
-            entityName + " not found with id " + id));
+            String.format(NotFoundAlertException.MSG_NOT_FOUND_WITH_ID, entityName, id)));
     // @formatter:on
   }
 

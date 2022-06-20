@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import it.francescofiora.books.service.dto.AuthorDto;
 import it.francescofiora.books.util.TestUtils;
+import it.francescofiora.books.util.UserUtils;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,76 +45,87 @@ class AuthorEndToEndTest extends AbstractTestEndToEnd {
   @Test
   void testCreate() throws Exception {
     var newAuthorDto = TestUtils.createNewAuthorDto();
-    var authorId = createAndReturnId(AUTHORS_URI, newAuthorDto, ALERT_CREATED);
+    var authorId =
+        createAndReturnId(UserUtils.BOOK_ADMIN, AUTHORS_URI, newAuthorDto, ALERT_CREATED);
 
     final var authorsIdUri = String.format(AUTHORS_ID_URI, authorId);
 
-    var actual = get(authorsIdUri, AuthorDto.class, ALERT_GET, String.valueOf(authorId));
+    var actual = get(UserUtils.BOOK_ADMIN, authorsIdUri, AuthorDto.class, ALERT_GET,
+        String.valueOf(authorId));
     assertThat(actual.getFirstName()).isEqualTo(newAuthorDto.getFirstName());
     assertThat(actual.getLastName()).isEqualTo(newAuthorDto.getLastName());
 
     var authorDto = TestUtils.createAuthorDto(authorId);
-    update(authorsIdUri, authorDto, ALERT_UPDATED, String.valueOf(authorId));
+    update(UserUtils.BOOK_ADMIN, authorsIdUri, authorDto, ALERT_UPDATED, String.valueOf(authorId));
 
-    actual = get(authorsIdUri, AuthorDto.class, ALERT_GET, String.valueOf(authorId));
+    actual = get(UserUtils.BOOK_ADMIN, authorsIdUri, AuthorDto.class, ALERT_GET,
+        String.valueOf(authorId));
     assertThat(actual).isEqualTo(authorDto);
     assertThat(actual.getFirstName()).isEqualTo(authorDto.getFirstName());
     assertThat(actual.getLastName()).isEqualTo(authorDto.getLastName());
 
-    var authors =
-        get(AUTHORS_URI, PageRequest.of(1, 1), AuthorDto[].class, ALERT_GET, PARAM_PAGE_20);
+    var authors = get(UserUtils.BOOK_ADMIN, AUTHORS_URI, PageRequest.of(1, 1), AuthorDto[].class,
+        ALERT_GET, PARAM_PAGE_20);
     assertThat(authors).isNotEmpty();
     var option = Stream.of(authors).filter(author -> author.getId().equals(authorId)).findAny();
     assertThat(option).isPresent().contains(authorDto);
 
-    delete(authorsIdUri, ALERT_DELETED, String.valueOf(authorId));
+    delete(UserUtils.BOOK_ADMIN, authorsIdUri, ALERT_DELETED, String.valueOf(authorId));
 
-    assertGetNotFound(authorsIdUri, AuthorDto.class, ALERT_NOT_FOUND, String.valueOf(authorId));
+    assertGetNotFound(UserUtils.BOOK_ADMIN, authorsIdUri, AuthorDto.class, ALERT_NOT_FOUND,
+        String.valueOf(authorId));
   }
 
   @Test
   void testGetBadRequest() throws Exception {
-    assertGetBadRequest(AUTHORS_URI + "/999999999999999999999999", String.class, "id.badRequest",
-        PARAM_NOT_VALID_LONG);
+    assertGetBadRequest(UserUtils.BOOK_ADMIN, AUTHORS_URI + "/999999999999999999999999",
+        String.class, "id.badRequest", PARAM_NOT_VALID_LONG);
   }
 
   @Test
   void testUpdateBadRequest() throws Exception {
     // id
-    assertUpdateBadRequest(String.format(AUTHORS_ID_URI, 1L), TestUtils.createAuthorDto(null),
-        ALERT_BAD_REQUEST, PARAM_ID_NOT_NULL);
+    assertUpdateBadRequest(UserUtils.BOOK_ADMIN, String.format(AUTHORS_ID_URI, 1L),
+        TestUtils.createAuthorDto(null), ALERT_BAD_REQUEST, PARAM_ID_NOT_NULL);
 
-    var id = createAndReturnId(AUTHORS_URI, TestUtils.createNewAuthorDto(), ALERT_CREATED);
+    var id = createAndReturnId(UserUtils.BOOK_ADMIN, AUTHORS_URI, TestUtils.createNewAuthorDto(),
+        ALERT_CREATED);
 
-    assertUpdateBadRequest(String.format(AUTHORS_ID_URI, (id + 1)), TestUtils.createAuthorDto(id),
-        ALERT_BAD_REQUEST, String.valueOf(id));
+    assertUpdateBadRequest(UserUtils.BOOK_ADMIN, String.format(AUTHORS_ID_URI, (id + 1)),
+        TestUtils.createAuthorDto(id), ALERT_BAD_REQUEST, String.valueOf(id));
 
     final var path = String.format(AUTHORS_ID_URI, id);
 
     // firstName
     var authorDto = TestUtils.createAuthorDto(id);
     authorDto.setFirstName(null);
-    assertUpdateBadRequest(path, authorDto, ALERT_BAD_REQUEST, PARAM_FIRST_NAME_NOT_BLANK);
+    assertUpdateBadRequest(UserUtils.BOOK_ADMIN, path, authorDto, ALERT_BAD_REQUEST,
+        PARAM_FIRST_NAME_NOT_BLANK);
 
     authorDto = TestUtils.createAuthorDto(id);
     authorDto.setFirstName("");
-    assertUpdateBadRequest(path, authorDto, ALERT_BAD_REQUEST, PARAM_FIRST_NAME_NOT_BLANK);
+    assertUpdateBadRequest(UserUtils.BOOK_ADMIN, path, authorDto, ALERT_BAD_REQUEST,
+        PARAM_FIRST_NAME_NOT_BLANK);
 
     authorDto = TestUtils.createAuthorDto(id);
     authorDto.setFirstName("  ");
-    assertUpdateBadRequest(path, authorDto, ALERT_BAD_REQUEST, PARAM_FIRST_NAME_NOT_BLANK);
+    assertUpdateBadRequest(UserUtils.BOOK_ADMIN, path, authorDto, ALERT_BAD_REQUEST,
+        PARAM_FIRST_NAME_NOT_BLANK);
 
     // lastName
     authorDto = TestUtils.createAuthorDto(id);
     authorDto.setLastName(null);
-    assertUpdateBadRequest(path, authorDto, ALERT_BAD_REQUEST, PARAM_LAST_NAME_NOT_BLANK);
+    assertUpdateBadRequest(UserUtils.BOOK_ADMIN, path, authorDto, ALERT_BAD_REQUEST,
+        PARAM_LAST_NAME_NOT_BLANK);
 
     authorDto = TestUtils.createAuthorDto(id);
     authorDto.setLastName("");
-    assertUpdateBadRequest(path, authorDto, ALERT_BAD_REQUEST, PARAM_LAST_NAME_NOT_BLANK);
+    assertUpdateBadRequest(UserUtils.BOOK_ADMIN, path, authorDto, ALERT_BAD_REQUEST,
+        PARAM_LAST_NAME_NOT_BLANK);
 
     authorDto = TestUtils.createAuthorDto(id);
     authorDto.setLastName("  ");
-    assertUpdateBadRequest(path, authorDto, ALERT_BAD_REQUEST, PARAM_LAST_NAME_NOT_BLANK);
+    assertUpdateBadRequest(UserUtils.BOOK_ADMIN, path, authorDto, ALERT_BAD_REQUEST,
+        PARAM_LAST_NAME_NOT_BLANK);
   }
 }

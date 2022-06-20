@@ -1,5 +1,7 @@
 package it.francescofiora.books.web.api;
 
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -10,12 +12,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import it.francescofiora.books.util.UserUtils;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
@@ -25,17 +30,22 @@ import org.springframework.test.web.servlet.ResultActions;
  */
 public abstract class AbstractTestApi {
 
+  protected static final String USER = "user";
+
   @Autowired
   private MockMvc mvc;
 
   @Autowired
   private ObjectMapper mapper;
 
-  @Value("${spring.security.user.name}")
-  private String user;
+  @MockBean
+  private UserDetailsService userDetailsService;
 
-  @Value("${spring.security.user.password}")
-  private String password;
+  @BeforeEach
+  void setUp() {
+    given(userDetailsService.loadUserByUsername(eq(USER)))
+        .willReturn(UserUtils.createUserBookReader());
+  }
 
   protected String writeValueAsString(Object value) throws JsonProcessingException {
     return mapper.writeValueAsString(value);
@@ -96,7 +106,7 @@ public abstract class AbstractTestApi {
 
   private HttpHeaders createHttpHeaders() {
     var headers = new HttpHeaders();
-    headers.setBasicAuth(user, password);
+    headers.setBasicAuth(USER, UserUtils.PASSWORD);
     return headers;
   }
 }
