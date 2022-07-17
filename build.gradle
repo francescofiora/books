@@ -1,7 +1,7 @@
 plugins {
   id 'java'
   id 'eclipse-wtp'
-  id 'org.springframework.boot' version '2.6.7'
+  id 'org.springframework.boot' version '2.7.1'
   id 'io.spring.dependency-management' version '1.0.11.RELEASE'
   id 'checkstyle'
   id 'jacoco'
@@ -21,6 +21,7 @@ repositories {
 group 'it.francescofiora'
 version '1.0-SNAPSHOT'
 
+def liquibase_version = property('liquibase.version')
 def springdoc_openapi_version = property('springdoc-openapi.version')
 def mapstruct_version = property('mapstruct.version')
 def lombok_version = property('lombok.version')
@@ -35,7 +36,7 @@ dependencies {
   implementation 'org.springframework.boot:spring-boot-starter-validation'
   implementation 'org.springframework.boot:spring-boot-starter-security'
 
-  implementation 'org.liquibase:liquibase-core:4.10.0'
+  implementation "org.liquibase:liquibase-core:${liquibase_version}"
 
   implementation "ch.qos.logback:logback-classic:${logback_version}"
 

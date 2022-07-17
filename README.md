@@ -104,10 +104,10 @@ https://localhost:8081/swagger-ui.html
 # Technologies used
 - [Gradle 7.0](https://gradle.org/)
 - [Java 11](https://openjdk.java.net/projects/jdk/11/)
-- [Spring Boot 2.6](https://spring.io/projects/spring-boot)
+- [Spring Boot 2.7](https://spring.io/projects/spring-boot)
 - [Spring Security](https://spring.io/projects/spring-security)
 - [Swagger OpeApi 3.0](https://swagger.io/specification/)
-- [Mapstruct 1.4](https://mapstruct.org/)
+- [Mapstruct 1.5](https://mapstruct.org/)
 - [Lombok 1.18](https://projectlombok.org/)
 - [Spring Data JPA](https://projects.spring.io/spring-data-jpa)
 - [Mysql connector 8.0](https://www.mysql.com/products/connector/)

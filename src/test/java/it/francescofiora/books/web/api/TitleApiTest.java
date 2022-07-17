@@ -6,6 +6,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import it.francescofiora.books.config.SecurityConfig;
 import it.francescofiora.books.service.TitleService;
 import it.francescofiora.books.service.dto.NewTitleDto;
 import it.francescofiora.books.service.dto.TitleDto;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.autoconfigure.info.ProjectInfoAutoConfiguration;
+import org.springframework.boot.info.BuildProperties;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
@@ -26,7 +27,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-@Import(ProjectInfoAutoConfiguration.class)
+@Import({BuildProperties.class, SecurityConfig.class})
 @WebMvcTest(controllers = TitleApi.class)
 @TestPropertySource(locations = {"classpath:application_test.properties"})
 class TitleApiTest extends AbstractTestApi {
