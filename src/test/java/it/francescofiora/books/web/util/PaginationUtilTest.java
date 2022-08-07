@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.List;
@@ -40,7 +39,7 @@ class PaginationUtilTest {
   @Test
   void testConstructorIsPrivate() throws NoSuchMethodException, IllegalAccessException,
       InvocationTargetException, InstantiationException {
-    Constructor<PaginationUtil> constructor = PaginationUtil.class.getDeclaredConstructor();
+    var constructor = PaginationUtil.class.getDeclaredConstructor();
     assertTrue(Modifier.isPrivate(constructor.getModifiers()));
     constructor.setAccessible(true);
     constructor.newInstance();
