@@ -35,7 +35,3 @@ spring:
     user: jadmin
     password: moresecret
     change-log: classpath:changelog/db.changelog.sql
-
-endpoints:
-  jmx:
-    enabled: true

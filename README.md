@@ -74,7 +74,8 @@ Scan project
 - Eclipse: import "Existing Gradle project" and "Run Application"
 
 ### Run the application with JMX support (Insecure connection)
-    java -Dcom.sun.management.jmxremote.port=9999 \
+    java -Dendpoints.jmx.enabled=true \
+    -Dcom.sun.management.jmxremote.port=9999 \
     -Dcom.sun.management.jmxremote.authenticate=false \
     -Dcom.sun.management.jmxremote.ssl=false \
     -jar ./build/libs/books-1.0-SNAPSHOT.jar
@@ -82,7 +83,8 @@ Scan project
     jconsole service:jmx:rmi:///jndi/rmi://localhost:9999/jmxrmi
 
 ### Run the application with JMX and SSL support
-    java -Dcom.sun.management.jmxremote.port=9999 \
+    java -Dendpoints.jmx.enabled=true \
+    -Dcom.sun.management.jmxremote.port=9999 \
     -Dcom.sun.management.jmxremote.authenticate=false \
     -Dcom.sun.management.jmxremote.ssl=true \
     -Dcom.sun.management.jmxremote.ssl.need.client.auth=false \
