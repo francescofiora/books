@@ -16,25 +16,11 @@ Yes, yet another tutorial with "book, author and publisher" as entities.
     - EndPoints using WebMvcTest
     - POJOs and DTOs using OpenPojo
     - End to End Test with TestRestTemplate
+    - Integration test using TestContainers
 - JMX
 - Eclipse support
 
 # Getting Started
-### Using Docker for tests
-There is a docker compose file to run MySql and phpMyAdmin.
-
-    cd docker
-    ./create_certificate.sh
-    docker-compose up
- - phpMyAdmin (http://localhost:8080/)
-
-### Useful Docker command
-
- - docker exec -it docker_dbbooks.francescofiora.it_1 bash
-
-### Check mysql SSL connection
-    openssl s_client -connect localhost:3306 -tls1_2
-
 ### Compile
     ./gradlew clean build
 
@@ -67,13 +53,18 @@ Scan project
     build/reports/dependency-check-report.html
     build/reports/pitest/index.html
 
+### Using Docker for tests
+There is a docker compose file to run MySql and phpMyAdmin.
+
+    docker-compose -f docker/docker-compose.yml up
+ - phpMyAdmin (http://localhost:8080/)
 
 # How to execute
 - gradle: ./gradlew bootRun
 - fat jar: java -jar ./build/libs/books-1.0-SNAPSHOT.jar
 - Eclipse: import "Existing Gradle project" and "Run Application"
 
-### Run the application with JMX support (Insecure connection)
+### Run the application with JMX support
     java -Dendpoints.jmx.enabled=true \
     -Dcom.sun.management.jmxremote.port=9999 \
     -Dcom.sun.management.jmxremote.authenticate=false \
@@ -82,26 +73,22 @@ Scan project
 
     jconsole service:jmx:rmi:///jndi/rmi://localhost:9999/jmxrmi
 
-### Run the application with JMX and SSL support
-    java -Dendpoints.jmx.enabled=true \
-    -Dcom.sun.management.jmxremote.port=9999 \
-    -Dcom.sun.management.jmxremote.authenticate=false \
-    -Dcom.sun.management.jmxremote.ssl=true \
-    -Dcom.sun.management.jmxremote.ssl.need.client.auth=false \
-    -Djavax.net.ssl.keyStorePassword=mypass \
-    -Djavax.net.ssl.keyStore=./docker/certs/localhost-keystore.jks \
-    -jar ./build/libs/books-1.0-SNAPSHOT.jar
-
-    jconsole -J-Djavax.net.ssl.trustStore=./docker/certs/truststore.ts \
-    -J-Djavax.net.ssl.trustStorePassword=mypass \
-    service:jmx:rmi:///jndi/rmi://localhost:9999/jmxrmi
-
 # API documentation
 https://localhost:8081/swagger-ui.html
 
-# Security
- - HTTPS connection and Basic Authentication with (user/password)
- - JDBC with SSL connection.
+## System Integration Test environment
+
+### Create Docker images
+    ./gradlew jibDockerBuild
+
+### Manual tests - execute all applications with Docker
+
+    docker-compose -f docker/docker-compose-all.yml up
+
+### Integration Test
+
+    cd books-integration-test/
+    ./gradlew clean build
 
 # Technologies used
 - [Gradle 7.0](https://gradle.org/)
@@ -123,3 +110,4 @@ https://localhost:8081/swagger-ui.html
 - [Owasp Dependency Check 6.2](https://owasp.org/www-project-dependency-check/)
 - [Jacoco 0.8](https://www.jacoco.org/)
 - [Pitest 1.7](https://pitest.org/)
+- [TestContainers 1.17](https://www.testcontainers.org/)
