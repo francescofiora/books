@@ -1,11 +1,11 @@
 plugins {
   id 'java'
   id 'eclipse-wtp'
-  id 'org.springframework.boot' version '2.7.3'
-  id 'io.spring.dependency-management' version '1.0.13.RELEASE'
+  id 'org.springframework.boot' version '2.7.5'
+  id 'io.spring.dependency-management' version '1.1.0'
   id 'checkstyle'
   id 'jacoco'
-  id 'org.owasp.dependencycheck' version '6.2.2'
+  id 'org.owasp.dependencycheck' version '7.3.0'
   id 'org.sonarqube' version '3.3'
  }
 
@@ -20,11 +20,9 @@ repositories {
 group 'it.francescofiora'
 version '1.0-SNAPSHOT'
 
-def springdoc_openapi_version = property('springdoc-openapi.version')
 def mysql_connector_version = property('mysql_connector.version')
 def lombok_version = property('lombok.version')
 def logback_version = property('logback.version')
-def openpojo_version = property('openpojo.version')
 def apache_httpclient_version = property('apache-httpclient.version')
 def testcontainers_version = property('testcontainers.version')
 
@@ -36,9 +34,6 @@ dependencies {
   implementation 'org.springframework.boot:spring-boot-starter-security'
 
   implementation "ch.qos.logback:logback-classic:${logback_version}"
-
-  implementation "org.springdoc:springdoc-openapi-ui:${springdoc_openapi_version}"
-  implementation "org.springdoc:springdoc-openapi-data-rest:${springdoc_openapi_version}"
 
   implementation "mysql:mysql-connector-java:${mysql_connector_version}"
 
@@ -53,7 +48,6 @@ dependencies {
 
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
   testImplementation 'org.springframework.security:spring-security-test'
-  testImplementation "com.openpojo:openpojo:$openpojo_version"
   testImplementation "org.projectlombok:lombok:${lombok_version}"
 
   testImplementation "org.testcontainers:junit-jupiter"

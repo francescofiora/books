@@ -107,7 +107,7 @@ https://localhost:8081/swagger-ui.html
 - [JUnit 5](https://junit.org/junit5/)
 - [OpenPojo 0.9](https://github.com/OpenPojo)
 - [CheckStyle 8.44](https://checkstyle.sourceforge.io/)
-- [Owasp Dependency Check 6.2](https://owasp.org/www-project-dependency-check/)
+- [Owasp Dependency Check 7.3](https://owasp.org/www-project-dependency-check/)
 - [Jacoco 0.8](https://www.jacoco.org/)
 - [Pitest 1.7](https://pitest.org/)
 - [TestContainers 1.17](https://www.testcontainers.org/)
