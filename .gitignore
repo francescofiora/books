@@ -1,9 +1,9 @@
-/.project
-/bin/
-/build/
-/.classpath
-/.gradle/
-/.settings/
-/gradle/
+.project
+bin/
+build/
+.classpath
+.gradle/
+.settings/
+gradle/
 /.gitattributes
-/docker/certs/
+

@@ -1,0 +1,15 @@
+[client]
+ssl-ca=/etc/certs/ca.pem
+ssl-cert=/etc/certs/book-mysql-cert.pem
+ssl-key=/etc/certs/book-mysql-key.pem
+
+[mysqld]
+
+bind-address=0.0.0.0
+require_secure_transport=ON
+
+tls_version=TLSv1.2
+
+ssl-ca=/etc/certs/ca.pem
+ssl-cert=/etc/certs/book-mysql-cert.pem
+ssl-key=/etc/certs/book-mysql-key.pem
