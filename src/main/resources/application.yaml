@@ -7,17 +7,17 @@ server:
   error:
     path: error_path
   ssl:
-    key-store: "file:./docker/certs/localhost-keystore.jks"
-    key-store-password: mypass
-    enabled: true
+    key-store: file:${KEYSTORE_FILE:}
+    key-store-password: ${KEYSTORE_PASSWORD:}
+    enabled: ${SSL_ENABLED:false}
 
 spring:
   profiles:
     active: Logging
   datasource:
-    url: jdbc:mysql://localhost:3306/books?verifyServerCertificate=true&useSSL=true&requireSSL=true&clientCertificateKeyStoreUrl=file:./docker/certs/localhost-keystore.jks&clientCertificateKeyStorePassword=mypass&trustCertificateKeyStoreUrl=file:./docker/certs/truststore.ts&trustCertificateKeyStorePassword=mypass
-    username: japp
-    password: secret
+    url: ${DATASOURCE_URL:jdbc:mysql://localhost:3306/books}
+    username: ${DATASOURCE_USERNAME:japp}
+    password: ${DATASOURCE_PASSWORD:secret}
     hikari:
       connectionTimeout: 30000
       idleTimeout: 600000
@@ -27,11 +27,11 @@ spring:
   jpa:
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
+        dialect: ${HIBERNATE_DIALECT:org.hibernate.dialect.MySQLDialect}
         format_sql: true
         id:
           new_generator_mappings: false
   liquibase:
-    user: jadmin
-    password: moresecret
+    user: ${DATASOURCE_ADMIN_USERNAME:jadmin}
+    password: ${DATASOURCE_ADMIN_PASSWORD:moresecret}
     change-log: classpath:changelog/db.changelog.sql
