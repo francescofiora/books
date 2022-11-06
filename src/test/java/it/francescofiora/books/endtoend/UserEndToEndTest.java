@@ -22,8 +22,8 @@ class UserEndToEndTest extends AbstractTestEndToEnd {
 
   private static final Long ID_NOT_FOUND = 100L;
 
-  private static final String USERS_URI = "/books/api/v1/users";
-  private static final String USERS_ID_URI = "/books/api/v1/users/%d";
+  private static final String USERS_URI = "/api/v1/users";
+  private static final String USERS_ID_URI = "/api/v1/users/%d";
 
   private static final String ALERT_CREATED = "UserDto.created";
   private static final String ALERT_UPDATED = "UserDto.updated";

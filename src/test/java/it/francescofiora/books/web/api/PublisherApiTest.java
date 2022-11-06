@@ -33,9 +33,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 class PublisherApiTest extends AbstractTestApi {
 
   private static final Long ID = 1L;
-  private static final String PUBLISHERS_URI = "/books/api/v1/publishers";
-  private static final String PUBLISHERS_ID_URI = "/books/api/v1/publishers/{id}";
-  private static final String WRONG_URI = "/books/api/v1/wrong";
+  private static final String PUBLISHERS_URI = "/api/v1/publishers";
+  private static final String PUBLISHERS_ID_URI = "/api/v1/publishers/{id}";
+  private static final String WRONG_URI = "/api/v1/wrong";
 
   @MockBean
   private PublisherService publisherService;

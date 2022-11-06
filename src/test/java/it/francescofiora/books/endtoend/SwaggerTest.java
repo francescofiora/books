@@ -24,7 +24,7 @@ class SwaggerTest extends AbstractTestApi {
 
   @Test
   void testSwaggerUiPage() throws Exception {
-    performGet("/swagger-ui/index.html?configUrl=/books/v3/api-docs/swagger-config")
+    performGet("/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config")
         .andExpect(status().isOk()).andExpect(content().string(containsString("Swagger UI")));
   }
 

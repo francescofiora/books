@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @Tag(name = "user", description = "User Rest API")
-@RequestMapping("/books/api/v1")
+@RequestMapping("/api/v1")
 public class UserApi extends AbstractApi {
 
   private static final String ENTITY_NAME = "UserDto";
@@ -62,7 +62,7 @@ public class UserApi extends AbstractApi {
       @Parameter(description = "Add new User") @Valid @RequestBody NewUserDto userDto)
       throws URISyntaxException {
     var result = userService.create(userDto);
-    return postResponse("/books/api/v1/users/" + result.getId(), result.getId());
+    return postResponse("/api/v1/users/" + result.getId(), result.getId());
   }
 
   /**

@@ -26,11 +26,11 @@ public abstract class AbstractTestContainer {
   public static final String DESCRIPTION = "description";
   public static final String PUBLISHER_NAME = "publisherName";
 
-  public static final String PERMISSION_URL = "/books/api/v1/permissions";
-  public static final String ROLE_URL = "/books/api/v1/roles";
-  public static final String AUTHOR_URL = "/books/api/v1/authors";
-  public static final String PUBLISHER_URL = "/books/api/v1/publishers";
-  public static final String TITLE_URL = "/books/api/v1/titles";
+  public static final String PERMISSION_URL = "/api/v1/permissions";
+  public static final String ROLE_URL = "/api/v1/roles";
+  public static final String AUTHOR_URL = "/api/v1/authors";
+  public static final String PUBLISHER_URL = "/api/v1/publishers";
+  public static final String TITLE_URL = "/api/v1/titles";
 
   public static final String ROLE_ADMIN = "roleAdmin";
   public static final String USER_ADMIN = "userAdmin";

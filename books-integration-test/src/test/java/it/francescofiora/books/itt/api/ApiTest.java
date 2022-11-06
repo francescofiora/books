@@ -128,7 +128,7 @@ public class ApiTest extends AbstractTestContainer {
     newUser.put("credentialsNonExpired", true);
     newUser.put("enabled", true);
 
-    return bookApi.createAndReturnId("/books/api/v1/users", newUser.toString());
+    return bookApi.createAndReturnId("/api/v1/users", newUser.toString());
   }
 
   @Test
@@ -243,7 +243,7 @@ public class ApiTest extends AbstractTestContainer {
   public static void endAll() throws Exception {
     bookApi.withUsername(USER_ADMIN).withPassword(PASSWORD);
 
-    var voidResult = bookApi.performDelete("/books/api/v1/users/" + userId);
+    var voidResult = bookApi.performDelete("/api/v1/users/" + userId);
     assertThat(voidResult.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
 
     containers.stopAndCloseAll();

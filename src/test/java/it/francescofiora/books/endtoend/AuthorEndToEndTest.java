@@ -19,8 +19,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @TestPropertySource(locations = {"classpath:application_test.properties"})
 class AuthorEndToEndTest extends AbstractTestEndToEnd {
 
-  private static final String AUTHORS_URI = "/books/api/v1/authors";
-  private static final String AUTHORS_ID_URI = "/books/api/v1/authors/%d";
+  private static final String AUTHORS_URI = "/api/v1/authors";
+  private static final String AUTHORS_ID_URI = "/api/v1/authors/%d";
 
   private static final String ALERT_CREATED = "AuthorDto.created";
   private static final String ALERT_UPDATED = "AuthorDto.updated";

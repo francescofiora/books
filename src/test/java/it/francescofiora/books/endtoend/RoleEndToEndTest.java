@@ -22,8 +22,8 @@ class RoleEndToEndTest extends AbstractTestEndToEnd {
 
   private static final Long ID_NOT_FOUND = 100L;
 
-  private static final String ROLES_URI = "/books/api/v1/roles";
-  private static final String ROLES_ID_URI = "/books/api/v1/roles/%d";
+  private static final String ROLES_URI = "/api/v1/roles";
+  private static final String ROLES_ID_URI = "/api/v1/roles/%d";
 
   private static final String ALERT_CREATED = "RoleDto.created";
   private static final String ALERT_UPDATED = "RoleDto.updated";

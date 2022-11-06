@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @Tag(name = "role", description = "Role Rest API")
-@RequestMapping("/books/api/v1")
+@RequestMapping("/api/v1")
 public class RoleApi extends AbstractApi {
 
   private static final String ENTITY_NAME = "RoleDto";
@@ -85,7 +85,7 @@ public class RoleApi extends AbstractApi {
       @Parameter(description = "Add new Role") @Valid @RequestBody NewRoleDto roleDto)
       throws URISyntaxException {
     var result = roleService.createRole(roleDto);
-    return postResponse("/books/api/v1/roles/" + result.getId(), result.getId());
+    return postResponse("/api/v1/roles/" + result.getId(), result.getId());
   }
 
   /**

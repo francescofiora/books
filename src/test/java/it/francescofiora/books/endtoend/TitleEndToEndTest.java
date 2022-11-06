@@ -20,14 +20,14 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @TestPropertySource(locations = {"classpath:application_test.properties"})
 class TitleEndToEndTest extends AbstractTestEndToEnd {
 
-  private static final String AUTHORS_URI = "/books/api/v1/authors";
-  private static final String AUTHORS_ID_URI = "/books/api/v1/authors/%d";
-  private static final String AUTHORS_TITLES_URI = "/books/api/v1/authors/%d/titles";
-  private static final String PUBLISHERS_URI = "/books/api/v1/publishers";
-  private static final String PUBLISHERS_ID_URI = "/books/api/v1/publishers/%d";
-  private static final String TITLES_URI = "/books/api/v1/titles";
-  private static final String TITLES_ID_URI = "/books/api/v1/titles/%d";
-  private static final String WRONG_URI = "/books/api/v1/wrong";
+  private static final String AUTHORS_URI = "/api/v1/authors";
+  private static final String AUTHORS_ID_URI = "/api/v1/authors/%d";
+  private static final String AUTHORS_TITLES_URI = "/api/v1/authors/%d/titles";
+  private static final String PUBLISHERS_URI = "/api/v1/publishers";
+  private static final String PUBLISHERS_ID_URI = "/api/v1/publishers/%d";
+  private static final String TITLES_URI = "/api/v1/titles";
+  private static final String TITLES_ID_URI = "/api/v1/titles/%d";
+  private static final String WRONG_URI = "/api/v1/wrong";
 
   private static final String AUTHOR_ALERT_CREATED = "AuthorDto.created";
   private static final String PUBLISHER_ALERT_CREATED = "PublisherDto.created";
