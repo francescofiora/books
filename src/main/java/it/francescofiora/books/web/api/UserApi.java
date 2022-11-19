@@ -48,7 +48,6 @@ public class UserApi extends AbstractApi {
    *
    * @param userDto the user to create
    * @return the {@link ResponseEntity} with status {@code 201 (Created)}
-   * @throws URISyntaxException if the Location URI syntax is incorrect
    */
   @Operation(summary = "Add new User", description = "Add a new User to the system",
       tags = {"user"})

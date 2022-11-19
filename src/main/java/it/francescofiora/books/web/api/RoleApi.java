@@ -71,7 +71,6 @@ public class RoleApi extends AbstractApi {
    *
    * @param roleDto the role to create
    * @return the {@link ResponseEntity} with status {@code 201 (Created)}
-   * @throws URISyntaxException if the Location URI syntax is incorrect
    */
   @Operation(summary = "Add new Role", description = "Add a new Role to the system",
       tags = {"role"})

@@ -49,7 +49,6 @@ public class TitleApi extends AbstractApi {
    *
    * @param titleDto the title to create
    * @return the {@link ResponseEntity} with status {@code 201 (Created)}
-   * @throws URISyntaxException if the Location URI syntax is incorrect
    */
   @Operation(summary = "Add new Title", description = "Add a new Title to the system",
       tags = {"title"})

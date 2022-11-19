@@ -48,7 +48,6 @@ public class PublisherApi extends AbstractApi {
    *
    * @param publisherDto the publisher to create
    * @return the {@link ResponseEntity} with status {@code 201 (Created)}
-   * @throws URISyntaxException if the Location URI syntax is incorrect
    */
   @Operation(summary = "Add new Publisher", description = "Add a new Publisher to the system",
       tags = {"publisher"})
