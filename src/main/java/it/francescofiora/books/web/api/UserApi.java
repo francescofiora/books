@@ -12,7 +12,6 @@ import it.francescofiora.books.service.UserService;
 import it.francescofiora.books.service.dto.NewUserDto;
 import it.francescofiora.books.service.dto.UserDto;
 import it.francescofiora.books.web.errors.BadRequestAlertException;
-import java.net.URISyntaxException;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.data.domain.Pageable;
@@ -59,8 +58,7 @@ public class UserApi extends AbstractApi {
   @PostMapping("/users")
   @PreAuthorize(AUTHORIZE_USER_UPDATE)
   public ResponseEntity<Void> createUser(
-      @Parameter(description = "Add new User") @Valid @RequestBody NewUserDto userDto)
-      throws URISyntaxException {
+      @Parameter(description = "Add new User") @Valid @RequestBody NewUserDto userDto) {
     var result = userService.create(userDto);
     return postResponse("/api/v1/users/" + result.getId(), result.getId());
   }

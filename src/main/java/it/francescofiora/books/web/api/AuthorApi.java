@@ -13,7 +13,6 @@ import it.francescofiora.books.service.dto.AuthorDto;
 import it.francescofiora.books.service.dto.NewAuthorDto;
 import it.francescofiora.books.service.dto.TitleDto;
 import it.francescofiora.books.web.errors.BadRequestAlertException;
-import java.net.URISyntaxException;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.data.domain.Pageable;
@@ -50,7 +49,6 @@ public class AuthorApi extends AbstractApi {
    *
    * @param authorDto the author to create
    * @return the {@link ResponseEntity} with status {@code 201 (Created)}
-   * @throws URISyntaxException if the Location URI syntax is incorrect
    */
   @Operation(summary = "Add new Author", description = "Add a new Author to the system",
       tags = {"author"})
@@ -60,8 +58,7 @@ public class AuthorApi extends AbstractApi {
   @PostMapping("/authors")
   @PreAuthorize(AUTHORIZE_BOOK_UPDATE)
   public ResponseEntity<Void> createAuthor(
-      @Parameter(description = "Add new Author") @Valid @RequestBody NewAuthorDto authorDto)
-      throws URISyntaxException {
+      @Parameter(description = "Add new Author") @Valid @RequestBody NewAuthorDto authorDto) {
     var result = authorService.create(authorDto);
     return postResponse("/api/v1/authors/" + result.getId(), result.getId());
   }

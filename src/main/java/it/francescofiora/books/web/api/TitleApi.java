@@ -13,7 +13,6 @@ import it.francescofiora.books.service.dto.NewTitleDto;
 import it.francescofiora.books.service.dto.TitleDto;
 import it.francescofiora.books.service.dto.UpdatebleTitleDto;
 import it.francescofiora.books.web.errors.BadRequestAlertException;
-import java.net.URISyntaxException;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.data.domain.Pageable;
@@ -60,8 +59,7 @@ public class TitleApi extends AbstractApi {
   @PostMapping("/titles")
   @PreAuthorize(AUTHORIZE_BOOK_UPDATE)
   public ResponseEntity<Void> createTitle(
-      @Parameter(description = "Add new Title") @Valid @RequestBody NewTitleDto titleDto)
-      throws URISyntaxException {
+      @Parameter(description = "Add new Title") @Valid @RequestBody NewTitleDto titleDto) {
     var result = titleService.create(titleDto);
     return postResponse("/api/v1/titles/" + result.getId(), result.getId());
   }

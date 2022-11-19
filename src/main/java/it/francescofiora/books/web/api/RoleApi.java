@@ -13,7 +13,6 @@ import it.francescofiora.books.service.dto.NewRoleDto;
 import it.francescofiora.books.service.dto.PermissionDto;
 import it.francescofiora.books.service.dto.RoleDto;
 import it.francescofiora.books.web.errors.BadRequestAlertException;
-import java.net.URISyntaxException;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.data.domain.Pageable;
@@ -82,8 +81,7 @@ public class RoleApi extends AbstractApi {
   @PostMapping("/roles")
   @PreAuthorize(AUTHORIZE_ROLE_UPDATE)
   public ResponseEntity<Void> createRole(
-      @Parameter(description = "Add new Role") @Valid @RequestBody NewRoleDto roleDto)
-      throws URISyntaxException {
+      @Parameter(description = "Add new Role") @Valid @RequestBody NewRoleDto roleDto) {
     var result = roleService.createRole(roleDto);
     return postResponse("/api/v1/roles/" + result.getId(), result.getId());
   }

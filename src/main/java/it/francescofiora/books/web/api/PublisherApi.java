@@ -12,7 +12,6 @@ import it.francescofiora.books.service.PublisherService;
 import it.francescofiora.books.service.dto.NewPublisherDto;
 import it.francescofiora.books.service.dto.PublisherDto;
 import it.francescofiora.books.web.errors.BadRequestAlertException;
-import java.net.URISyntaxException;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.data.domain.Pageable;
@@ -58,10 +57,8 @@ public class PublisherApi extends AbstractApi {
       @ApiResponse(responseCode = "409", description = "An existing Publisher already exists")})
   @PostMapping("/publishers")
   @PreAuthorize(AUTHORIZE_BOOK_UPDATE)
-  public ResponseEntity<Void> createPublisher(
-      @Parameter(
-          description = "Add new Publisher") @Valid @RequestBody NewPublisherDto publisherDto)
-      throws URISyntaxException {
+  public ResponseEntity<Void> createPublisher(@Parameter(
+      description = "Add new Publisher") @Valid @RequestBody NewPublisherDto publisherDto) {
     var result = publisherService.create(publisherDto);
     return postResponse("/api/v1/publishers/" + result.getId(), result.getId());
   }
