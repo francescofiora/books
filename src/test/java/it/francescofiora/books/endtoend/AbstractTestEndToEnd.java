@@ -11,6 +11,7 @@ import it.francescofiora.books.repository.UserRepository;
 import it.francescofiora.books.service.dto.RefPermissionDto;
 import it.francescofiora.books.service.dto.RefRoleDto;
 import it.francescofiora.books.util.UserUtils;
+import it.francescofiora.books.web.api.AbstractApi;
 import it.francescofiora.books.web.util.HeaderUtil;
 import java.net.URI;
 import javax.transaction.Transactional;
@@ -76,7 +77,7 @@ public class AbstractTestEndToEnd {
     return "http://localhost:" + randomServerPort + path;
   }
 
-  protected RefRoleDto getRefRoleDto(String roleName) throws Exception {
+  protected RefRoleDto getRefRoleDto(String roleName) {
     var roleExample = new Role();
     roleExample.setName(roleName);
     var optRole = roleRepository.findOne(Example.of(roleExample));
@@ -89,7 +90,7 @@ public class AbstractTestEndToEnd {
     return refRoleDto;
   }
 
-  protected RefPermissionDto getPermissionDtoBookRead() throws Exception {
+  protected RefPermissionDto getPermissionDtoBookRead() {
     var permissionExample = new Permission();
     permissionExample.setName(UserUtils.OP_BOOK_READ);
     var optPermission = permissionRepository.findOne(Example.of(permissionExample));
@@ -102,7 +103,7 @@ public class AbstractTestEndToEnd {
     return refPermDto;
   }
 
-  protected void testUnauthorized(String path) throws Exception {
+  protected void testUnauthorized(String path) {
     var result = unauthorizedGet(path, String.class);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
 
@@ -110,44 +111,39 @@ public class AbstractTestEndToEnd {
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
   }
 
-  protected <T> ResponseEntity<T> unauthorizedGet(String path, Class<T> responseType)
-      throws Exception {
-    return restTemplate.getForEntity(new URI(getPath(path)), responseType);
+  protected <T> ResponseEntity<T> unauthorizedGet(String path, Class<T> responseType) {
+    return restTemplate.getForEntity(AbstractApi.createUri(getPath(path)), responseType);
   }
 
-  protected <T> ResponseEntity<T> unauthorizedGetWrongUser(String path, Class<T> responseType)
-      throws Exception {
+  protected <T> ResponseEntity<T> unauthorizedGetWrongUser(String path, Class<T> responseType) {
     var headers = new HttpHeaders();
     headers.setBasicAuth("wrong_user", "wrong_password");
     var request = new HttpEntity<>(null, headers);
     return restTemplate.exchange(getPath(path), HttpMethod.GET, request, responseType);
   }
 
-  protected <T> ResponseEntity<T> performGet(String username, String path, Class<T> responseType)
-      throws Exception {
+  protected <T> ResponseEntity<T> performGet(String username, String path, Class<T> responseType) {
     var request = new HttpEntity<>(null, createHttpHeaders(username));
     return restTemplate.exchange(getPath(path), HttpMethod.GET, request, responseType);
   }
 
   protected <T> ResponseEntity<T> performGet(String username, String path, Pageable pageable,
-      Class<T> responseType) throws Exception {
+      Class<T> responseType) {
     var request = new HttpEntity<>(pageable, createHttpHeaders(username));
     return restTemplate.exchange(getPath(path), HttpMethod.GET, request, responseType);
   }
 
-  protected ResponseEntity<Void> performDelete(String username, String path) throws Exception {
+  protected ResponseEntity<Void> performDelete(String username, String path) {
     var request = new HttpEntity<>(null, createHttpHeaders(username));
     return restTemplate.exchange(getPath(path), HttpMethod.DELETE, request, Void.class);
   }
 
-  protected <T> ResponseEntity<Void> performPost(String username, String path, T body)
-      throws Exception {
+  protected <T> ResponseEntity<Void> performPost(String username, String path, T body) {
     var request = new HttpEntity<>(body, createHttpHeaders(username));
-    return restTemplate.postForEntity(new URI(getPath(path)), request, Void.class);
+    return restTemplate.postForEntity(AbstractApi.createUri(getPath(path)), request, Void.class);
   }
 
-  protected <T> ResponseEntity<Void> performPut(String username, String path, T body)
-      throws Exception {
+  protected <T> ResponseEntity<Void> performPut(String username, String path, T body) {
     var request = new HttpEntity<>(body, createHttpHeaders(username));
     return restTemplate.exchange(getPath(path), HttpMethod.PUT, request, Void.class);
   }
@@ -158,8 +154,7 @@ public class AbstractTestEndToEnd {
     assertThat(headers.get(HeaderUtil.X_PARAMS)).contains(param);
   }
 
-  protected <T> Long createAndReturnId(String username, String path, T body, String alert)
-      throws Exception {
+  protected <T> Long createAndReturnId(String username, String path, T body, String alert) {
     var result = performPost(username, path, body);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     assertThat(result.getHeaders()).containsKeys(HeaderUtil.X_ALERT, HttpHeaders.LOCATION,
@@ -172,35 +167,34 @@ public class AbstractTestEndToEnd {
   }
 
   protected <T> void assertCreateNotFound(String username, String path, T body, String alert,
-      String param) throws Exception {
+      String param) {
     var result = performPost(username, path, body);
     checkHeadersError(result.getHeaders(), alert, param);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
   }
 
   protected <T> void assertCreateBadRequest(String username, String path, T body, String alert,
-      String param) throws Exception {
+      String param) {
     var result = performPost(username, path, body);
     checkHeadersError(result.getHeaders(), alert, param);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
   }
 
-  protected <T> void update(String username, String path, T body, String alert, String param)
-      throws Exception {
+  protected <T> void update(String username, String path, T body, String alert, String param) {
     var result = performPut(username, path, body);
     checkHeaders(result.getHeaders(), alert, param);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
   }
 
   protected <T> void assertUpdateNotFound(String username, String path, T body, String alert,
-      String param) throws Exception {
+      String param) {
     var result = performPut(username, path, body);
     checkHeadersError(result.getHeaders(), alert, param);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
   }
 
   protected <T> void assertUpdateBadRequest(String username, String path, T body, String alert,
-      String param) throws Exception {
+      String param) {
     var result = performPut(username, path, body);
     checkHeadersError(result.getHeaders(), alert, param);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
@@ -214,7 +208,7 @@ public class AbstractTestEndToEnd {
   }
 
   protected <T> T get(String username, String path, Class<T> responseType, String alert,
-      String param) throws Exception {
+      String param) {
     var result = performGet(username, path, responseType);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
     checkHeaders(result.getHeaders(), alert, param);
@@ -224,7 +218,7 @@ public class AbstractTestEndToEnd {
   }
 
   protected <T> T get(String username, String path, Pageable pageable, Class<T> responseType,
-      String alert, String param) throws Exception {
+      String alert, String param) {
     var result = performGet(username, path, pageable, responseType);
     checkHeaders(result.getHeaders(), alert, param);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -234,34 +228,33 @@ public class AbstractTestEndToEnd {
   }
 
   protected <T> void assertGetNotFound(String username, String path, Class<T> responseType,
-      String alert, String param) throws Exception {
+      String alert, String param) {
     var result = performGet(username, path, responseType);
     checkHeadersError(result.getHeaders(), alert, param);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
   }
 
   protected <T> void assertGetNotFound(String username, String path, Pageable pageable,
-      Class<T> responseType, String alert, String param) throws Exception {
+      Class<T> responseType, String alert, String param) {
     var result = performGet(username, path, pageable, responseType);
     checkHeadersError(result.getHeaders(), alert, param);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
   }
 
   protected <T> void assertGetBadRequest(String username, String path, Class<T> responseType,
-      String alert, String param) throws Exception {
+      String alert, String param) {
     var result = performGet(username, path, responseType);
     checkHeadersError(result.getHeaders(), alert, param);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
   }
 
-  protected void delete(String username, String path, String alert, String param) throws Exception {
+  protected void delete(String username, String path, String alert, String param) {
     var result = performDelete(username, path);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     checkHeaders(result.getHeaders(), alert, param);
   }
 
-  protected void assertDeleteBadRequest(String username, String path, String alert, String param)
-      throws Exception {
+  protected void assertDeleteBadRequest(String username, String path, String alert, String param) {
     var result = performDelete(username, path);
     checkHeadersError(result.getHeaders(), alert, param);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);

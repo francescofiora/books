@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 class ConfigTest {
 
   @Test
-  void testJpaConfiguration() throws Exception {
+  void testJpaConfiguration() {
     assertDoesNotThrow(() -> new JpaConfiguration());
   }
 

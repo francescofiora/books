@@ -37,12 +37,12 @@ class PublisherEndToEndTest extends AbstractTestEndToEnd {
   private static final String PARAM_NAME_NOT_BLANK = "[publisherDto.publisherName - NotBlank]";
 
   @Test
-  void testAuth() throws Exception {
+  void testAuth() {
     testUnauthorized(PUBLISHERS_URI);
   }
 
   @Test
-  void testCreate() throws Exception {
+  void testCreate() {
     var newPublisherDto = TestUtils.createNewPublisherDto();
     var publisherId =
         createAndReturnId(UserUtils.BOOK_ADMIN, PUBLISHERS_URI, newPublisherDto, ALERT_CREATED);
@@ -76,13 +76,13 @@ class PublisherEndToEndTest extends AbstractTestEndToEnd {
   }
 
   @Test
-  void testGetBadRequest() throws Exception {
+  void testGetBadRequest() {
     assertGetBadRequest(UserUtils.BOOK_ADMIN, PUBLISHERS_URI + "/999999999999999999999999",
         String.class, "id.badRequest", PARAM_NOT_VALID_LONG);
   }
 
   @Test
-  void testUpdateBadRequest() throws Exception {
+  void testUpdateBadRequest() {
     assertUpdateBadRequest(UserUtils.BOOK_ADMIN, String.format(PUBLISHERS_ID_URI, 1L),
         TestUtils.createPublisherDto(null), ALERT_BAD_REQUEST, PARAM_ID_NOT_NULL);
 

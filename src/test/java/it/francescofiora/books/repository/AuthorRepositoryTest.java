@@ -13,7 +13,7 @@ class AuthorRepositoryTest extends AbstractTestRepository {
   private AuthorRepository authorRepository;
 
   @Test
-  void testCrud() throws Exception {
+  void testCrud() {
     var expected1 = TestUtils.createAuthor1();
     var expected2 = TestUtils.createAuthor2();
     authorRepository.save(expected1);

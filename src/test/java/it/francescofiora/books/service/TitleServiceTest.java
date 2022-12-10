@@ -3,6 +3,7 @@ package it.francescofiora.books.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -21,76 +22,70 @@ import it.francescofiora.books.util.TestUtils;
 import it.francescofiora.books.web.errors.NotFoundAlertException;
 import java.util.List;
 import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 class TitleServiceTest {
 
   private static final Long ID = 1L;
 
-  @MockBean
-  private TitleRepository titleRepository;
-
-  @MockBean
-  private TitleMapper titleMapper;
-
-  @MockBean
-  private AuthorRepository authorRepository;
-
-  @MockBean
-  private PublisherRepository publisherRepository;
-
-  private TitleService titleService;
-
-  @BeforeEach
-  void setUp() {
-    titleService =
-        new TitleServiceImpl(titleRepository, titleMapper, authorRepository, publisherRepository);
-  }
-
   @Test
-  void testCreate() throws Exception {
+  void testCreate() {
     var title = new Title();
+    var titleMapper = mock(TitleMapper.class);
     when(titleMapper.toEntity(any(NewTitleDto.class))).thenReturn(title);
+
+    var titleRepository = mock(TitleRepository.class);
     when(titleRepository.save(any(Title.class))).thenReturn(title);
 
     var expected = new TitleDto();
     when(titleMapper.toDto(any(Title.class))).thenReturn(expected);
 
     var titleDto = TestUtils.createNewTitleDto();
+    var authorRepository = mock(AuthorRepository.class);
     when(authorRepository.findById(titleDto.getAuthors().get(0).getId()))
         .thenReturn(Optional.of(new Author()));
 
+    var publisherRepository = mock(PublisherRepository.class);
     when(publisherRepository.findById(titleDto.getPublisher().getId()))
         .thenReturn(Optional.of(new Publisher()));
+
+    var titleService =
+        new TitleServiceImpl(titleRepository, titleMapper, authorRepository, publisherRepository);
 
     var actual = titleService.create(titleDto);
     assertThat(actual).isEqualTo(expected);
   }
 
   @Test
-  void testUpdateNotFound() throws Exception {
+  void testUpdateNotFound() {
     var titleDto = new UpdatebleTitleDto();
+    var titleService = new TitleServiceImpl(mock(TitleRepository.class), mock(TitleMapper.class),
+        mock(AuthorRepository.class), mock(PublisherRepository.class));
+
     assertThrows(NotFoundAlertException.class, () -> titleService.update(titleDto));
   }
 
   @Test
-  void testUpdate() throws Exception {
+  void testUpdate() {
     var title = new Title();
+    var titleRepository = mock(TitleRepository.class);
     when(titleRepository.findById(ID)).thenReturn(Optional.of(title));
 
     var titleDto = TestUtils.createUpdatebleTitleDto(ID);
+    var authorRepository = mock(AuthorRepository.class);
     when(authorRepository.findById(titleDto.getAuthors().get(0).getId()))
         .thenReturn(Optional.of(new Author()));
+
+    var publisherRepository = mock(PublisherRepository.class);
     when(publisherRepository.findById(titleDto.getPublisher().getId()))
         .thenReturn(Optional.of(new Publisher()));
+
+    var titleMapper = mock(TitleMapper.class);
+    var titleService =
+        new TitleServiceImpl(titleRepository, titleMapper, authorRepository, publisherRepository);
 
     titleService.update(titleDto);
     verify(titleMapper).updateEntityFromDto(titleDto, title);
@@ -98,30 +93,45 @@ class TitleServiceTest {
   }
 
   @Test
-  void testFindAll() throws Exception {
+  void testFindAll() {
     var title = new Title();
+    var titleRepository = mock(TitleRepository.class);
     when(titleRepository.findAll(any(Pageable.class)))
         .thenReturn(new PageImpl<Title>(List.of(title)));
+
     var expected = new TitleDto();
+    var titleMapper = mock(TitleMapper.class);
     when(titleMapper.toDto(any(Title.class))).thenReturn(expected);
+
     var pageable = PageRequest.of(1, 1);
+    var titleService = new TitleServiceImpl(titleRepository, titleMapper,
+        mock(AuthorRepository.class), mock(PublisherRepository.class));
+
     var page = titleService.findAll(pageable);
     assertThat(page.getContent().get(0)).isEqualTo(expected);
   }
 
   @Test
-  void testFindOneNotFound() throws Exception {
+  void testFindOneNotFound() {
+    var titleService = new TitleServiceImpl(mock(TitleRepository.class), mock(TitleMapper.class),
+        mock(AuthorRepository.class), mock(PublisherRepository.class));
     var titleOpt = titleService.findOne(ID);
     assertThat(titleOpt).isNotPresent();
   }
 
   @Test
-  void testFindOne() throws Exception {
+  void testFindOne() {
     var title = new Title();
     title.setId(ID);
+    var titleRepository = mock(TitleRepository.class);
     when(titleRepository.findById(title.getId())).thenReturn(Optional.of(title));
+
     var expected = new TitleDto();
+    var titleMapper = mock(TitleMapper.class);
     when(titleMapper.toDto(any(Title.class))).thenReturn(expected);
+
+    var titleService = new TitleServiceImpl(titleRepository, titleMapper,
+        mock(AuthorRepository.class), mock(PublisherRepository.class));
 
     var titleOpt = titleService.findOne(ID);
     assertThat(titleOpt).isPresent();
@@ -130,7 +140,10 @@ class TitleServiceTest {
   }
 
   @Test
-  void testDelete() throws Exception {
+  void testDelete() {
+    var titleRepository = mock(TitleRepository.class);
+    var titleService = new TitleServiceImpl(titleRepository, mock(TitleMapper.class),
+        mock(AuthorRepository.class), mock(PublisherRepository.class));
     titleService.delete(ID);
     verify(titleRepository).deleteById(ID);
   }

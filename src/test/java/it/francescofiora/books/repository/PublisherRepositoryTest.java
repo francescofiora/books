@@ -13,7 +13,7 @@ class PublisherRepositoryTest extends AbstractTestRepository {
   private PublisherRepository publisherRepository;
 
   @Test
-  void testCrud() throws Exception {
+  void testCrud() {
     var expected1 = TestUtils.createPublisher1();
     var expected2 = TestUtils.createPublisher2();
     publisherRepository.save(expected1);

@@ -46,12 +46,12 @@ class RoleEndToEndTest extends AbstractTestEndToEnd {
   private static final String PARAM_PERMISSIONS_NOT_NULL = "[roleDto.permissions - NotEmpty]";
 
   @Test
-  void testAuth() throws Exception {
+  void testAuth() {
     testUnauthorized(ROLES_URI);
   }
 
   @Test
-  void testCreateBadRequest() throws Exception {
+  void testCreateBadRequest() {
     var newRoleDto =
         UserUtils.createNewRoleDto(UserUtils.ROLE_BOOK_READ, UserUtils.ROLE_BOOK_READ_DESCR);
     assertCreateBadRequest(UserUtils.ROLE_ADMIN, ROLES_URI, newRoleDto, ALERT_NEW_BAD_REQUEST,
@@ -59,7 +59,7 @@ class RoleEndToEndTest extends AbstractTestEndToEnd {
   }
 
   @Test
-  void testCreateNotFound() throws Exception {
+  void testCreateNotFound() {
     var newRoleDto =
         UserUtils.createNewRoleDto(UserUtils.ROLE_BOOK_READ, UserUtils.ROLE_BOOK_READ_DESCR);
     var refPermDto = new RefPermissionDto();
@@ -70,7 +70,7 @@ class RoleEndToEndTest extends AbstractTestEndToEnd {
   }
 
   @Test
-  void testCreate() throws Exception {
+  void testCreate() {
     var refPermDto = getPermissionDtoBookRead();
 
     var newRoleDto =
@@ -115,13 +115,13 @@ class RoleEndToEndTest extends AbstractTestEndToEnd {
   }
 
   @Test
-  void testGetBadRequest() throws Exception {
+  void testGetBadRequest() {
     assertGetBadRequest(UserUtils.ROLE_ADMIN, ROLES_URI + "/999999999999999999999999", String.class,
         "id.badRequest", PARAM_NOT_VALID_LONG);
   }
 
   @Test
-  void testUpdateBadRequest() throws Exception {
+  void testUpdateBadRequest() {
     var refPermDto = getPermissionDtoBookRead();
 
     // id
@@ -179,7 +179,7 @@ class RoleEndToEndTest extends AbstractTestEndToEnd {
   }
 
   @Test
-  void testDeleteBadRequest() throws Exception {
+  void testDeleteBadRequest() {
     var roles = get(UserUtils.ROLE_ADMIN, ROLES_URI, PageRequest.of(1, 1), RoleDto[].class,
         ALERT_GET, PARAM_PAGE_20);
 

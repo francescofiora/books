@@ -3,6 +3,7 @@ package it.francescofiora.books.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -16,39 +17,22 @@ import it.francescofiora.books.service.mapper.PublisherMapper;
 import it.francescofiora.books.web.errors.NotFoundAlertException;
 import java.util.List;
 import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 class PublisherServiceTest {
 
   private static final Long ID = 1L;
 
-  @MockBean
-  private PublisherRepository publisherRepository;
-
-  @MockBean
-  private TitleRepository titleRepository;
-
-  @MockBean
-  private PublisherMapper publisherMapper;
-
-  private PublisherService publisherService;
-
-  @BeforeEach
-  void setUp() {
-    publisherService =
-        new PublisherServiceImpl(publisherRepository, publisherMapper, titleRepository);
-  }
-
   @Test
-  void testCreate() throws Exception {
+  void testCreate() {
+    var publisherRepository = mock(PublisherRepository.class);
+    var publisherMapper = mock(PublisherMapper.class);
+    var publisherService =
+        new PublisherServiceImpl(publisherRepository, publisherMapper, mock(TitleRepository.class));
+
     var publisher = new Publisher();
     when(publisherMapper.toEntity(any(NewPublisherDto.class))).thenReturn(publisher);
     when(publisherRepository.save(any(Publisher.class))).thenReturn(publisher);
@@ -62,13 +46,21 @@ class PublisherServiceTest {
   }
 
   @Test
-  void testUpdateNotFound() throws Exception {
+  void testUpdateNotFound() {
+    var publisherService = new PublisherServiceImpl(mock(PublisherRepository.class),
+        mock(PublisherMapper.class), mock(TitleRepository.class));
+
     var publisherDto = new PublisherDto();
     assertThrows(NotFoundAlertException.class, () -> publisherService.update(publisherDto));
   }
 
   @Test
-  void testUpdate() throws Exception {
+  void testUpdate() {
+    var publisherRepository = mock(PublisherRepository.class);
+    var publisherMapper = mock(PublisherMapper.class);
+    var publisherService =
+        new PublisherServiceImpl(publisherRepository, publisherMapper, mock(TitleRepository.class));
+
     var publisher = new Publisher();
     when(publisherRepository.findById(ID)).thenReturn(Optional.of(publisher));
 
@@ -80,10 +72,15 @@ class PublisherServiceTest {
   }
 
   @Test
-  void testFindAll() throws Exception {
+  void testFindAll() {
+    var publisherRepository = mock(PublisherRepository.class);
+    var publisherMapper = mock(PublisherMapper.class);
+    var publisherService =
+        new PublisherServiceImpl(publisherRepository, publisherMapper, mock(TitleRepository.class));
+
     var publisher = new Publisher();
     when(publisherRepository.findAll(any(Pageable.class)))
-        .thenReturn(new PageImpl<Publisher>(List.of(publisher)));
+        .thenReturn(new PageImpl<>(List.of(publisher)));
     var expected = new PublisherDto();
     when(publisherMapper.toDto(any(Publisher.class))).thenReturn(expected);
     var pageable = PageRequest.of(1, 1);
@@ -92,18 +89,27 @@ class PublisherServiceTest {
   }
 
   @Test
-  void testFindOneNotFound() throws Exception {
+  void testFindOneNotFound() {
+    var publisherService = new PublisherServiceImpl(mock(PublisherRepository.class),
+        mock(PublisherMapper.class), mock(TitleRepository.class));
+
     var publisherOpt = publisherService.findOne(ID);
     assertThat(publisherOpt).isNotPresent();
   }
 
   @Test
-  void testFindOne() throws Exception {
+  void testFindOne() {
     var publisher = new Publisher();
     publisher.setId(ID);
+    var publisherRepository = mock(PublisherRepository.class);
     when(publisherRepository.findById(publisher.getId())).thenReturn(Optional.of(publisher));
+
     var expected = new PublisherDto();
+    var publisherMapper = mock(PublisherMapper.class);
     when(publisherMapper.toDto(any(Publisher.class))).thenReturn(expected);
+
+    var publisherService =
+        new PublisherServiceImpl(publisherRepository, publisherMapper, mock(TitleRepository.class));
 
     var publisherOpt = publisherService.findOne(ID);
     assertThat(publisherOpt).isPresent();
@@ -112,7 +118,11 @@ class PublisherServiceTest {
   }
 
   @Test
-  void testDelete() throws Exception {
+  void testDelete() {
+    var publisherRepository = mock(PublisherRepository.class);
+    var publisherService = new PublisherServiceImpl(publisherRepository,
+        mock(PublisherMapper.class), mock(TitleRepository.class));
+
     publisherService.delete(ID);
     verify(publisherRepository).deleteById(ID);
   }

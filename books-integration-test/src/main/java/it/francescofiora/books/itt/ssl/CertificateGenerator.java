@@ -35,10 +35,8 @@ public class CertificateGenerator {
 
   /**
    * Generate CA Certificate.
-   *
-   * @throws Exception if errors occur
    */
-  public void generateRoot() throws Exception {
+  public void generateRoot() {
     var rootCertkeyPath = getFullPath(ROOT_CERT_KEY);
     exec("openssl genrsa -out " + rootCertkeyPath + " " + KEY_LENGHT);
     setPosixFilePermissions(rootCertkeyPath);
@@ -59,15 +57,13 @@ public class CertificateGenerator {
    * @param name the name of container
    * @param serial the serial number
    * @param createJks if true generate the JKS file
-   * @throws Exception if errors occur
    */
-  public void generateSignedCertificate(String name, String serial, boolean createJks)
-      throws Exception {
+  public void generateSignedCertificate(String name, String serial, boolean createJks) {
     var keyStorePath = getFullPathFormatted(KEY_STORE_FILE, name);
     var reqPath = getFullPathFormatted(REQ_FILE, name);
     exec("openssl req -newkey rsa:" + KEY_LENGHT + " -days " + DAYS
-        + " -nodes -subj \"/C=IE/ST=Ireland/CN=" + name + "\" -keyout " + keyStorePath
-        + " -out " + reqPath);
+        + " -nodes -subj \"/C=IE/ST=Ireland/CN=" + name + "\" -keyout " + keyStorePath + " -out "
+        + reqPath);
     setPosixFilePermissions(keyStorePath);
     setPosixFilePermissions(reqPath);
 
@@ -119,24 +115,32 @@ public class CertificateGenerator {
     }
   }
 
-  private void exec(String op) throws Exception {
+  private void exec(String op) {
     String[] cmd = {"/bin/sh", "-c", op};
-    var p = Runtime.getRuntime().exec(cmd);
-    while (p.isAlive()) {
+    Process p;
+    try {
+      p = Runtime.getRuntime().exec(cmd);
+      while (p.isAlive()) {
+      }
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
   }
 
-  private void setPosixFilePermissions(String path) throws Exception {
-    Files.setPosixFilePermissions(Path.of(path), KEY_PERMISSIONS);
+  private void setPosixFilePermissions(String path) {
+    try {
+      Files.setPosixFilePermissions(Path.of(path), KEY_PERMISSIONS);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   /**
    * Append keyStore file and Certificate file to new Certificate File.
    *
    * @param name the container name
-   * @throws Exception if errors occur
    */
-  public void appendCertificate(String name) throws Exception {
+  public void appendCertificate(String name) {
     var keyStorePath = getFullPathFormatted(KEY_STORE_FILE, name);
     var certPath = getFullPathFormatted(CERT_FILE, name);
     var pemPath = getFullPathFormatted(PEM_FILE, name);

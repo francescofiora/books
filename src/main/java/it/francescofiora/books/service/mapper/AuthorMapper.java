@@ -28,19 +28,4 @@ public interface AuthorMapper {
   @Mapping(target = "lastName", ignore = true)
   @Mapping(target = "titles", ignore = true)
   Author toEntity(RefAuthorDto dto);
-
-  /**
-   * Create Author from id.
-   *
-   * @param id id
-   * @return Author
-   */
-  default Author fromId(Long id) {
-    if (id == null) {
-      return null;
-    }
-    var author = new Author();
-    author.setId(id);
-    return author;
-  }
 }

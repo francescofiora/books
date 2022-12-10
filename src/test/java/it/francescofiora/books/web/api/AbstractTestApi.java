@@ -58,7 +58,7 @@ public abstract class AbstractTestApi {
 
   protected ResultActions performPost(String path, Object content) throws Exception {
     // @formatter:off
-    return mvc.perform(post(new URI(path))
+    return mvc.perform(post(AbstractApi.createUri(path))
         .contentType(APPLICATION_JSON)
         .headers(createHttpHeaders())
         .content(writeValueAsString(content)));
@@ -80,7 +80,7 @@ public abstract class AbstractTestApi {
 
   protected ResultActions performGet(String path, Pageable pageable) throws Exception {
     // @formatter:off
-    return mvc.perform(get(new URI(path))
+    return mvc.perform(get(AbstractApi.createUri(path))
         .headers(createHttpHeaders())
         .contentType(APPLICATION_JSON)
         .content(writeValueAsString(pageable)));
@@ -97,7 +97,7 @@ public abstract class AbstractTestApi {
   }
 
   protected ResultActions performGet(String path) throws Exception {
-    return mvc.perform(get(new URI(path)).headers(createHttpHeaders()));
+    return mvc.perform(get(AbstractApi.createUri(path)).headers(createHttpHeaders()));
   }
 
   protected ResultActions performDelete(String path, Long id) throws Exception {

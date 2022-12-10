@@ -1,6 +1,7 @@
 package it.francescofiora.books.itt.container;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import lombok.Getter;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
@@ -57,7 +58,7 @@ public class SpringAplicationContainer extends GenericContainer<SpringAplication
     return http + "://" + getHost() + ":" + getFirstMappedPort() + path;
   }
 
-  public Long createAndReturnId(String path, String jsonBody) throws Exception {
+  public Long createAndReturnId(String path, String jsonBody) {
     var result = performPost(path, jsonBody);
     return getIdFormHttpHeaders(result.getHeaders());
   }
@@ -67,33 +68,41 @@ public class SpringAplicationContainer extends GenericContainer<SpringAplication
     return Long.valueOf(url.substring(url.lastIndexOf('/') + 1));
   }
 
-  public ResponseEntity<String> performGet(String path) throws Exception {
+  public ResponseEntity<String> performGet(String path) {
     var request = new HttpEntity<>(null, createHttpHeaders());
     return rest.exchange(getHttpPath(path), HttpMethod.GET, request, String.class);
   }
 
-  public ResponseEntity<String> performGet(String path, Pageable pageable) throws Exception {
+  public ResponseEntity<String> performGet(String path, Pageable pageable) {
     var request = new HttpEntity<>(pageable, createHttpHeaders());
     return rest.exchange(getHttpPath(path), HttpMethod.GET, request, String.class);
   }
 
-  public ResponseEntity<Void> performDelete(String path) throws Exception {
+  public ResponseEntity<Void> performDelete(String path) {
     var request = new HttpEntity<>(null, createHttpHeaders());
     return rest.exchange(getHttpPath(path), HttpMethod.DELETE, request, Void.class);
   }
 
-  public ResponseEntity<Void> performPost(String path, String jsonBody) throws Exception {
+  public ResponseEntity<Void> performPost(String path, String jsonBody) {
     var request = new HttpEntity<>(jsonBody, createHttpHeaders());
-    return rest.postForEntity(new URI(getHttpPath(path)), request, Void.class);
+    return rest.postForEntity(createUri(getHttpPath(path)), request, Void.class);
   }
 
-  public ResponseEntity<Void> performPatch(String path, String jsonBody) throws Exception {
+  public ResponseEntity<Void> performPatch(String path, String jsonBody) {
     var request = new HttpEntity<>(jsonBody, createHttpHeaders());
     return rest.exchange(getHttpPath(path), HttpMethod.PATCH, request, Void.class);
   }
 
-  public ResponseEntity<Void> performPut(String path, String jsonBody) throws Exception {
+  public ResponseEntity<Void> performPut(String path, String jsonBody) {
     var request = new HttpEntity<>(jsonBody, createHttpHeaders());
     return rest.exchange(getHttpPath(path), HttpMethod.PUT, request, Void.class);
+  }
+
+  private URI createUri(String uri) {
+    try {
+      return new URI(uri);
+    } catch (URISyntaxException e) {
+      throw new RuntimeException(e);
+    }
   }
 }

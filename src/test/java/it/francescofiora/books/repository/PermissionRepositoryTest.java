@@ -13,7 +13,7 @@ class PermissionRepositoryTest extends AbstractTestRepository {
   private PermissionRepository permissionRepository;
 
   @Test
-  void testCrud() throws Exception {
+  void testCrud() {
     var expected1 =
         UserUtils.createPermission(UserUtils.OP_USER_UPDATE, UserUtils.OP_USER_UPDATE_DESCR);
     var expected2 =

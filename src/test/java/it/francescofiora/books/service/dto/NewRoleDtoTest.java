@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 class NewRoleDtoTest {
 
   @Test
-  void dtoEqualsVerifier() throws Exception {
+  void dtoEqualsVerifier() {
     var roleDto1 =
         UserUtils.createNewRoleDto(UserUtils.ROLE_BOOK_ADMIN, UserUtils.ROLE_BOOK_ADMIN_DESCR);
     var roleDto2 = new NewRoleDto();

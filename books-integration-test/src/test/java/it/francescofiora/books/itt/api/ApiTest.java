@@ -10,6 +10,7 @@ import it.francescofiora.books.itt.util.ContainerGenerator;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -22,7 +23,7 @@ import org.testcontainers.containers.output.Slf4jLogConsumer;
  * Api Test.
  */
 @Slf4j
-public class ApiTest extends AbstractTestContainer {
+class ApiTest extends AbstractTestContainer {
 
   private static final String DATASOURCE_URL = "jdbc:mysql://book-mysql:3306/books";
 
@@ -33,11 +34,9 @@ public class ApiTest extends AbstractTestContainer {
 
   /**
    * Configuration before all tests.
-   *
-   * @throws Exception if errors occur
    */
   @BeforeAll
-  public static void init() throws Exception {
+  static void init() throws JSONException {
     var mySql = containerGenerator.createMySqlContainer();
     containers.add(mySql);
 
@@ -59,12 +58,12 @@ public class ApiTest extends AbstractTestContainer {
   }
 
   @Test
-  void testHealth() throws Exception {
+  void testHealth() {
     assertTrue(containers.areRunning());
   }
 
   @Test
-  void testPermission() throws Exception {
+  void testPermission() throws JSONException {
     bookApi.withUsername(ROLE_ADMIN).withPassword(PASSWORD);
 
     var result = bookApi.performGet(PERMISSION_URL);
@@ -73,7 +72,7 @@ public class ApiTest extends AbstractTestContainer {
   }
 
   @Test
-  void testRoleUser() throws Exception {
+  void testRoleUser() throws JSONException {
     bookApi.withUsername(ROLE_ADMIN).withPassword(PASSWORD);
 
     var result = bookApi.performGet(ROLE_URL);
@@ -112,7 +111,7 @@ public class ApiTest extends AbstractTestContainer {
   }
 
   private static Long createUser(String user, String password, List<String> listRole)
-      throws Exception {
+      throws JSONException {
     var result = bookApi.performGet(ROLE_URL);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
     var mapRole = listToMap(new JSONArray(result.getBody()), NAME);
@@ -132,7 +131,7 @@ public class ApiTest extends AbstractTestContainer {
   }
 
   @Test
-  void testAuthor() throws Exception {
+  void testAuthor() throws JSONException {
     bookApi.withUsername(USER_TEST).withPassword(PASSWORD_TEST);
 
     var newAuthor = createAuthor();
@@ -163,7 +162,7 @@ public class ApiTest extends AbstractTestContainer {
   }
 
   @Test
-  void testPublisher() throws Exception {
+  void testPublisher() throws JSONException {
     bookApi.withUsername(USER_TEST).withPassword(PASSWORD_TEST);
 
     var newPublisher = createPublisher();
@@ -193,7 +192,7 @@ public class ApiTest extends AbstractTestContainer {
   }
 
   @Test
-  void testTitle() throws Exception {
+  void testTitle() throws JSONException {
     bookApi.withUsername(USER_TEST).withPassword(PASSWORD_TEST);
 
     var authorId = bookApi.createAndReturnId(AUTHOR_URL, createAuthor().toString());
@@ -236,11 +235,9 @@ public class ApiTest extends AbstractTestContainer {
 
   /**
    * Config at the End of All tests.
-   *
-   * @throws Exception if errors occur
    */
   @AfterAll
-  public static void endAll() throws Exception {
+  static void endAll() {
     bookApi.withUsername(USER_ADMIN).withPassword(PASSWORD);
 
     var voidResult = bookApi.performDelete("/api/v1/users/" + userId);

@@ -50,7 +50,7 @@ class UserEndToEndTest extends AbstractTestEndToEnd {
   private static final String ALERT_ROLE_NOT_FOUND = "RoleDto.notFound";
 
   @Test
-  void testAuth() throws Exception {
+  void testAuth() {
     testUnauthorized(USERS_URI);
   }
 
@@ -61,14 +61,14 @@ class UserEndToEndTest extends AbstractTestEndToEnd {
   }
 
   @Test
-  void testCreateBadRequest() throws Exception {
+  void testCreateBadRequest() {
     var newUserDto = UserUtils.createNewUserDto();
     assertCreateBadRequest(UserUtils.USER_ADMIN, USERS_URI, newUserDto, ALERT_NEW_BAD_REQUEST,
         PARAM_NEW_ROLES_NOT_NULL);
   }
 
   @Test
-  void testCreateNotFound() throws Exception {
+  void testCreateNotFound() {
     var newUserDto = UserUtils.createNewUserDto();
     var refRoleDto = new RefRoleDto();
     refRoleDto.setId(ID_NOT_FOUND);
@@ -78,7 +78,7 @@ class UserEndToEndTest extends AbstractTestEndToEnd {
   }
 
   @Test
-  void testCreate() throws Exception {
+  void testCreate() {
     var refRoleDto = getRefRoleDto(UserUtils.ROLE_BOOK_ADMIN);
 
     var newUserDto = UserUtils.createNewUserDto();
@@ -112,13 +112,13 @@ class UserEndToEndTest extends AbstractTestEndToEnd {
   }
 
   @Test
-  void testGetBadRequest() throws Exception {
+  void testGetBadRequest() {
     assertGetBadRequest(UserUtils.USER_ADMIN, USERS_URI + "/999999999999999999999999", String.class,
         "id.badRequest", PARAM_NOT_VALID_LONG);
   }
 
   @Test
-  void testUpdateBadRequest() throws Exception {
+  void testUpdateBadRequest() {
     var refRoleDto = getRefRoleDto(UserUtils.ROLE_BOOK_ADMIN);
 
     // id

@@ -68,12 +68,12 @@ class TitleEndToEndTest extends AbstractTestEndToEnd {
   private static final String PARAM_NAME_NOT_BLANK = "[updatebleTitleDto.name - NotBlank]";
 
   @Test
-  void testAuth() throws Exception {
+  void testAuth() {
     testUnauthorized(TITLES_URI);
   }
 
   @Test
-  void testCreate() throws Exception {
+  void testCreate() {
     var authorId = createAndReturnId(UserUtils.BOOK_ADMIN, AUTHORS_URI,
         TestUtils.createNewAuthorDto(), AUTHOR_ALERT_CREATED);
 
@@ -159,7 +159,7 @@ class TitleEndToEndTest extends AbstractTestEndToEnd {
   }
 
   @Test
-  void testCreateBadRequest() throws Exception {
+  void testCreateBadRequest() {
     var newTitleDto = TestUtils.createNewSimpleTitleDto();
 
     var authorId = createAndReturnId(UserUtils.BOOK_ADMIN, AUTHORS_URI,
@@ -183,13 +183,13 @@ class TitleEndToEndTest extends AbstractTestEndToEnd {
 
 
   @Test
-  void testGetBadRequest() throws Exception {
+  void testGetBadRequest() {
     assertGetBadRequest(UserUtils.BOOK_ADMIN, TITLES_URI + "/999999999999999999999999",
         String.class, "id.badRequest", PARAM_NOT_VALID_LONG);
   }
 
   @Test
-  void testUpdateBadRequest() throws Exception {
+  void testUpdateBadRequest() {
     // id
     var titleDto = TestUtils.createUpdatebleTitleDto(null);
     assertUpdateBadRequest(UserUtils.BOOK_ADMIN, String.format(TITLES_ID_URI, 1L), titleDto,
@@ -293,7 +293,7 @@ class TitleEndToEndTest extends AbstractTestEndToEnd {
   }
 
   @Test
-  void testWrongUri() throws Exception {
+  void testWrongUri() {
     assertGetNotFound(UserUtils.BOOK_ADMIN, WRONG_URI, String.class, "404 NOT_FOUND", WRONG_URI);
   }
 }

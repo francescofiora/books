@@ -3,6 +3,7 @@ package it.francescofiora.books.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -20,48 +21,25 @@ import it.francescofiora.books.service.mapper.RoleMapper;
 import it.francescofiora.books.web.errors.NotFoundAlertException;
 import java.util.List;
 import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 class RoleServiceTest {
 
   private static final Long ID = 1L;
 
-  @MockBean
-  private PermissionMapper permissionMapper;
-
-  @MockBean
-  private RoleMapper roleMapper;
-
-  @MockBean
-  private UserRepository userRepository;
-
-  @MockBean
-  private PermissionRepository permissionRepository;
-
-  @MockBean
-  private RoleRepository roleRepository;
-
-  private RoleService roleService;
-
-  @BeforeEach
-  void setUp() {
-    roleService = new RoleServiceImpl(permissionMapper, roleMapper, userRepository,
-        permissionRepository, roleRepository);
-  }
-
   @Test
-  void testFindPermissions() throws Exception {
+  void testFindPermissions() {
+    var permissionMapper = mock(PermissionMapper.class);
+    var permissionRepository = mock(PermissionRepository.class);
+    var roleService = new RoleServiceImpl(permissionMapper, mock(RoleMapper.class),
+        mock(UserRepository.class), permissionRepository, mock(RoleRepository.class));
+
     var permission = new Permission();
     when(permissionRepository.findAll(any(Pageable.class)))
-        .thenReturn(new PageImpl<Permission>(List.of(permission)));
+        .thenReturn(new PageImpl<>(List.of(permission)));
     var expected = new PermissionDto();
     when(permissionMapper.toDto(any(Permission.class))).thenReturn(expected);
     var pageable = PageRequest.of(1, 1);
@@ -70,7 +48,12 @@ class RoleServiceTest {
   }
 
   @Test
-  void testCreateRole() throws Exception {
+  void testCreateRole() {
+    var roleMapper = mock(RoleMapper.class);
+    var roleRepository = mock(RoleRepository.class);
+    var roleService = new RoleServiceImpl(mock(PermissionMapper.class), roleMapper,
+        mock(UserRepository.class), mock(PermissionRepository.class), roleRepository);
+
     var role = new Role();
     when(roleMapper.toEntity(any(NewRoleDto.class))).thenReturn(role);
     when(roleRepository.save(any(Role.class))).thenReturn(role);
@@ -84,13 +67,21 @@ class RoleServiceTest {
   }
 
   @Test
-  void testUpdateNotFound() throws Exception {
+  void testUpdateNotFound() {
+    var roleService = new RoleServiceImpl(mock(PermissionMapper.class), mock(RoleMapper.class),
+        mock(UserRepository.class), mock(PermissionRepository.class), mock(RoleRepository.class));
+
     var roleDto = new RoleDto();
     assertThrows(NotFoundAlertException.class, () -> roleService.updateRole(roleDto));
   }
 
   @Test
-  void testUpdate() throws Exception {
+  void testUpdate() {
+    var roleMapper = mock(RoleMapper.class);
+    var roleRepository = mock(RoleRepository.class);
+    var roleService = new RoleServiceImpl(mock(PermissionMapper.class), roleMapper,
+        mock(UserRepository.class), mock(PermissionRepository.class), roleRepository);
+
     var role = new Role();
     when(roleRepository.findById(ID)).thenReturn(Optional.of(role));
 
@@ -102,9 +93,14 @@ class RoleServiceTest {
   }
 
   @Test
-  void testFindAll() throws Exception {
+  void testFindAll() {
+    var roleMapper = mock(RoleMapper.class);
+    var roleRepository = mock(RoleRepository.class);
+    var roleService = new RoleServiceImpl(mock(PermissionMapper.class), roleMapper,
+        mock(UserRepository.class), mock(PermissionRepository.class), roleRepository);
+
     var role = new Role();
-    when(roleRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<Role>(List.of(role)));
+    when(roleRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(List.of(role)));
     var expected = new RoleDto();
     when(roleMapper.toDto(any(Role.class))).thenReturn(expected);
     var pageable = PageRequest.of(1, 1);
@@ -113,18 +109,27 @@ class RoleServiceTest {
   }
 
   @Test
-  void testFindOneNotFound() throws Exception {
+  void testFindOneNotFound() {
+    var roleService = new RoleServiceImpl(mock(PermissionMapper.class), mock(RoleMapper.class),
+        mock(UserRepository.class), mock(PermissionRepository.class), mock(RoleRepository.class));
+
     var roleOpt = roleService.findOneRole(ID);
     assertThat(roleOpt).isNotPresent();
   }
 
   @Test
-  void testFindOne() throws Exception {
+  void testFindOne() {
     var role = new Role();
     role.setId(ID);
+    var roleRepository = mock(RoleRepository.class);
     when(roleRepository.findById(role.getId())).thenReturn(Optional.of(role));
+
     var expected = new RoleDto();
+    var roleMapper = mock(RoleMapper.class);
     when(roleMapper.toDto(any(Role.class))).thenReturn(expected);
+
+    var roleService = new RoleServiceImpl(mock(PermissionMapper.class), roleMapper,
+        mock(UserRepository.class), mock(PermissionRepository.class), roleRepository);
 
     var roleOpt = roleService.findOneRole(ID);
     assertThat(roleOpt).isPresent();
@@ -133,7 +138,11 @@ class RoleServiceTest {
   }
 
   @Test
-  void testDelete() throws Exception {
+  void testDelete() {
+    var roleRepository = mock(RoleRepository.class);
+    var roleService = new RoleServiceImpl(mock(PermissionMapper.class), mock(RoleMapper.class),
+        mock(UserRepository.class), mock(PermissionRepository.class), roleRepository);
+
     roleService.deleteRole(ID);
     verify(roleRepository).deleteById(ID);
   }

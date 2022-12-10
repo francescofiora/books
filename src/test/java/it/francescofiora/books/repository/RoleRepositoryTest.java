@@ -13,7 +13,7 @@ class RoleRepositoryTest extends AbstractTestRepository {
   private RoleRepository roleRepository;
 
   @Test
-  void testCrud() throws Exception {
+  void testCrud() {
     var expected1 = UserUtils.createRoleUserAdmin();
     expected1.getPermissions().forEach(permission -> getEntityManager().persist(permission));
     roleRepository.save(expected1);

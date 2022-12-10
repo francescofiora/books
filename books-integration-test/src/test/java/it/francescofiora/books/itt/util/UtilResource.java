@@ -1,9 +1,11 @@
 package it.francescofiora.books.itt.util;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.junit.jupiter.api.Assertions;
 
 /**
  * Util Resource.
@@ -23,9 +25,20 @@ public final class UtilResource {
     return url.getFile();
   }
 
-  public static String fileToString(final String resourceName) throws Exception {
+  /**
+   * Load file.
+   *
+   * @param resourceName file name
+   * @return the content of the file
+   */
+  public static String loadFile(final String resourceName) {
     var fileName = Path.of(getResourceFile(resourceName));
-    return Files.readString(fileName);
+    try {
+      return Files.readString(fileName);
+    } catch (IOException e) {
+      e.printStackTrace();
+      Assertions.fail();
+      return "";
+    }
   }
-
 }

@@ -17,6 +17,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.ssl.SSLContexts;
 import org.apache.http.ssl.TrustStrategy;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -32,7 +33,7 @@ import org.testcontainers.containers.output.Slf4jLogConsumer;
  * Api Ssl Test.
  */
 @Slf4j
-public class ApiSslTest extends AbstractTestContainer {
+class ApiSslTest extends AbstractTestContainer {
 
   private static final String DATASOURCE_URL = "jdbc:mysql://book-mysql:3306/books?"
       + "verifyServerCertificate=true&useSSL=true&requireSSL=true"
@@ -59,10 +60,9 @@ public class ApiSslTest extends AbstractTestContainer {
   /**
    * Configuration before all tests.
    *
-   * @throws Exception if errors occur
    */
   @BeforeAll
-  public static void init() throws Exception {
+  static void init() throws Exception {
     containerGenerator.useSsl();
 
     var mySql = containerGenerator.createMySqlContainer();
@@ -98,12 +98,12 @@ public class ApiSslTest extends AbstractTestContainer {
   }
 
   @Test
-  void testHealth() throws Exception {
+  void testHealth() {
     assertTrue(containers.areRunning());
   }
 
   @Test
-  void testPermission() throws Exception {
+  void testPermission() throws JSONException {
     bookApi.withUsername(ROLE_ADMIN).withPassword(PASSWORD);
 
     var result = bookApi.performGet(PERMISSION_URL);
@@ -112,7 +112,7 @@ public class ApiSslTest extends AbstractTestContainer {
   }
 
   @Test
-  void testRoleUser() throws Exception {
+  void testRoleUser() throws JSONException {
     bookApi.withUsername(ROLE_ADMIN).withPassword(PASSWORD);
 
     var result = bookApi.performGet(ROLE_URL);
@@ -151,7 +151,7 @@ public class ApiSslTest extends AbstractTestContainer {
   }
 
   private static Long createUser(String user, String password, List<String> listRole)
-      throws Exception {
+      throws JSONException {
     var result = bookApi.performGet(ROLE_URL);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
     var mapRole = listToMap(new JSONArray(result.getBody()), NAME);
@@ -171,7 +171,7 @@ public class ApiSslTest extends AbstractTestContainer {
   }
 
   @Test
-  void testAuthor() throws Exception {
+  void testAuthor() throws JSONException {
     bookApi.withUsername(USER_TEST).withPassword(PASSWORD_TEST);
 
     var newAuthor = createAuthor();
@@ -202,7 +202,7 @@ public class ApiSslTest extends AbstractTestContainer {
   }
 
   @Test
-  void testPublisher() throws Exception {
+  void testPublisher() throws JSONException {
     bookApi.withUsername(USER_TEST).withPassword(PASSWORD_TEST);
 
     var newPublisher = createPublisher();
@@ -232,7 +232,7 @@ public class ApiSslTest extends AbstractTestContainer {
   }
 
   @Test
-  void testTitle() throws Exception {
+  void testTitle() throws JSONException {
     bookApi.withUsername(USER_TEST).withPassword(PASSWORD_TEST);
 
     var authorId = bookApi.createAndReturnId(AUTHOR_URL, createAuthor().toString());
@@ -273,13 +273,8 @@ public class ApiSslTest extends AbstractTestContainer {
         () -> bookApi.performGet(TITLE_URL + "/" + titleId));
   }
 
-  /**
-   * Config at the End of All tests.
-   *
-   * @throws Exception if errors occur
-   */
   @AfterAll
-  public static void endAll() throws Exception {
+  static void endAll() {
     bookApi.withUsername(USER_ADMIN).withPassword(PASSWORD);
 
     var voidResult = bookApi.performDelete("/api/v1/users/" + userId);

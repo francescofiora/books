@@ -23,7 +23,6 @@ class TitleMapperTest {
   @Autowired
   private TitleMapper titleMapper;
 
-
   @Test
   void testEntityFromId() {
     var id = 1L;

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 class NewUserDtoTest {
 
   @Test
-  void dtoEqualsVerifier() throws Exception {
+  void dtoEqualsVerifier() {
     var userDto1 = UserUtils.createNewUserDto(UserUtils.USER);
     var userDto2 = new NewUserDto();
     assertThat(userDto1).isNotEqualTo(userDto2);

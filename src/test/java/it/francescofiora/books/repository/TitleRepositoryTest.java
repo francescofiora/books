@@ -13,7 +13,7 @@ class TitleRepositoryTest extends AbstractTestRepository {
   private TitleRepository titleRepository;
 
   @Test
-  void testCrud() throws Exception {
+  void testCrud() {
     var expected1 = TestUtils.createTitle1();
     expected1.getAuthors().forEach(author -> getEntityManager().persist(author));
     getEntityManager().persist(expected1.getPublisher());

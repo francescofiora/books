@@ -22,7 +22,7 @@ class UserRepositoryTest extends AbstractTestRepository {
   }
 
   @Test
-  void testCrud() throws Exception {
+  void testCrud() {
     var expected1 = UserUtils.createUserRoleAdmin();
     create(expected1);
 

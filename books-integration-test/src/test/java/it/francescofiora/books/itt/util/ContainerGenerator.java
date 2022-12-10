@@ -32,12 +32,10 @@ public class ContainerGenerator {
 
   /**
    * Use Ssl.
-   *
-   * @throws Exception if errors occur
    */
-  public void useSsl() throws Exception {
+  public void useSsl() {
     if (!useSsl) {
-      throw new Exception("useSsl is false");
+      throw new RuntimeException("useSsl is false");
     }
 
     tmpDir = UtilResource.getResourceFile("ssl");

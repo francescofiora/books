@@ -6,27 +6,21 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import it.francescofiora.books.domain.Publisher;
 import it.francescofiora.books.service.dto.NewPublisherDto;
 import it.francescofiora.books.service.dto.RefPublisherDto;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class PublisherMapperTest {
 
-  private PublisherMapper publisherMapper;
-
-  @BeforeEach
-  void setUp() {
-    publisherMapper = new PublisherMapperImpl();
-  }
-
   @Test
   void testEntityFromId() {
     var id = 1L;
+    var publisherMapper = new PublisherMapperImpl();
     assertThat(publisherMapper.fromId(id).getId()).isEqualTo(id);
     assertThat(publisherMapper.fromId(null)).isNull();
   }
 
   @Test
   void testNullObject() {
+    var publisherMapper = new PublisherMapperImpl();
     assertThat(publisherMapper.toDto(null)).isNull();
 
     NewPublisherDto publisherDto = null;
