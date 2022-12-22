@@ -8,22 +8,14 @@ import it.francescofiora.books.service.dto.NewRoleDto;
 import it.francescofiora.books.service.dto.RefRoleDto;
 import it.francescofiora.books.service.dto.RoleDto;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
-@ExtendWith(SpringExtension.class)
-@TestPropertySource(locations = {"classpath:application_test.properties"})
 class RoleMapperTest {
-
-  @Autowired
-  private RoleMapper roleMapper;
 
   @Test
   void testNullObject() {
+    var roleMapper = new RoleMapperImpl();
+    ReflectionTestUtils.setField(roleMapper, "permissionMapper", new PermissionMapperImpl());
     assertThat(roleMapper.toDto(null)).isNull();
 
     NewRoleDto roleDto = null;
@@ -39,6 +31,8 @@ class RoleMapperTest {
   void testToDto() {
     var role = new Role();
     role.setPermissions(null);
+    var roleMapper = new RoleMapperImpl();
+    ReflectionTestUtils.setField(roleMapper, "permissionMapper", new PermissionMapperImpl());
     var roleDto = roleMapper.toDto(role);
     assertThat(roleDto.getPermissions()).isNull();
   }
@@ -48,6 +42,8 @@ class RoleMapperTest {
     var roleDto = new RoleDto();
     var role = new Role();
     role.setPermissions(null);
+    var roleMapper = new RoleMapperImpl();
+    ReflectionTestUtils.setField(roleMapper, "permissionMapper", new PermissionMapperImpl());
     assertDoesNotThrow(() -> roleMapper.updateEntityFromDto(roleDto, role));
     assertThat(role.getPermissions()).isEmpty();
   }
@@ -57,6 +53,8 @@ class RoleMapperTest {
     var roleDto = new RoleDto();
     roleDto.setPermissions(null);
     var role = new Role();
+    var roleMapper = new RoleMapperImpl();
+    ReflectionTestUtils.setField(roleMapper, "permissionMapper", new PermissionMapperImpl());
     assertDoesNotThrow(() -> roleMapper.updateEntityFromDto(roleDto, role));
     assertThat(role.getPermissions()).isNull();
   }
@@ -67,20 +65,9 @@ class RoleMapperTest {
     roleDto.setPermissions(null);
     var role = new Role();
     role.setPermissions(null);
+    var roleMapper = new RoleMapperImpl();
+    ReflectionTestUtils.setField(roleMapper, "permissionMapper", new PermissionMapperImpl());
     assertDoesNotThrow(() -> roleMapper.updateEntityFromDto(roleDto, role));
     assertThat(role.getPermissions()).isNull();
-  }
-
-  @TestConfiguration
-  static class TestContextConfiguration {
-    @Bean
-    RoleMapper roleMapper() {
-      return new RoleMapperImpl();
-    }
-
-    @Bean
-    PermissionMapper permissionMapper() {
-      return new PermissionMapperImpl();
-    }
   }
 }

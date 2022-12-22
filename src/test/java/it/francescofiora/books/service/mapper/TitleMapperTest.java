@@ -2,36 +2,27 @@ package it.francescofiora.books.service.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.mockito.Mockito.mock;
 
 import it.francescofiora.books.domain.Title;
 import it.francescofiora.books.service.dto.RefPublisherDto;
 import it.francescofiora.books.service.dto.UpdatebleTitleDto;
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
-@ExtendWith(SpringExtension.class)
-@TestPropertySource(locations = {"classpath:application_test.properties"})
 class TitleMapperTest {
-
-  @Autowired
-  private TitleMapper titleMapper;
 
   @Test
   void testEntityFromId() {
     var id = 1L;
+    var titleMapper = createTitleMapper();
     assertThat(titleMapper.fromId(id).getId()).isEqualTo(id);
     assertThat(titleMapper.fromId(null)).isNull();
   }
 
   @Test
   void testNullObject() {
+    var titleMapper = createTitleMapper();
     assertThat(titleMapper.toEntity(null)).isNull();
 
     Title title = null;
@@ -47,6 +38,7 @@ class TitleMapperTest {
   void testToDto() {
     var title = new Title();
     title.setAuthors(null);
+    var titleMapper = createTitleMapper();
     var titleDto = titleMapper.toDto(title);
     assertThat(titleDto.getAuthors()).isNull();
   }
@@ -57,6 +49,7 @@ class TitleMapperTest {
     titleDto.setPublisher(new RefPublisherDto());
     var title = new Title();
     title.setAuthors(null);
+    var titleMapper = createTitleMapper();
     assertDoesNotThrow(() -> titleMapper.updateEntityFromDto(titleDto, title));
     assertThat(title.getAuthors()).isEmpty();
   }
@@ -67,6 +60,7 @@ class TitleMapperTest {
     titleDto.setPublisher(new RefPublisherDto());
     titleDto.setAuthors(null);
     var title = new Title();
+    var titleMapper = createTitleMapper();
     assertDoesNotThrow(() -> titleMapper.updateEntityFromDto(titleDto, title));
     assertThat(title.getAuthors()).isNull();
   }
@@ -78,26 +72,15 @@ class TitleMapperTest {
     titleDto.setAuthors(null);
     var title = new Title();
     title.setAuthors(null);
+    var titleMapper = createTitleMapper();
     assertDoesNotThrow(() -> titleMapper.updateEntityFromDto(titleDto, title));
     assertThat(title.getAuthors()).isNull();
   }
 
-  @TestConfiguration
-  static class TestContextConfiguration {
-
-    @Bean
-    TitleMapper titleMapper() {
-      return new TitleMapperImpl();
-    }
-
-    @Bean
-    AuthorMapper authorMapper() {
-      return mock(AuthorMapper.class);
-    }
-
-    @Bean
-    PublisherMapper publisherMapper() {
-      return mock(PublisherMapper.class);
-    }
+  private TitleMapper createTitleMapper() {
+    var titleMapper = new TitleMapperImpl();
+    ReflectionTestUtils.setField(titleMapper, "authorMapper", new AuthorMapperImpl());
+    ReflectionTestUtils.setField(titleMapper, "publisherMapper", new PublisherMapperImpl());
+    return titleMapper;
   }
 }

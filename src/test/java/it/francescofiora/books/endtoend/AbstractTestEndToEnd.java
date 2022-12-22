@@ -13,7 +13,6 @@ import it.francescofiora.books.service.dto.RefRoleDto;
 import it.francescofiora.books.util.UserUtils;
 import it.francescofiora.books.web.api.AbstractApi;
 import it.francescofiora.books.web.util.HeaderUtil;
-import java.net.URI;
 import javax.transaction.Transactional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
