@@ -2,12 +2,11 @@ package it.francescofiora.books.web.errors;
 
 import it.francescofiora.books.web.util.HeaderUtil;
 import java.util.stream.Collectors;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
@@ -29,7 +28,6 @@ public class GlobalControllerExceptionHandler {
    * @return ResponseEntity
    */
   @ExceptionHandler(BadRequestAlertException.class)
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
   public ResponseEntity<Void> handleBadRequest(BadRequestAlertException ex) {
 
     return createBadRequest(HeaderUtil.createFailureAlert(ex.getEntityName() + ALERT_BAD_REQUEST,
@@ -47,7 +45,6 @@ public class GlobalControllerExceptionHandler {
    * @return ResponseEntity
    */
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
   public ResponseEntity<Void> handleArgumentNotValid(MethodArgumentNotValidException ex) {
 
     final var result = ex.getBindingResult();
@@ -74,7 +71,6 @@ public class GlobalControllerExceptionHandler {
    * @return ResponseEntity
    */
   @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
   public ResponseEntity<Void> handleArgumentTypeMismatch(MethodArgumentTypeMismatchException ex) {
 
     final var fieldError = String.format(TYPE_MISMATCH_MESSAGE, ex.getName(),
@@ -92,12 +88,25 @@ public class GlobalControllerExceptionHandler {
    * @return ResponseEntity
    */
   @ExceptionHandler(NotFoundAlertException.class)
-  @ResponseStatus(HttpStatus.NOT_FOUND)
   public ResponseEntity<Void> handleNotFound(NotFoundAlertException ex) {
 
     return ResponseEntity.notFound()
         .headers(HeaderUtil.createFailureAlert(ex.getEntityName() + ALERT_NOT_FOUND,
             ex.getErrorKey(), ex.getMessage()))
         .build();
+  }
+
+
+  /**
+   * Handle Property Reference Exception.
+   *
+   * @param ex PropertyReferenceException
+   * @return ResponseEntity
+   */
+  @ExceptionHandler(PropertyReferenceException.class)
+  public ResponseEntity<Void> handlePropertyReferenceException(PropertyReferenceException ex) {
+
+    return createBadRequest(
+        HeaderUtil.createFailureAlert(ALERT_BAD_REQUEST, ex.getPropertyName(), ex.getMessage()));
   }
 }

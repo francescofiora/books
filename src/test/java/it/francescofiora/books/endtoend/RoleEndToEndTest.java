@@ -2,6 +2,7 @@ package it.francescofiora.books.endtoend;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import it.francescofiora.books.service.dto.PermissionDto;
 import it.francescofiora.books.service.dto.RefPermissionDto;
 import it.francescofiora.books.service.dto.RoleDto;
 import it.francescofiora.books.util.UserUtils;
@@ -24,6 +25,7 @@ class RoleEndToEndTest extends AbstractTestEndToEnd {
 
   private static final String ROLES_URI = "/api/v1/roles";
   private static final String ROLES_ID_URI = "/api/v1/roles/%d";
+  private static final String PERMISSIONS_URI = "/api/v1/permissions";
 
   private static final String ALERT_CREATED = "RoleDto.created";
   private static final String ALERT_UPDATED = "RoleDto.updated";
@@ -67,6 +69,19 @@ class RoleEndToEndTest extends AbstractTestEndToEnd {
     newRoleDto.setPermissions(List.of(refPermDto));
     assertCreateNotFound(UserUtils.ROLE_ADMIN, ROLES_URI, newRoleDto, ALERT_PERMISSION_NOT_FOUND,
         String.valueOf(ID_NOT_FOUND));
+  }
+
+  @Test
+  void testGetPermissions() {
+    var permissions = get(UserUtils.ROLE_ADMIN, PERMISSIONS_URI, PageRequest.of(1, 1),
+        PermissionDto[].class, ALERT_GET, PARAM_PAGE_20);
+    assertThat(permissions).isNotEmpty();
+  }
+
+  @Test
+  void testGetPermissionsBadRequest() {
+    assertGetBadRequest(UserUtils.ROLE_ADMIN, PERMISSIONS_URI + "?sort=badField",
+        PermissionDto[].class, ".badRequest", "badField");
   }
 
   @Test
@@ -187,5 +202,4 @@ class RoleEndToEndTest extends AbstractTestEndToEnd {
     assertDeleteBadRequest(UserUtils.ROLE_ADMIN, rolesIdUri, ALERT_BAD_REQUEST,
         String.valueOf(roles[0].getId()));
   }
-
 }
