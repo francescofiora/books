@@ -52,8 +52,7 @@ public class UserApi extends AbstractApi {
   @Operation(summary = "Add new User", description = "Add a new User to the system",
       tags = {"user"})
   @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "User created"),
-      @ApiResponse(responseCode = "400", description = "Invalid input, object invalid"),
-      @ApiResponse(responseCode = "409", description = "An existing User already exists")})
+      @ApiResponse(responseCode = "400", description = "Invalid input, object invalid")})
   @PostMapping("/users")
   @PreAuthorize(AUTHORIZE_USER_UPDATE)
   public ResponseEntity<Void> createUser(

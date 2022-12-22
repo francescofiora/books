@@ -21,6 +21,20 @@ class ConfigTest {
   }
 
   @Test
+  void testBuildPropertiesConfig() {
+    var buildPropertiesConfig = new BuildPropertiesConfig();
+    var buildProperties = buildPropertiesConfig.buildProperties();
+    assertThat(buildProperties).isNotNull();
+  }
+
+  @Test
+  void testPasswordEncoder() {
+    var securityConfig = new SecurityConfig();
+    var bce = securityConfig.passwordEncoder();
+    assertThat(bce).isNotNull();
+  }
+
+  @Test
   void testOpenApiConfig() {
     var openApi = new OpenApiConfig().customOpenApi();
 

@@ -53,8 +53,7 @@ public class TitleApi extends AbstractApi {
   @Operation(summary = "Add new Title", description = "Add a new Title to the system",
       tags = {"title"})
   @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Title created"),
-      @ApiResponse(responseCode = "400", description = "Invalid input, object invalid"),
-      @ApiResponse(responseCode = "409", description = "An existing Title already exists")})
+      @ApiResponse(responseCode = "400", description = "Invalid input, object invalid")})
   @PostMapping("/titles")
   @PreAuthorize(AUTHORIZE_BOOK_UPDATE)
   public ResponseEntity<Void> createTitle(

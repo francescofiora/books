@@ -52,8 +52,7 @@ public class PublisherApi extends AbstractApi {
   @Operation(summary = "Add new Publisher", description = "Add a new Publisher to the system",
       tags = {"publisher"})
   @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Publisher created"),
-      @ApiResponse(responseCode = "400", description = "Invalid input, object invalid"),
-      @ApiResponse(responseCode = "409", description = "An existing Publisher already exists")})
+      @ApiResponse(responseCode = "400", description = "Invalid input, object invalid")})
   @PostMapping("/publishers")
   @PreAuthorize(AUTHORIZE_BOOK_UPDATE)
   public ResponseEntity<Void> createPublisher(@Parameter(

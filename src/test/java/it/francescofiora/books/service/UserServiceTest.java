@@ -11,6 +11,7 @@ import it.francescofiora.books.domain.User;
 import it.francescofiora.books.repository.RoleRepository;
 import it.francescofiora.books.repository.UserRepository;
 import it.francescofiora.books.service.dto.NewUserDto;
+import it.francescofiora.books.service.dto.RefRoleDto;
 import it.francescofiora.books.service.dto.UserDto;
 import it.francescofiora.books.service.impl.UserServiceImpl;
 import it.francescofiora.books.service.mapper.UserMapper;
@@ -26,6 +27,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 class UserServiceTest {
 
   private static final Long ID = 1L;
+  private static final String SECURE_PWD = "securepwd";
 
   @Test
   void testCreate() {
@@ -39,18 +41,44 @@ class UserServiceTest {
     var expected = new UserDto();
     when(userMapper.toDto(any(User.class))).thenReturn(expected);
 
+    var passwordEncoder = mock(BCryptPasswordEncoder.class);
     var userService = new UserServiceImpl(userMapper, userRepository, mock(RoleRepository.class),
-        mock(BCryptPasswordEncoder.class));
+        passwordEncoder);
 
     var userDto = new NewUserDto();
+    userDto.setPassword(SECURE_PWD);
     var actual = userService.create(userDto);
     assertThat(actual).isEqualTo(expected);
+    verify(passwordEncoder).encode(SECURE_PWD);
+  }
+
+  @Test
+  void testCreateNotFound() {
+    var userDto = new NewUserDto();
+    userDto.getRoles().add(new RefRoleDto());
+    var userService = new UserServiceImpl(mock(UserMapper.class), mock(UserRepository.class),
+        mock(RoleRepository.class), mock(BCryptPasswordEncoder.class));
+    assertThrows(NotFoundAlertException.class, () -> userService.create(userDto));
   }
 
   @Test
   void testUpdateNotFound() {
     var userDto = new UserDto();
     var userService = new UserServiceImpl(mock(UserMapper.class), mock(UserRepository.class),
+        mock(RoleRepository.class), mock(BCryptPasswordEncoder.class));
+    assertThrows(NotFoundAlertException.class, () -> userService.update(userDto));
+  }
+
+  @Test
+  void testUpdateWithRoleNotFound() {
+    var user = new User();
+    var userRepository = mock(UserRepository.class);
+    when(userRepository.findById(ID)).thenReturn(Optional.of(user));
+
+    var userDto = new UserDto();
+    userDto.setId(ID);
+    userDto.getRoles().add(new RefRoleDto());
+    var userService = new UserServiceImpl(mock(UserMapper.class), userRepository,
         mock(RoleRepository.class), mock(BCryptPasswordEncoder.class));
     assertThrows(NotFoundAlertException.class, () -> userService.update(userDto));
   }

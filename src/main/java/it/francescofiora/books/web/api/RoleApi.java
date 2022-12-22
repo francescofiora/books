@@ -75,8 +75,7 @@ public class RoleApi extends AbstractApi {
   @Operation(summary = "Add new Role", description = "Add a new Role to the system",
       tags = {"role"})
   @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Role created"),
-      @ApiResponse(responseCode = "400", description = "Invalid input, object invalid"),
-      @ApiResponse(responseCode = "409", description = "An existing Role already exists")})
+      @ApiResponse(responseCode = "400", description = "Invalid input, object invalid")})
   @PostMapping("/roles")
   @PreAuthorize(AUTHORIZE_ROLE_UPDATE)
   public ResponseEntity<Void> createRole(

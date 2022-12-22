@@ -14,6 +14,7 @@ import it.francescofiora.books.repository.RoleRepository;
 import it.francescofiora.books.repository.UserRepository;
 import it.francescofiora.books.service.dto.NewRoleDto;
 import it.francescofiora.books.service.dto.PermissionDto;
+import it.francescofiora.books.service.dto.RefPermissionDto;
 import it.francescofiora.books.service.dto.RoleDto;
 import it.francescofiora.books.service.impl.RoleServiceImpl;
 import it.francescofiora.books.service.mapper.PermissionMapper;
@@ -72,6 +73,21 @@ class RoleServiceTest {
         mock(UserRepository.class), mock(PermissionRepository.class), mock(RoleRepository.class));
 
     var roleDto = new RoleDto();
+    assertThrows(NotFoundAlertException.class, () -> roleService.updateRole(roleDto));
+  }
+
+  @Test
+  void testUpdateWithPermissionNotFound() {
+    var role = new Role();
+    var roleRepository = mock(RoleRepository.class);
+    when(roleRepository.findById(ID)).thenReturn(Optional.of(role));
+
+    var roleService = new RoleServiceImpl(mock(PermissionMapper.class), mock(RoleMapper.class),
+        mock(UserRepository.class), mock(PermissionRepository.class), roleRepository);
+
+    var roleDto = new RoleDto();
+    roleDto.setId(ID);
+    roleDto.getPermissions().add(new RefPermissionDto());
     assertThrows(NotFoundAlertException.class, () -> roleService.updateRole(roleDto));
   }
 

@@ -53,8 +53,7 @@ public class AuthorApi extends AbstractApi {
   @Operation(summary = "Add new Author", description = "Add a new Author to the system",
       tags = {"author"})
   @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Author created"),
-      @ApiResponse(responseCode = "400", description = "Invalid input, object invalid"),
-      @ApiResponse(responseCode = "409", description = "An existing Author already exists")})
+      @ApiResponse(responseCode = "400", description = "Invalid input, object invalid")})
   @PostMapping("/authors")
   @PreAuthorize(AUTHORIZE_BOOK_UPDATE)
   public ResponseEntity<Void> createAuthor(
