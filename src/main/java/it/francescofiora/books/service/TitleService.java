@@ -30,10 +30,11 @@ public interface TitleService {
   /**
    * Get all the titles.
    *
+   * @param name the name.
    * @param pageable the pagination information.
    * @return the list of entities.
    */
-  Page<TitleDto> findAll(Pageable pageable);
+  Page<TitleDto> findAll(String name, Pageable pageable);
 
   /**
    * Get the "id" title.

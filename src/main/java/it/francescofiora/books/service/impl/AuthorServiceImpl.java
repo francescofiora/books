@@ -1,5 +1,6 @@
 package it.francescofiora.books.service.impl;
 
+import it.francescofiora.books.domain.Author;
 import it.francescofiora.books.repository.AuthorRepository;
 import it.francescofiora.books.service.AuthorService;
 import it.francescofiora.books.service.dto.AuthorDto;
@@ -13,6 +14,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.ExampleMatcher.GenericPropertyMatcher;
+import org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +32,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @AllArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
+
+  private static final GenericPropertyMatcher PROPERTY_MATCHER_DEFAULT =
+      GenericPropertyMatchers.contains().ignoreCase();
 
   private final AuthorRepository authorRepository;
   private final AuthorMapper authorMapper;
@@ -56,9 +64,16 @@ public class AuthorServiceImpl implements AuthorService {
 
   @Override
   @Transactional(readOnly = true)
-  public Page<AuthorDto> findAll(Pageable pageable) {
+  public Page<AuthorDto> findAll(String firstName, String lastName, Pageable pageable) {
     log.debug("Request to get all Authors");
-    return authorRepository.findAll(pageable).map(authorMapper::toDto);
+    var author = new Author();
+    author.setFirstName(firstName);
+    author.setLastName(lastName);
+    var exampleMatcher =
+        ExampleMatcher.matchingAll().withMatcher("firstName", PROPERTY_MATCHER_DEFAULT)
+            .withMatcher("lastName", PROPERTY_MATCHER_DEFAULT);
+    var example = Example.of(author, exampleMatcher);
+    return authorRepository.findAll(example, pageable).map(authorMapper::toDto);
   }
 
   @Override

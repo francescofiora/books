@@ -2,6 +2,7 @@ package it.francescofiora.books.web.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -35,6 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserApi extends AbstractApi {
 
   private static final String ENTITY_NAME = "UserDto";
+  private static final String TAG = "user";
 
   private final UserService userService;
 
@@ -49,8 +52,7 @@ public class UserApi extends AbstractApi {
    * @param userDto the user to create
    * @return the {@link ResponseEntity} with status {@code 201 (Created)}
    */
-  @Operation(summary = "Add new User", description = "Add a new User to the system",
-      tags = {"user"})
+  @Operation(summary = "Add new User", description = "Add a new User to the system", tags = {TAG})
   @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "User created"),
       @ApiResponse(responseCode = "400", description = "Invalid input, object invalid")})
   @PostMapping("/users")
@@ -70,7 +72,7 @@ public class UserApi extends AbstractApi {
    *         {@code 400 (Bad Request)} if the user is not valid, or with status
    *         {@code 500 (Internal Server Error)} if the user couldn't be updated
    */
-  @Operation(summary = "Update User", description = "Update an User to the system", tags = {"user"})
+  @Operation(summary = "Update User", description = "Update an User to the system", tags = {TAG})
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "User updated"),
       @ApiResponse(responseCode = "400", description = "Invalid input, object invalid"),
       @ApiResponse(responseCode = "404", description = "Not found")})
@@ -97,7 +99,7 @@ public class UserApi extends AbstractApi {
   @Operation(summary = "Searches users",
       description = "By passing in the appropriate options, "
           + "you can search for available users in the system",
-      tags = {"user"})
+      tags = {TAG})
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Search results matching criteria",
           content = @Content(
@@ -105,8 +107,12 @@ public class UserApi extends AbstractApi {
       @ApiResponse(responseCode = "400", description = "Bad input parameter")})
   @GetMapping("/users")
   @PreAuthorize(AUTHORIZE_USER_READ)
-  public ResponseEntity<List<UserDto>> getAllUsers(Pageable pageable) {
-    return getResponse(userService.findAll(pageable));
+  public ResponseEntity<List<UserDto>> getAllUsers(
+      @Parameter(description = "User Name", example = "user",
+          in = ParameterIn.QUERY) @RequestParam(required = false) String username,
+      @Parameter(example = "{\n  \"page\": 0,  \"size\": 10}",
+          in = ParameterIn.QUERY) Pageable pageable) {
+    return getResponse(userService.findAll(username, pageable));
   }
 
   /**
@@ -116,8 +122,7 @@ public class UserApi extends AbstractApi {
    * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the user, or with
    *         status {@code 404 (Not Found)}
    */
-  @Operation(summary = "Searches user by 'id'", description = "Searches user by 'id'",
-      tags = {"user"})
+  @Operation(summary = "Searches user by 'id'", description = "Searches user by 'id'", tags = {TAG})
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Search results matching criteria",
           content = @Content(schema = @Schema(implementation = UserDto.class))),
@@ -136,8 +141,7 @@ public class UserApi extends AbstractApi {
    * @param id the id of the userDto to delete
    * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}
    */
-  @Operation(summary = "Delete user by 'id'", description = "Delete an user by 'id'",
-      tags = {"user"})
+  @Operation(summary = "Delete user by 'id'", description = "Delete an user by 'id'", tags = {TAG})
   @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "User deleted"),
       @ApiResponse(responseCode = "400", description = "Bad input parameter")})
   @DeleteMapping("/users/{id}")

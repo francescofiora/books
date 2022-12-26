@@ -2,6 +2,7 @@ package it.francescofiora.books.web.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -36,6 +38,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthorApi extends AbstractApi {
 
   private static final String ENTITY_NAME = "AuthorDto";
+  private static final String TAG = "author";
 
   private final AuthorService authorService;
 
@@ -51,7 +54,7 @@ public class AuthorApi extends AbstractApi {
    * @return the {@link ResponseEntity} with status {@code 201 (Created)}
    */
   @Operation(summary = "Add new Author", description = "Add a new Author to the system",
-      tags = {"author"})
+      tags = {TAG})
   @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Author created"),
       @ApiResponse(responseCode = "400", description = "Invalid input, object invalid")})
   @PostMapping("/authors")
@@ -72,7 +75,7 @@ public class AuthorApi extends AbstractApi {
    *         {@code 500 (Internal Server Error)} if the author couldn't be updated
    */
   @Operation(summary = "Update Author", description = "Update an Author to the system",
-      tags = {"author"})
+      tags = {TAG})
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Author updated"),
       @ApiResponse(responseCode = "400", description = "Invalid input, object invalid"),
       @ApiResponse(responseCode = "404", description = "Not found")})
@@ -99,7 +102,7 @@ public class AuthorApi extends AbstractApi {
   @Operation(summary = "Searches authors",
       description = "By passing in the appropriate options, "
           + "you can search for available authors in the system",
-      tags = {"author"})
+      tags = {TAG})
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Search results matching criteria",
           content = @Content(
@@ -107,8 +110,14 @@ public class AuthorApi extends AbstractApi {
       @ApiResponse(responseCode = "400", description = "Bad input parameter")})
   @GetMapping("/authors")
   @PreAuthorize(AUTHORIZE_BOOK_READ)
-  public ResponseEntity<List<AuthorDto>> getAllAuthors(Pageable pageable) {
-    return getResponse(authorService.findAll(pageable));
+  public ResponseEntity<List<AuthorDto>> getAllAuthors(
+      @Parameter(description = "First Name", example = "John",
+          in = ParameterIn.QUERY) @RequestParam(required = false) String firstName,
+      @Parameter(description = "Last Name", example = "Smith",
+          in = ParameterIn.QUERY) @RequestParam(required = false) String lastName,
+      @Parameter(example = "{\n  \"page\": 0,  \"size\": 10}",
+          in = ParameterIn.QUERY) Pageable pageable) {
+    return getResponse(authorService.findAll(firstName, lastName, pageable));
   }
 
   /**
@@ -119,7 +128,7 @@ public class AuthorApi extends AbstractApi {
    *         with status {@code 404 (Not Found)}
    */
   @Operation(summary = "Searches author by 'id'", description = "Searches author by 'id'",
-      tags = {"author"})
+      tags = {TAG})
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Search results matching criteria",
           content = @Content(schema = @Schema(implementation = AuthorDto.class))),
@@ -140,7 +149,7 @@ public class AuthorApi extends AbstractApi {
    *         titleDto of author, or with status {@code 404 (Not Found)}
    */
   @Operation(summary = "Searches titles of the by author 'id'",
-      description = "Searches titles by author 'id'", tags = {"author"})
+      description = "Searches titles by author 'id'", tags = {TAG})
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Search results matching criteria",
           content = @Content(
@@ -162,7 +171,7 @@ public class AuthorApi extends AbstractApi {
    * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}
    */
   @Operation(summary = "Delete author by 'id'", description = "Delete an author by 'id'",
-      tags = {"author"})
+      tags = {TAG})
   @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "Author deleted"),
       @ApiResponse(responseCode = "400", description = "Bad input parameter")})
   @DeleteMapping("/authors/{id}")

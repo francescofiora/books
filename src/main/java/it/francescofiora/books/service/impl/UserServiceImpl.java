@@ -1,5 +1,6 @@
 package it.francescofiora.books.service.impl;
 
+import it.francescofiora.books.domain.User;
 import it.francescofiora.books.repository.RoleRepository;
 import it.francescofiora.books.repository.UserRepository;
 import it.francescofiora.books.service.RoleService;
@@ -13,6 +14,10 @@ import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.ExampleMatcher.GenericPropertyMatcher;
+import org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,6 +32,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
+
+  private static final GenericPropertyMatcher PROPERTY_MATCHER_DEFAULT =
+      GenericPropertyMatchers.contains().ignoreCase();
 
   private final UserMapper userMapper;
   private final UserRepository userRepository;
@@ -69,9 +77,14 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public Page<UserDto> findAll(Pageable pageable) {
+  public Page<UserDto> findAll(String username, Pageable pageable) {
     log.debug("Request to get all Users");
-    return userRepository.findAll(pageable).map(userMapper::toDto);
+    var user = new User();
+    user.setUsername(username);
+    var exampleMatcher =
+        ExampleMatcher.matchingAll().withMatcher("username", PROPERTY_MATCHER_DEFAULT);
+    var example = Example.of(user, exampleMatcher);
+    return userRepository.findAll(example, pageable).map(userMapper::toDto);
   }
 
   @Override

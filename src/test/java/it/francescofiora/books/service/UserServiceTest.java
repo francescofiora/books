@@ -19,6 +19,8 @@ import it.francescofiora.books.web.errors.NotFoundAlertException;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -104,7 +106,8 @@ class UserServiceTest {
   void testFindAll() {
     var user = new User();
     var userRepository = mock(UserRepository.class);
-    when(userRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(List.of(user)));
+    when(userRepository.findAll(ArgumentMatchers.<Example<User>>any(), any(Pageable.class)))
+        .thenReturn(new PageImpl<>(List.of(user)));
 
     var expected = new UserDto();
     var userMapper = mock(UserMapper.class);
@@ -114,7 +117,7 @@ class UserServiceTest {
         mock(BCryptPasswordEncoder.class));
 
     var pageable = PageRequest.of(1, 1);
-    var page = userService.findAll(pageable);
+    var page = userService.findAll(null, pageable);
     assertThat(page.getContent().get(0)).isEqualTo(expected);
   }
 

@@ -20,12 +20,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * Abstract Test class for EndToEnd tests.
@@ -126,10 +127,11 @@ public class AbstractTestEndToEnd {
     return restTemplate.exchange(getPath(path), HttpMethod.GET, request, responseType);
   }
 
-  protected <T> ResponseEntity<T> performGet(String username, String path, Pageable pageable,
-      Class<T> responseType) {
-    var request = new HttpEntity<>(pageable, createHttpHeaders(username));
-    return restTemplate.exchange(getPath(path), HttpMethod.GET, request, responseType);
+  protected <T> ResponseEntity<T> performGet(String username, String path,
+      MultiValueMap<String, String> pageable, Class<T> responseType) {
+    var request = new HttpEntity<>(createHttpHeaders(username));
+    var uri = UriComponentsBuilder.fromHttpUrl(getPath(path)).queryParams(pageable).build();
+    return restTemplate.exchange(uri.toUriString(), HttpMethod.GET, request, responseType);
   }
 
   protected ResponseEntity<Void> performDelete(String username, String path) {
@@ -216,8 +218,8 @@ public class AbstractTestEndToEnd {
     return value;
   }
 
-  protected <T> T get(String username, String path, Pageable pageable, Class<T> responseType,
-      String alert, String param) {
+  protected <T> T get(String username, String path, MultiValueMap<String, String> pageable,
+      Class<T> responseType, String alert, String param) {
     var result = performGet(username, path, pageable, responseType);
     checkHeaders(result.getHeaders(), alert, param);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -233,8 +235,8 @@ public class AbstractTestEndToEnd {
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
   }
 
-  protected <T> void assertGetNotFound(String username, String path, Pageable pageable,
-      Class<T> responseType, String alert, String param) {
+  protected <T> void assertGetNotFound(String username, String path,
+      MultiValueMap<String, String> pageable, Class<T> responseType, String alert, String param) {
     var result = performGet(username, path, pageable, responseType);
     checkHeadersError(result.getHeaders(), alert, param);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);

@@ -40,10 +40,12 @@ public interface RoleService {
   /**
    * Get all the roles.
    *
+   * @param name the name.
+   * @param description the description.
    * @param pageable the pagination information.
    * @return the list of entities.
    */
-  Page<RoleDto> findRoles(Pageable pageable);
+  Page<RoleDto> findRoles(String name, String description, Pageable pageable);
 
   /**
    * Get by "id" role.

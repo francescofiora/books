@@ -2,6 +2,7 @@ package it.francescofiora.books.web.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -35,6 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PublisherApi extends AbstractApi {
 
   private static final String ENTITY_NAME = "PublisherDto";
+  private static final String TAG = "publisher";
 
   private final PublisherService publisherService;
 
@@ -50,7 +53,7 @@ public class PublisherApi extends AbstractApi {
    * @return the {@link ResponseEntity} with status {@code 201 (Created)}
    */
   @Operation(summary = "Add new Publisher", description = "Add a new Publisher to the system",
-      tags = {"publisher"})
+      tags = {TAG})
   @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Publisher created"),
       @ApiResponse(responseCode = "400", description = "Invalid input, object invalid")})
   @PostMapping("/publishers")
@@ -71,7 +74,7 @@ public class PublisherApi extends AbstractApi {
    *         {@code 500 (Internal Server Error)} if the publisher couldn't be updated
    */
   @Operation(summary = "Update Publisher", description = "Update an Publisher to the system",
-      tags = {"publisher"})
+      tags = {TAG})
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Publisher updated"),
       @ApiResponse(responseCode = "400", description = "Invalid input, object invalid"),
       @ApiResponse(responseCode = "404", description = "Not found")})
@@ -99,7 +102,7 @@ public class PublisherApi extends AbstractApi {
   @Operation(summary = "Searches publishers",
       description = "By passing in the appropriate options, "
           + "you can search for available publishers in the system",
-      tags = {"publisher"})
+      tags = {TAG})
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Search results matching criteria",
           content = @Content(
@@ -107,8 +110,12 @@ public class PublisherApi extends AbstractApi {
       @ApiResponse(responseCode = "400", description = "Bad input parameter")})
   @GetMapping("/publishers")
   @PreAuthorize(AUTHORIZE_BOOK_READ)
-  public ResponseEntity<List<PublisherDto>> getAllPublishers(Pageable pageable) {
-    return getResponse(publisherService.findAll(pageable));
+  public ResponseEntity<List<PublisherDto>> getAllPublishers(
+      @Parameter(description = "Publisher Name", example = "Publisher Ltd",
+          in = ParameterIn.QUERY) @RequestParam(required = false) String publisherName,
+      @Parameter(example = "{\n  \"page\": 0,  \"size\": 10}",
+          in = ParameterIn.QUERY) Pageable pageable) {
+    return getResponse(publisherService.findAll(publisherName, pageable));
   }
 
   /**
@@ -119,7 +126,7 @@ public class PublisherApi extends AbstractApi {
    *         or with status {@code 404 (Not Found)}
    */
   @Operation(summary = "Searches publisher by 'id'", description = "Searches publisher by 'id'",
-      tags = {"publisher"})
+      tags = {TAG})
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Search results matching criteria",
           content = @Content(schema = @Schema(implementation = PublisherDto.class))),
@@ -140,7 +147,7 @@ public class PublisherApi extends AbstractApi {
    * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}
    */
   @Operation(summary = "Delete publisher by 'id'", description = "Delete an publisher by 'id'",
-      tags = {"publisher"})
+      tags = {TAG})
   @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "Publisher deleted"),
       @ApiResponse(responseCode = "400", description = "Bad input parameter")})
   @DeleteMapping("/publishers/{id}")

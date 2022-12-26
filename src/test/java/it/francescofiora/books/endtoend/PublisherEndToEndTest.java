@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -30,6 +29,7 @@ class PublisherEndToEndTest extends AbstractTestEndToEnd {
   private static final String ALERT_NOT_FOUND = "PublisherDto.notFound";
 
   private static final String PARAM_PAGE_20 = "0 20";
+  private static final String PARAM_PAGE_10 = "0 10";
   private static final String PARAM_NOT_VALID_LONG =
       "'id' should be a valid 'Long' and '999999999999999999999999' isn't";
 
@@ -62,10 +62,18 @@ class PublisherEndToEndTest extends AbstractTestEndToEnd {
     assertThat(actual).isEqualTo(publisherDto);
     assertThat(actual.getPublisherName()).isEqualTo(publisherDto.getPublisherName());
 
-    var publishers = get(UserUtils.BOOK_ADMIN, PUBLISHERS_URI, PageRequest.of(1, 1),
-        PublisherDto[].class, ALERT_GET, PARAM_PAGE_20);
+    var publishers =
+        get(UserUtils.BOOK_ADMIN, PUBLISHERS_URI, PublisherDto[].class, ALERT_GET, PARAM_PAGE_20);
     assertThat(publishers).isNotEmpty();
     var option =
+        Stream.of(publishers).filter(publisher -> publisher.getId().equals(publisherId)).findAny();
+    assertThat(option).isPresent().contains(publisherDto);
+
+    var pageRequest = TestUtils.createPageRequestAsMap(0, 10);
+    publishers = get(UserUtils.BOOK_ADMIN, PUBLISHERS_URI, pageRequest, PublisherDto[].class,
+        ALERT_GET, PARAM_PAGE_10);
+    assertThat(publishers).isNotEmpty();
+    option =
         Stream.of(publishers).filter(publisher -> publisher.getId().equals(publisherId)).findAny();
     assertThat(option).isPresent().contains(publisherDto);
 

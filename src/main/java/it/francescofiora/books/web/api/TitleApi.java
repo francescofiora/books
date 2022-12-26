@@ -2,6 +2,7 @@ package it.francescofiora.books.web.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -36,6 +38,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TitleApi extends AbstractApi {
 
   private static final String ENTITY_NAME = "TitleDto";
+  private static final String TAG = "title";
 
   private final TitleService titleService;
 
@@ -50,8 +53,7 @@ public class TitleApi extends AbstractApi {
    * @param titleDto the title to create
    * @return the {@link ResponseEntity} with status {@code 201 (Created)}
    */
-  @Operation(summary = "Add new Title", description = "Add a new Title to the system",
-      tags = {"title"})
+  @Operation(summary = "Add new Title", description = "Add a new Title to the system", tags = {TAG})
   @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Title created"),
       @ApiResponse(responseCode = "400", description = "Invalid input, object invalid")})
   @PostMapping("/titles")
@@ -71,8 +73,7 @@ public class TitleApi extends AbstractApi {
    *         {@code 400 (Bad Request)} if the title is not valid, or with status
    *         {@code 500 (Internal Server Error)} if the title couldn't be updated.
    */
-  @Operation(summary = "Update Title", description = "Update an Title to the system",
-      tags = {"title"})
+  @Operation(summary = "Update Title", description = "Update an Title to the system", tags = {TAG})
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Title updated"),
       @ApiResponse(responseCode = "400", description = "Invalid input, object invalid"),
       @ApiResponse(responseCode = "404", description = "Not found")})
@@ -99,7 +100,7 @@ public class TitleApi extends AbstractApi {
   @Operation(summary = "Searches titles",
       description = "By passing in the appropriate options, "
           + "you can search for available titles in the system",
-      tags = {"title"})
+      tags = {TAG})
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Search results matching criteria",
           content = @Content(
@@ -107,8 +108,12 @@ public class TitleApi extends AbstractApi {
       @ApiResponse(responseCode = "400", description = "Bad input parameter")})
   @GetMapping("/titles")
   @PreAuthorize(AUTHORIZE_BOOK_READ)
-  public ResponseEntity<List<TitleDto>> getAllTitles(Pageable pageable) {
-    return getResponse(titleService.findAll(pageable));
+  public ResponseEntity<List<TitleDto>> getAllTitles(
+      @Parameter(description = "Book's Name", example = "My prefer Book",
+          in = ParameterIn.QUERY) @RequestParam(required = false) String name,
+      @Parameter(example = "{\n  \"page\": 0,  \"size\": 10}",
+          in = ParameterIn.QUERY) Pageable pageable) {
+    return getResponse(titleService.findAll(name, pageable));
   }
 
   /**
@@ -119,7 +124,7 @@ public class TitleApi extends AbstractApi {
    *         with status {@code 404 (Not Found)}
    */
   @Operation(summary = "Searches title by 'id'", description = "Searches title by 'id'",
-      tags = {"title"})
+      tags = {TAG})
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Search results matching criteria",
           content = @Content(schema = @Schema(implementation = TitleDto.class))),
@@ -138,7 +143,7 @@ public class TitleApi extends AbstractApi {
    * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}
    */
   @Operation(summary = "Delete title by 'id'", description = "Delete an title by 'id'",
-      tags = {"title"})
+      tags = {TAG})
   @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "Title deleted"),
       @ApiResponse(responseCode = "400", description = "Bad input parameter")})
   @DeleteMapping("/titles/{id}")

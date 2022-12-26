@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import it.francescofiora.books.service.dto.PermissionDto;
 import it.francescofiora.books.service.dto.RefPermissionDto;
 import it.francescofiora.books.service.dto.RoleDto;
+import it.francescofiora.books.util.TestUtils;
 import it.francescofiora.books.util.UserUtils;
 import java.util.List;
 import java.util.stream.Stream;
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -37,6 +37,7 @@ class RoleEndToEndTest extends AbstractTestEndToEnd {
   private static final String ALERT_NOT_FOUND = "RoleDto.notFound";
 
   private static final String PARAM_PAGE_20 = "0 20";
+  private static final String PARAM_PAGE_10 = "0 10";
   private static final String PARAM_NOT_VALID_LONG =
       "'id' should be a valid 'Long' and '999999999999999999999999' isn't";
 
@@ -73,8 +74,8 @@ class RoleEndToEndTest extends AbstractTestEndToEnd {
 
   @Test
   void testGetPermissions() {
-    var permissions = get(UserUtils.ROLE_ADMIN, PERMISSIONS_URI, PageRequest.of(1, 1),
-        PermissionDto[].class, ALERT_GET, PARAM_PAGE_20);
+    var permissions =
+        get(UserUtils.ROLE_ADMIN, PERMISSIONS_URI, PermissionDto[].class, ALERT_GET, PARAM_PAGE_20);
     assertThat(permissions).isNotEmpty();
   }
 
@@ -111,10 +112,16 @@ class RoleEndToEndTest extends AbstractTestEndToEnd {
     assertThat(actual.getName()).isEqualTo(roleDto.getName());
     assertThat(actual.getDescription()).isEqualTo(roleDto.getDescription());
 
-    var roles = get(UserUtils.ROLE_ADMIN, ROLES_URI, PageRequest.of(1, 1), RoleDto[].class,
-        ALERT_GET, PARAM_PAGE_20);
+    var roles = get(UserUtils.ROLE_ADMIN, ROLES_URI, RoleDto[].class, ALERT_GET, PARAM_PAGE_20);
     assertThat(roles).isNotEmpty();
     var option = Stream.of(roles).filter(role -> role.getId().equals(roleId)).findAny();
+    assertThat(option).isPresent().contains(roleDto);
+
+    var pageRequest = TestUtils.createPageRequestAsMap(0, 10);
+    roles = get(UserUtils.ROLE_ADMIN, ROLES_URI, pageRequest, RoleDto[].class, ALERT_GET,
+        PARAM_PAGE_10);
+    assertThat(roles).isNotEmpty();
+    option = Stream.of(roles).filter(role -> role.getId().equals(roleId)).findAny();
     assertThat(option).isPresent().contains(roleDto);
 
     delete(UserUtils.ROLE_ADMIN, rolesIdUri, ALERT_DELETED, String.valueOf(roleId));
@@ -195,8 +202,7 @@ class RoleEndToEndTest extends AbstractTestEndToEnd {
 
   @Test
   void testDeleteBadRequest() {
-    var roles = get(UserUtils.ROLE_ADMIN, ROLES_URI, PageRequest.of(1, 1), RoleDto[].class,
-        ALERT_GET, PARAM_PAGE_20);
+    var roles = get(UserUtils.ROLE_ADMIN, ROLES_URI, RoleDto[].class, ALERT_GET, PARAM_PAGE_20);
 
     final var rolesIdUri = String.format(ROLES_ID_URI, roles[0].getId());
     assertDeleteBadRequest(UserUtils.ROLE_ADMIN, rolesIdUri, ALERT_BAD_REQUEST,

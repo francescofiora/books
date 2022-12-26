@@ -32,10 +32,12 @@ public interface AuthorService {
   /**
    * Get all the authors.
    *
+   * @param firstName the first name.
+   * @param lastName the last name.
    * @param pageable the pagination information.
    * @return the list of entities.
    */
-  Page<AuthorDto> findAll(Pageable pageable);
+  Page<AuthorDto> findAll(String firstName, String lastName, Pageable pageable);
 
   /**
    * Get by "id" author.

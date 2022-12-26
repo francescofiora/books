@@ -23,6 +23,8 @@ import it.francescofiora.books.web.errors.NotFoundAlertException;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -110,17 +112,20 @@ class RoleServiceTest {
 
   @Test
   void testFindAll() {
-    var roleMapper = mock(RoleMapper.class);
+    var role = new Role();
     var roleRepository = mock(RoleRepository.class);
+    when(roleRepository.findAll(ArgumentMatchers.<Example<Role>>any(), any(Pageable.class)))
+        .thenReturn(new PageImpl<>(List.of(role)));
+
+    var expected = new RoleDto();
+    var roleMapper = mock(RoleMapper.class);
+    when(roleMapper.toDto(any(Role.class))).thenReturn(expected);
+    var pageable = PageRequest.of(1, 1);
+
     var roleService = new RoleServiceImpl(mock(PermissionMapper.class), roleMapper,
         mock(UserRepository.class), mock(PermissionRepository.class), roleRepository);
 
-    var role = new Role();
-    when(roleRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(List.of(role)));
-    var expected = new RoleDto();
-    when(roleMapper.toDto(any(Role.class))).thenReturn(expected);
-    var pageable = PageRequest.of(1, 1);
-    var page = roleService.findRoles(pageable);
+    var page = roleService.findRoles(null, null, pageable);
     assertThat(page.getContent().get(0)).isEqualTo(expected);
   }
 

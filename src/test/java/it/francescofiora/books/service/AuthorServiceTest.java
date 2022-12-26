@@ -21,6 +21,8 @@ import it.francescofiora.books.web.errors.NotFoundAlertException;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -73,16 +75,19 @@ class AuthorServiceTest {
 
   @Test
   void testFindAll() {
-    var authorMapper = mock(AuthorMapper.class);
+    var author = new Author();
     var authorRepository = mock(AuthorRepository.class);
+    when(authorRepository.findAll(ArgumentMatchers.<Example<Author>>any(), any(Pageable.class)))
+        .thenReturn(new PageImpl<>(List.of(author)));
+
+    var expected = new AuthorDto();
+    var authorMapper = mock(AuthorMapper.class);
+    when(authorMapper.toDto(any(Author.class))).thenReturn(expected);
+
+    var pageable = PageRequest.of(1, 1);
     var authorService =
         new AuthorServiceImpl(authorRepository, authorMapper, mock(TitleMapper.class));
-    var author = new Author();
-    when(authorRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(List.of(author)));
-    var expected = new AuthorDto();
-    when(authorMapper.toDto(any(Author.class))).thenReturn(expected);
-    var pageable = PageRequest.of(1, 1);
-    var page = authorService.findAll(pageable);
+    var page = authorService.findAll(null, null, pageable);
     assertThat(page.getContent().get(0)).isEqualTo(expected);
   }
 

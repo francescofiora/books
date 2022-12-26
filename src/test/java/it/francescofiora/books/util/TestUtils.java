@@ -20,6 +20,8 @@ import it.francescofiora.books.service.dto.UpdatebleTitleDto;
 import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 /**
  * Utility for testing.
@@ -390,5 +392,19 @@ public final class TestUtils {
     var dtoObj = (DtoIdentifier) clazz.getConstructor().newInstance();
     dtoObj.setId(id);
     return dtoObj;
+  }
+
+  /**
+   * Create PageRequest As MultiValueMap.
+   *
+   * @param page the page
+   * @param size the size
+   * @return the MultiValueMap
+   */
+  public static MultiValueMap<String, String> createPageRequestAsMap(int page, int size) {
+    MultiValueMap<String, String> pageRequest = new LinkedMultiValueMap<>();
+    pageRequest.add("page", String.valueOf(page));
+    pageRequest.add("size", String.valueOf(size));
+    return pageRequest;
   }
 }

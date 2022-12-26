@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -50,6 +49,7 @@ class TitleEndToEndTest extends AbstractTestEndToEnd {
   private static final String ALERT_GET = "TitleDto.get";
 
   private static final String PARAM_PAGE_20 = "0 20";
+  private static final String PARAM_PAGE_10 = "0 10";
   private static final String PARAM_PAGE_1 = "0 1";
   private static final String PARAM_NOT_VALID_LONG =
       "'id' should be a valid 'Long' and '999999999999999999999999' isn't";
@@ -114,16 +114,16 @@ class TitleEndToEndTest extends AbstractTestEndToEnd {
     assertThat(titleDto.getAuthors()).hasSize(1);
     assertThat(titleDto.getAuthors().get(0).getId()).isEqualTo(authorId);
 
-    var pageable = PageRequest.of(1, 1);
-    var titles =
-        get(UserUtils.BOOK_ADMIN, TITLES_URI, pageable, TitleDto[].class, ALERT_GET, PARAM_PAGE_20);
+    var pageRequest = TestUtils.createPageRequestAsMap(0, 10);
+    var titles = get(UserUtils.BOOK_ADMIN, TITLES_URI, pageRequest, TitleDto[].class, ALERT_GET,
+        PARAM_PAGE_10);
     assertThat(titles).isNotEmpty();
     var option = Stream.of(titles).filter(title -> title.getId().equals(titleId)).findAny();
     assertThat(option).isPresent().contains(titleDto);
 
     final var authorsTitlesUri = String.format(AUTHORS_TITLES_URI, authorId);
 
-    titles = get(UserUtils.BOOK_ADMIN, authorsTitlesUri, pageable, TitleDto[].class, ALERT_GET,
+    titles = get(UserUtils.BOOK_ADMIN, authorsTitlesUri, pageRequest, TitleDto[].class, ALERT_GET,
         PARAM_PAGE_1);
     assertThat(titles).isNotEmpty();
     option = Stream.of(titles).filter(title -> title.getId().equals(titleId)).findAny();
@@ -145,8 +145,8 @@ class TitleEndToEndTest extends AbstractTestEndToEnd {
     delete(UserUtils.BOOK_ADMIN, String.format(PUBLISHERS_ID_URI, publisherId),
         PUBLISHER_ALERT_DELETED, String.valueOf(publisherId));
 
-    assertGetNotFound(UserUtils.BOOK_ADMIN, String.format(AUTHORS_TITLES_URI, authorId), pageable,
-        TitleDto[].class, AUTHOR_ALERT_NOT_FOUND, String.valueOf(authorId));
+    assertGetNotFound(UserUtils.BOOK_ADMIN, String.format(AUTHORS_TITLES_URI, authorId),
+        pageRequest, TitleDto[].class, AUTHOR_ALERT_NOT_FOUND, String.valueOf(authorId));
   }
 
   void checkTitleDto(TitleDto titleDto, BaseTitleDto baseTitleDto) {

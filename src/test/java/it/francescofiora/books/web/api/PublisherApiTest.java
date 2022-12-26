@@ -79,7 +79,7 @@ class PublisherApiTest extends AbstractTestApi {
   void testGetAllPublishers() throws Exception {
     var pageable = PageRequest.of(1, 1);
     var expected = TestUtils.createPublisherDto(ID);
-    given(publisherService.findAll(any(Pageable.class)))
+    given(publisherService.findAll(any(), any(Pageable.class)))
         .willReturn(new PageImpl<PublisherDto>(List.of(expected)));
     var result = performGet(PUBLISHERS_URI, pageable).andExpect(status().isOk()).andReturn();
     var list = readValue(result, new TypeReference<List<PublisherDto>>() {});

@@ -31,10 +31,11 @@ public interface PublisherService {
   /**
    * Get all the publishers.
    *
+   * @param publisherName the Publisher Name.
    * @param pageable the pagination information.
    * @return the list of entities.
    */
-  Page<PublisherDto> findAll(Pageable pageable);
+  Page<PublisherDto> findAll(String publisherName, Pageable pageable);
 
   /**
    * Get the "id" publisher.

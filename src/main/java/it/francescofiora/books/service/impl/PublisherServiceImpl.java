@@ -1,5 +1,6 @@
 package it.francescofiora.books.service.impl;
 
+import it.francescofiora.books.domain.Publisher;
 import it.francescofiora.books.repository.PublisherRepository;
 import it.francescofiora.books.repository.TitleRepository;
 import it.francescofiora.books.service.PublisherService;
@@ -11,6 +12,10 @@ import it.francescofiora.books.web.errors.NotFoundAlertException;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.ExampleMatcher.GenericPropertyMatcher;
+import org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,6 +29,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @AllArgsConstructor
 public class PublisherServiceImpl implements PublisherService {
+
+  private static final GenericPropertyMatcher PROPERTY_MATCHER_DEFAULT =
+      GenericPropertyMatchers.contains().ignoreCase();
 
   private final PublisherRepository publisherRepository;
   private final PublisherMapper publisherMapper;
@@ -53,9 +61,14 @@ public class PublisherServiceImpl implements PublisherService {
 
   @Override
   @Transactional(readOnly = true)
-  public Page<PublisherDto> findAll(Pageable pageable) {
+  public Page<PublisherDto> findAll(String publisherName, Pageable pageable) {
     log.debug("Request to get all Publishers");
-    return publisherRepository.findAll(pageable).map(publisherMapper::toDto);
+    var publisher = new Publisher();
+    publisher.setPublisherName(publisherName);
+    var exampleMatcher =
+        ExampleMatcher.matchingAll().withMatcher("publisherName", PROPERTY_MATCHER_DEFAULT);
+    var example = Example.of(publisher, exampleMatcher);
+    return publisherRepository.findAll(example, pageable).map(publisherMapper::toDto);
   }
 
   @Override

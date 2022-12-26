@@ -1,5 +1,6 @@
 package it.francescofiora.books.service.impl;
 
+import it.francescofiora.books.domain.Role;
 import it.francescofiora.books.repository.PermissionRepository;
 import it.francescofiora.books.repository.RoleRepository;
 import it.francescofiora.books.repository.UserRepository;
@@ -16,6 +17,10 @@ import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.ExampleMatcher.GenericPropertyMatcher;
+import org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -31,6 +36,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class RoleServiceImpl implements RoleService {
 
   private static final String PERMISSION_ENTITY_NAME = "PermissionDto";
+  private static final GenericPropertyMatcher PROPERTY_MATCHER_DEFAULT =
+      GenericPropertyMatchers.contains().ignoreCase();
 
   private final PermissionMapper permissionMapper;
   private final RoleMapper roleMapper;
@@ -82,9 +89,15 @@ public class RoleServiceImpl implements RoleService {
   }
 
   @Override
-  public Page<RoleDto> findRoles(Pageable pageable) {
+  public Page<RoleDto> findRoles(String name, String description, Pageable pageable) {
     log.debug("Request to get all Roles");
-    return roleRepository.findAll(pageable).map(roleMapper::toDto);
+    var role = new Role();
+    role.setName(name);
+    role.setDescription(description);
+    var exampleMatcher = ExampleMatcher.matchingAll().withMatcher("name", PROPERTY_MATCHER_DEFAULT)
+        .withMatcher("description", PROPERTY_MATCHER_DEFAULT);
+    var example = Example.of(role, exampleMatcher);
+    return roleRepository.findAll(example, pageable).map(roleMapper::toDto);
   }
 
   @Override

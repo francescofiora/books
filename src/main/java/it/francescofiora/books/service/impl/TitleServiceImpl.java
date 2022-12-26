@@ -1,5 +1,6 @@
 package it.francescofiora.books.service.impl;
 
+import it.francescofiora.books.domain.Title;
 import it.francescofiora.books.repository.AuthorRepository;
 import it.francescofiora.books.repository.PublisherRepository;
 import it.francescofiora.books.repository.TitleRepository;
@@ -17,6 +18,10 @@ import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.ExampleMatcher.GenericPropertyMatcher;
+import org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -32,6 +37,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class TitleServiceImpl implements TitleService {
 
   private static final String ENTITY_NAME = "TitleDto";
+  private static final GenericPropertyMatcher PROPERTY_MATCHER_DEFAULT =
+      GenericPropertyMatchers.contains().ignoreCase();
 
   private final TitleRepository titleRepository;
   private final TitleMapper titleMapper;
@@ -86,9 +93,13 @@ public class TitleServiceImpl implements TitleService {
 
   @Override
   @Transactional(readOnly = true)
-  public Page<TitleDto> findAll(Pageable pageable) {
+  public Page<TitleDto> findAll(String name, Pageable pageable) {
     log.debug("Request to get all Titles");
-    return titleRepository.findAll(pageable).map(titleMapper::toDto);
+    var title = new Title();
+    title.setName(name);
+    var exampleMatcher = ExampleMatcher.matchingAll().withMatcher("name", PROPERTY_MATCHER_DEFAULT);
+    var example = Example.of(title, exampleMatcher);
+    return titleRepository.findAll(example, pageable).map(titleMapper::toDto);
   }
 
   @Override

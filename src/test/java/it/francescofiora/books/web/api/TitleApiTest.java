@@ -184,7 +184,7 @@ class TitleApiTest extends AbstractTestApi {
     var pageable = PageRequest.of(1, 1);
     var expected = new TitleDto();
     expected.setId(ID);
-    given(titleService.findAll(any(Pageable.class)))
+    given(titleService.findAll(any(), any(Pageable.class)))
         .willReturn(new PageImpl<TitleDto>(List.of(expected)));
     var result = performGet(TITLES_URI, pageable).andExpect(status().isOk()).andReturn();
     var list = readValue(result, new TypeReference<List<TitleDto>>() {});

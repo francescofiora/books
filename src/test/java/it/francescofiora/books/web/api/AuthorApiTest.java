@@ -99,7 +99,7 @@ class AuthorApiTest extends AbstractTestApi {
   void testGetAllAuthors() throws Exception {
     var pageable = PageRequest.of(1, 1);
     var expected = TestUtils.createAuthorDto(ID);
-    given(authorService.findAll(any(Pageable.class)))
+    given(authorService.findAll(any(), any(), any(Pageable.class)))
         .willReturn(new PageImpl<AuthorDto>(List.of(expected)));
 
     var result = performGet(AUTHORS_URI, pageable).andExpect(status().isOk()).andReturn();

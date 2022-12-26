@@ -31,10 +31,11 @@ public interface UserService {
   /**
    * Get all the users.
    *
+   * @param username the user name.
    * @param pageable the pagination information.
    * @return the list of entities.
    */
-  Page<UserDto> findAll(Pageable pageable);
+  Page<UserDto> findAll(String username, Pageable pageable);
 
   /**
    * Get by "id" user.

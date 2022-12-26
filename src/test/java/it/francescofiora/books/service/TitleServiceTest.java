@@ -23,6 +23,8 @@ import it.francescofiora.books.web.errors.NotFoundAlertException;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -96,7 +98,7 @@ class TitleServiceTest {
   void testFindAll() {
     var title = new Title();
     var titleRepository = mock(TitleRepository.class);
-    when(titleRepository.findAll(any(Pageable.class)))
+    when(titleRepository.findAll(ArgumentMatchers.<Example<Title>>any(), any(Pageable.class)))
         .thenReturn(new PageImpl<Title>(List.of(title)));
 
     var expected = new TitleDto();
@@ -107,7 +109,7 @@ class TitleServiceTest {
     var titleService = new TitleServiceImpl(titleRepository, titleMapper,
         mock(AuthorRepository.class), mock(PublisherRepository.class));
 
-    var page = titleService.findAll(pageable);
+    var page = titleService.findAll(null, pageable);
     assertThat(page.getContent().get(0)).isEqualTo(expected);
   }
 

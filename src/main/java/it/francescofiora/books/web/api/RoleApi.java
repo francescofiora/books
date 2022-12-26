@@ -2,6 +2,7 @@ package it.francescofiora.books.web.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -36,6 +38,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class RoleApi extends AbstractApi {
 
   private static final String ENTITY_NAME = "RoleDto";
+  private static final String TAG = "role";
 
   private final RoleService roleService;
 
@@ -62,7 +65,8 @@ public class RoleApi extends AbstractApi {
       @ApiResponse(responseCode = "400", description = "Bad input parameter")})
   @GetMapping("/permissions")
   @PreAuthorize(AUTHORIZE_ROLE_READ)
-  public ResponseEntity<List<PermissionDto>> getAllPermissions(Pageable pageable) {
+  public ResponseEntity<List<PermissionDto>> getAllPermissions(@Parameter(
+      example = "{\n  \"page\": 0,  \"size\": 10}", in = ParameterIn.QUERY) Pageable pageable) {
     return getResponse(roleService.findPermissions(pageable));
   }
 
@@ -72,8 +76,7 @@ public class RoleApi extends AbstractApi {
    * @param roleDto the role to create
    * @return the {@link ResponseEntity} with status {@code 201 (Created)}
    */
-  @Operation(summary = "Add new Role", description = "Add a new Role to the system",
-      tags = {"role"})
+  @Operation(summary = "Add new Role", description = "Add a new Role to the system", tags = {TAG})
   @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Role created"),
       @ApiResponse(responseCode = "400", description = "Invalid input, object invalid")})
   @PostMapping("/roles")
@@ -93,7 +96,7 @@ public class RoleApi extends AbstractApi {
    *         {@code 400 (Bad Request)} if the role is not valid, or with status
    *         {@code 500 (Internal Server Error)} if the role couldn't be updated
    */
-  @Operation(summary = "Update Role", description = "Update an Role to the system", tags = {"role"})
+  @Operation(summary = "Update Role", description = "Update an Role to the system", tags = {TAG})
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Role updated"),
       @ApiResponse(responseCode = "400", description = "Invalid input, object invalid"),
       @ApiResponse(responseCode = "404", description = "Not found")})
@@ -120,7 +123,7 @@ public class RoleApi extends AbstractApi {
   @Operation(summary = "Searches roles",
       description = "By passing in the appropriate options, "
           + "you can search for available roles in the system",
-      tags = {"role"})
+      tags = {TAG})
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Search results matching criteria",
           content = @Content(
@@ -128,8 +131,14 @@ public class RoleApi extends AbstractApi {
       @ApiResponse(responseCode = "400", description = "Bad input parameter")})
   @GetMapping("/roles")
   @PreAuthorize(AUTHORIZE_ROLE_READ)
-  public ResponseEntity<List<RoleDto>> getAllRoles(Pageable pageable) {
-    return getResponse(roleService.findRoles(pageable));
+  public ResponseEntity<List<RoleDto>> getAllRoles(
+      @Parameter(description = "Role's Name", example = "book_read",
+          in = ParameterIn.QUERY) @RequestParam(required = false) String name,
+      @Parameter(description = "Description of the Role", example = "Read books",
+          in = ParameterIn.QUERY) @RequestParam(required = false) String description,
+      @Parameter(example = "{\n  \"page\": 0,  \"size\": 10}",
+          in = ParameterIn.QUERY) Pageable pageable) {
+    return getResponse(roleService.findRoles(name, description, pageable));
   }
 
   /**
@@ -139,8 +148,7 @@ public class RoleApi extends AbstractApi {
    * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the role, or with
    *         status {@code 404 (Not Found)}
    */
-  @Operation(summary = "Searches role by 'id'", description = "Searches role by 'id'",
-      tags = {"role"})
+  @Operation(summary = "Searches role by 'id'", description = "Searches role by 'id'", tags = {TAG})
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Search results matching criteria",
           content = @Content(schema = @Schema(implementation = RoleDto.class))),
@@ -159,8 +167,7 @@ public class RoleApi extends AbstractApi {
    * @param id the id of the roleDto to delete
    * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}
    */
-  @Operation(summary = "Delete role by 'id'", description = "Delete an role by 'id'",
-      tags = {"role"})
+  @Operation(summary = "Delete role by 'id'", description = "Delete an role by 'id'", tags = {TAG})
   @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "Role deleted"),
       @ApiResponse(responseCode = "400", description = "Bad input parameter")})
   @DeleteMapping("/roles/{id}")
