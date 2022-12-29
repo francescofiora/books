@@ -96,7 +96,6 @@ public class GlobalControllerExceptionHandler {
         .build();
   }
 
-
   /**
    * Handle Property Reference Exception.
    *

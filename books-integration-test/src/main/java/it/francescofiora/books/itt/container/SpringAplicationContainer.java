@@ -69,7 +69,7 @@ public class SpringAplicationContainer extends GenericContainer<SpringAplication
   }
 
   public ResponseEntity<String> performGet(String path) {
-    var request = new HttpEntity<>(null, createHttpHeaders());
+    var request = new HttpEntity<>(createHttpHeaders());
     return rest.exchange(getHttpPath(path), HttpMethod.GET, request, String.class);
   }
 
@@ -79,7 +79,7 @@ public class SpringAplicationContainer extends GenericContainer<SpringAplication
   }
 
   public ResponseEntity<Void> performDelete(String path) {
-    var request = new HttpEntity<>(null, createHttpHeaders());
+    var request = new HttpEntity<>(createHttpHeaders());
     return rest.exchange(getHttpPath(path), HttpMethod.DELETE, request, Void.class);
   }
 

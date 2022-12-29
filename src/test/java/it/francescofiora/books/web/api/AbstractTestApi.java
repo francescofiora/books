@@ -1,6 +1,5 @@
 package it.francescofiora.books.web.api;
 
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -42,8 +41,7 @@ public abstract class AbstractTestApi {
 
   @BeforeEach
   void setUp() {
-    given(userDetailsService.loadUserByUsername(eq(USER)))
-        .willReturn(UserUtils.createUserBookReader());
+    given(userDetailsService.loadUserByUsername(USER)).willReturn(UserUtils.createUserBookReader());
   }
 
   protected String writeValueAsString(Object value) throws JsonProcessingException {

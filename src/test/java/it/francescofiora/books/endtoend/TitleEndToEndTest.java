@@ -114,11 +114,16 @@ class TitleEndToEndTest extends AbstractTestEndToEnd {
     assertThat(titleDto.getAuthors()).hasSize(1);
     assertThat(titleDto.getAuthors().get(0).getId()).isEqualTo(authorId);
 
-    var pageRequest = TestUtils.createPageRequestAsMap(0, 10);
-    var titles = get(UserUtils.BOOK_ADMIN, TITLES_URI, pageRequest, TitleDto[].class, ALERT_GET,
-        PARAM_PAGE_10);
+    var titles = get(UserUtils.BOOK_ADMIN, TITLES_URI, TitleDto[].class, ALERT_GET, PARAM_PAGE_20);
     assertThat(titles).isNotEmpty();
     var option = Stream.of(titles).filter(title -> title.getId().equals(titleId)).findAny();
+    assertThat(option).isPresent().contains(titleDto);
+
+    var pageRequest = TestUtils.createPageRequestAsMap(0, 10);
+    titles = get(UserUtils.BOOK_ADMIN, TITLES_URI, pageRequest, TitleDto[].class, ALERT_GET,
+        PARAM_PAGE_10);
+    assertThat(titles).isNotEmpty();
+    option = Stream.of(titles).filter(title -> title.getId().equals(titleId)).findAny();
     assertThat(option).isPresent().contains(titleDto);
 
     final var authorsTitlesUri = String.format(AUTHORS_TITLES_URI, authorId);

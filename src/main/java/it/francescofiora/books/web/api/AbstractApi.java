@@ -24,12 +24,13 @@ public abstract class AbstractApi {
   public static final String OP_BOOK_UPDATE = "OP_BOOK_UPDATE";
   public static final String OP_BOOK_READ = "OP_BOOK_READ";
 
-  protected static final String AUTHORIZE_ROLE_UPDATE = "hasAuthority('" + OP_ROLE_UPDATE + "')";
-  protected static final String AUTHORIZE_ROLE_READ = "hasAuthority('" + OP_ROLE_READ + "')";
-  protected static final String AUTHORIZE_USER_UPDATE = "hasAuthority('" + OP_USER_UPDATE + "')";
-  protected static final String AUTHORIZE_USER_READ = "hasAuthority('" + OP_USER_READ + "')";
-  protected static final String AUTHORIZE_BOOK_UPDATE = "hasAuthority('" + OP_BOOK_UPDATE + "')";
-  protected static final String AUTHORIZE_BOOK_READ = "hasAuthority('" + OP_BOOK_READ + "')";
+  protected static final String AUTHORIZE = "hasAuthority";
+  protected static final String AUTHORIZE_ROLE_UPDATE = AUTHORIZE + "('" + OP_ROLE_UPDATE + "')";
+  protected static final String AUTHORIZE_ROLE_READ = AUTHORIZE + "('" + OP_ROLE_READ + "')";
+  protected static final String AUTHORIZE_USER_UPDATE = AUTHORIZE + "('" + OP_USER_UPDATE + "')";
+  protected static final String AUTHORIZE_USER_READ = AUTHORIZE + "('" + OP_USER_READ + "')";
+  protected static final String AUTHORIZE_BOOK_UPDATE = AUTHORIZE + "('" + OP_BOOK_UPDATE + "')";
+  protected static final String AUTHORIZE_BOOK_READ = AUTHORIZE + "('" + OP_BOOK_READ + "')";
 
   private final String entityName;
 

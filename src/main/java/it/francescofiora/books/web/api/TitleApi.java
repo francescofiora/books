@@ -51,7 +51,7 @@ public class TitleApi extends AbstractApi {
    * {@code POST  /titles} : Create a new title.
    *
    * @param titleDto the title to create
-   * @return the {@link ResponseEntity} with status {@code 201 (Created)}
+   * @return the {@link ResponseEntity}
    */
   @Operation(summary = "Add new Title", description = "Add a new Title to the system", tags = {TAG})
   @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Title created"),
@@ -69,9 +69,7 @@ public class TitleApi extends AbstractApi {
    *
    * @param titleDto the title to update
    * @param id the id of the publisher to update
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)}, or with status
-   *         {@code 400 (Bad Request)} if the title is not valid, or with status
-   *         {@code 500 (Internal Server Error)} if the title couldn't be updated.
+   * @return the {@link ResponseEntity}
    */
   @Operation(summary = "Update Title", description = "Update an Title to the system", tags = {TAG})
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Title updated"),
@@ -94,8 +92,9 @@ public class TitleApi extends AbstractApi {
   /**
    * {@code GET  /titles} : get all the titles.
    *
+   * @param name the name
    * @param pageable the pagination information
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of titles in body
+   * @return the {@link ResponseEntity} with the list of titles
    */
   @Operation(summary = "Searches titles",
       description = "By passing in the appropriate options, "
@@ -120,8 +119,7 @@ public class TitleApi extends AbstractApi {
    * {@code GET  /titles/:id} : get the "id" title.
    *
    * @param id the id of the title to retrieve
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the title, or
-   *         with status {@code 404 (Not Found)}
+   * @return the {@link ResponseEntity} with the title
    */
   @Operation(summary = "Searches title by 'id'", description = "Searches title by 'id'",
       tags = {TAG})
@@ -140,7 +138,7 @@ public class TitleApi extends AbstractApi {
    * {@code DELETE  /titles/:id} : delete the "id" title.
    *
    * @param id the id of the title to delete
-   * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}
+   * @return the {@link ResponseEntity}
    */
   @Operation(summary = "Delete title by 'id'", description = "Delete an title by 'id'",
       tags = {TAG})

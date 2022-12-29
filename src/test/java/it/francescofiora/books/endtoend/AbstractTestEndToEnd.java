@@ -118,12 +118,12 @@ public class AbstractTestEndToEnd {
   protected <T> ResponseEntity<T> unauthorizedGetWrongUser(String path, Class<T> responseType) {
     var headers = new HttpHeaders();
     headers.setBasicAuth("wrong_user", "wrong_password");
-    var request = new HttpEntity<>(null, headers);
+    var request = new HttpEntity<>(headers);
     return restTemplate.exchange(getPath(path), HttpMethod.GET, request, responseType);
   }
 
   protected <T> ResponseEntity<T> performGet(String username, String path, Class<T> responseType) {
-    var request = new HttpEntity<>(null, createHttpHeaders(username));
+    var request = new HttpEntity<>(createHttpHeaders(username));
     return restTemplate.exchange(getPath(path), HttpMethod.GET, request, responseType);
   }
 
@@ -135,7 +135,7 @@ public class AbstractTestEndToEnd {
   }
 
   protected ResponseEntity<Void> performDelete(String username, String path) {
-    var request = new HttpEntity<>(null, createHttpHeaders(username));
+    var request = new HttpEntity<>(createHttpHeaders(username));
     return restTemplate.exchange(getPath(path), HttpMethod.DELETE, request, Void.class);
   }
 

@@ -51,7 +51,7 @@ public class AuthorApi extends AbstractApi {
    * {@code POST  /authors} : Create a new author.
    *
    * @param authorDto the author to create
-   * @return the {@link ResponseEntity} with status {@code 201 (Created)}
+   * @return the {@link ResponseEntity}
    */
   @Operation(summary = "Add new Author", description = "Add a new Author to the system",
       tags = {TAG})
@@ -70,9 +70,7 @@ public class AuthorApi extends AbstractApi {
    *
    * @param authorDto the author to update
    * @param id the id of the author to update
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)}, or with status
-   *         {@code 400 (Bad Request)} if the author is not valid, or with status
-   *         {@code 500 (Internal Server Error)} if the author couldn't be updated
+   * @return the {@link ResponseEntity}
    */
   @Operation(summary = "Update Author", description = "Update an Author to the system",
       tags = {TAG})
@@ -96,8 +94,10 @@ public class AuthorApi extends AbstractApi {
   /**
    * {@code GET  /authors} : get all the authors.
    *
+   * @param firstName the first name
+   * @param lastName the last name
    * @param pageable the pagination information
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of authors in body
+   * @return the {@link ResponseEntity} with the list of authors
    */
   @Operation(summary = "Searches authors",
       description = "By passing in the appropriate options, "
@@ -124,8 +124,7 @@ public class AuthorApi extends AbstractApi {
    * {@code GET  /authors/:id} : get the "id" author.
    *
    * @param id the id of the author to retrieve
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the author, or
-   *         with status {@code 404 (Not Found)}
+   * @return the {@link ResponseEntity} with the author
    */
   @Operation(summary = "Searches author by 'id'", description = "Searches author by 'id'",
       tags = {TAG})
@@ -145,8 +144,7 @@ public class AuthorApi extends AbstractApi {
    * {@code GET  /authors/:id/titles} : get titles the "id" author.
    *
    * @param id the id of the author of the TitleDto to retrieve
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the list of the
-   *         titleDto of author, or with status {@code 404 (Not Found)}
+   * @return the {@link ResponseEntity} with the list of the titleDto of author
    */
   @Operation(summary = "Searches titles of the by author 'id'",
       description = "Searches titles by author 'id'", tags = {TAG})
@@ -168,7 +166,7 @@ public class AuthorApi extends AbstractApi {
    * {@code DELETE  /authors/:id} : delete the "id" author.
    *
    * @param id the id of the authorDto to delete
-   * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}
+   * @return the {@link ResponseEntity}
    */
   @Operation(summary = "Delete author by 'id'", description = "Delete an author by 'id'",
       tags = {TAG})

@@ -50,7 +50,7 @@ public class PublisherApi extends AbstractApi {
    * {@code POST  /publishers} : Create a new publisher.
    *
    * @param publisherDto the publisher to create
-   * @return the {@link ResponseEntity} with status {@code 201 (Created)}
+   * @return the {@link ResponseEntity}
    */
   @Operation(summary = "Add new Publisher", description = "Add a new Publisher to the system",
       tags = {TAG})
@@ -69,9 +69,7 @@ public class PublisherApi extends AbstractApi {
    *
    * @param publisherDto the publisher to update
    * @param id the id of the publisher to update
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)}, or with status
-   *         {@code 400 (Bad Request)} if the publisher is not valid, or with status
-   *         {@code 500 (Internal Server Error)} if the publisher couldn't be updated
+   * @return the {@link ResponseEntity}
    */
   @Operation(summary = "Update Publisher", description = "Update an Publisher to the system",
       tags = {TAG})
@@ -95,9 +93,9 @@ public class PublisherApi extends AbstractApi {
   /**
    * {@code GET  /publishers} : get all the publishers.
    *
+   * @param publisherName the publisher name
    * @param pageable the pagination information
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of publishers in
-   *         body
+   * @return the {@link ResponseEntity} with the list of publishers
    */
   @Operation(summary = "Searches publishers",
       description = "By passing in the appropriate options, "
@@ -122,8 +120,7 @@ public class PublisherApi extends AbstractApi {
    * {@code GET  /publishers/:id} : get the "id" publisher.
    *
    * @param id the id of the publisherDto to retrieve
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the publisherDto,
-   *         or with status {@code 404 (Not Found)}
+   * @return the {@link ResponseEntity} with the publisherDto
    */
   @Operation(summary = "Searches publisher by 'id'", description = "Searches publisher by 'id'",
       tags = {TAG})
@@ -144,7 +141,7 @@ public class PublisherApi extends AbstractApi {
    * {@code DELETE  /publishers/:id} : delete the "id" publisher.
    *
    * @param id the id of the publisherDto to delete
-   * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}
+   * @return the {@link ResponseEntity}
    */
   @Operation(summary = "Delete publisher by 'id'", description = "Delete an publisher by 'id'",
       tags = {TAG})

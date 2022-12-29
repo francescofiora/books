@@ -50,7 +50,7 @@ public class UserApi extends AbstractApi {
    * {@code POST  /users} : Create a new user.
    *
    * @param userDto the user to create
-   * @return the {@link ResponseEntity} with status {@code 201 (Created)}
+   * @return the {@link ResponseEntity}
    */
   @Operation(summary = "Add new User", description = "Add a new User to the system", tags = {TAG})
   @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "User created"),
@@ -68,9 +68,7 @@ public class UserApi extends AbstractApi {
    *
    * @param userDto the user to update
    * @param id the id of the user to update
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)}, or with status
-   *         {@code 400 (Bad Request)} if the user is not valid, or with status
-   *         {@code 500 (Internal Server Error)} if the user couldn't be updated
+   * @return the {@link ResponseEntity}
    */
   @Operation(summary = "Update User", description = "Update an User to the system", tags = {TAG})
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "User updated"),
@@ -93,8 +91,9 @@ public class UserApi extends AbstractApi {
   /**
    * {@code GET  /users} : get all the users.
    *
+   * @param username the username
    * @param pageable the pagination information
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of users in body
+   * @return the {@link ResponseEntity} with the list of users
    */
   @Operation(summary = "Searches users",
       description = "By passing in the appropriate options, "
@@ -119,8 +118,7 @@ public class UserApi extends AbstractApi {
    * {@code GET  /users/:id} : get the "id" user.
    *
    * @param id the id of the user to retrieve
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the user, or with
-   *         status {@code 404 (Not Found)}
+   * @return the {@link ResponseEntity} with the user
    */
   @Operation(summary = "Searches user by 'id'", description = "Searches user by 'id'", tags = {TAG})
   @ApiResponses(value = {
@@ -139,7 +137,7 @@ public class UserApi extends AbstractApi {
    * {@code DELETE  /users/:id} : delete the "id" user.
    *
    * @param id the id of the userDto to delete
-   * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}
+   * @return the {@link ResponseEntity}
    */
   @Operation(summary = "Delete user by 'id'", description = "Delete an user by 'id'", tags = {TAG})
   @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "User deleted"),
