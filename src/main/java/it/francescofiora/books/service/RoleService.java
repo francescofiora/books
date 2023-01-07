@@ -17,23 +17,23 @@ public interface RoleService {
   /**
    * Get all the permissions.
    *
-   * @param pageable the pagination information.
-   * @return the list of entities.
+   * @param pageable the pagination information
+   * @return the list of entities
    */
   Page<PermissionDto> findPermissions(Pageable pageable);
 
   /**
    * Create a new role.
    *
-   * @param roleDto the entity to save.
-   * @return the persisted entity.
+   * @param roleDto the entity to save
+   * @return the persisted entity
    */
   RoleDto createRole(NewRoleDto roleDto);
 
   /**
    * Update an role.
    *
-   * @param roleDto the entity to update.
+   * @param roleDto the entity to update
    */
   void updateRole(RoleDto roleDto);
 
@@ -41,24 +41,24 @@ public interface RoleService {
    * Get all the roles.
    *
    * @param name the name.
-   * @param description the description.
-   * @param pageable the pagination information.
-   * @return the list of entities.
+   * @param description the description
+   * @param pageable the pagination information
+   * @return the list of entities
    */
   Page<RoleDto> findRoles(String name, String description, Pageable pageable);
 
   /**
    * Get by "id" role.
    *
-   * @param id the id of the entity.
-   * @return the entity.
+   * @param id the id of the entity
+   * @return the entity
    */
   Optional<RoleDto> findOneRole(Long id);
 
   /**
    * Delete the "id" role.
    *
-   * @param id the id of the entity.
+   * @param id the id of the entity
    */
   void deleteRole(Long id);
 

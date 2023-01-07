@@ -68,7 +68,7 @@ public class TitleApi extends AbstractApi {
    * {@code PUT  /titles:id} : Updates an existing title.
    *
    * @param titleDto the title to update
-   * @param id the id of the publisher to update
+   * @param id the id of the title to update
    * @return the {@link ResponseEntity}
    */
   @Operation(summary = "Update Title", description = "Update an Title to the system", tags = {TAG})

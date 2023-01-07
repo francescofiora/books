@@ -162,7 +162,7 @@ public class RoleApi extends AbstractApi {
   /**
    * {@code DELETE  /roles/:id} : delete the "id" role.
    *
-   * @param id the id of the roleDto to delete
+   * @param id the id of the role to delete
    * @return the {@link ResponseEntity}
    */
   @Operation(summary = "Delete role by 'id'", description = "Delete an role by 'id'", tags = {TAG})

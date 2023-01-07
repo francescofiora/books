@@ -143,8 +143,8 @@ public class AuthorApi extends AbstractApi {
   /**
    * {@code GET  /authors/:id/titles} : get titles the "id" author.
    *
-   * @param id the id of the author of the TitleDto to retrieve
-   * @return the {@link ResponseEntity} with the list of the titleDto of author
+   * @param id the id of the author of the titles to retrieve
+   * @return the {@link ResponseEntity} with the list of the titles of author
    */
   @Operation(summary = "Searches titles of the by author 'id'",
       description = "Searches titles by author 'id'", tags = {TAG})
@@ -165,7 +165,7 @@ public class AuthorApi extends AbstractApi {
   /**
    * {@code DELETE  /authors/:id} : delete the "id" author.
    *
-   * @param id the id of the authorDto to delete
+   * @param id the id of the author to delete
    * @return the {@link ResponseEntity}
    */
   @Operation(summary = "Delete author by 'id'", description = "Delete an author by 'id'",

@@ -16,39 +16,39 @@ public interface UserService {
   /**
    * Create a new user.
    *
-   * @param userDto the entity to save.
-   * @return the persisted entity.
+   * @param userDto the entity to save
+   * @return the persisted entity
    */
   UserDto create(NewUserDto userDto);
 
   /**
    * Update an user.
    *
-   * @param userDto the entity to update.
+   * @param userDto the entity to update
    */
   void update(UserDto userDto);
 
   /**
    * Get all the users.
    *
-   * @param username the user name.
-   * @param pageable the pagination information.
-   * @return the list of entities.
+   * @param username the user name
+   * @param pageable the pagination information
+   * @return the list of entities
    */
   Page<UserDto> findAll(String username, Pageable pageable);
 
   /**
    * Get by "id" user.
    *
-   * @param id the id of the entity.
-   * @return the entity.
+   * @param id the id of the entity
+   * @return the entity
    */
   Optional<UserDto> findOne(Long id);
 
   /**
    * Delete the "id" user.
    *
-   * @param id the id of the entity.
+   * @param id the id of the entity
    */
   void delete(Long id);
 }

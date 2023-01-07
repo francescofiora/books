@@ -15,39 +15,39 @@ public interface TitleService {
   /**
    * Create a new title.
    *
-   * @param titleDto the entity to save.
-   * @return the persisted entity.
+   * @param titleDto the entity to save
+   * @return the persisted entity
    */
   TitleDto create(NewTitleDto titleDto);
 
   /**
    * Update a title.
    *
-   * @param titleDto the entity to save.
+   * @param titleDto the entity to save
    */
   void update(UpdatebleTitleDto titleDto);
 
   /**
    * Get all the titles.
    *
-   * @param name the name.
-   * @param pageable the pagination information.
-   * @return the list of entities.
+   * @param name the name
+   * @param pageable the pagination information
+   * @return the list of entities
    */
   Page<TitleDto> findAll(String name, Pageable pageable);
 
   /**
    * Get the "id" title.
    *
-   * @param id the id of the entity.
-   * @return the entity.
+   * @param id the id of the entity
+   * @return the entity
    */
   Optional<TitleDto> findOne(Long id);
 
   /**
    * Delete the "id" title.
    *
-   * @param id the id of the entity.
+   * @param id the id of the entity
    */
   void delete(Long id);
 }

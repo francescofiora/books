@@ -17,40 +17,40 @@ public interface AuthorService {
   /**
    * Create a new author.
    *
-   * @param authorDto the entity to save.
-   * @return the persisted entity.
+   * @param authorDto the entity to save
+   * @return the persisted entity
    */
   AuthorDto create(NewAuthorDto authorDto);
 
   /**
    * Update an author.
    *
-   * @param authorDto the entity to update.
+   * @param authorDto the entity to update
    */
   void update(AuthorDto authorDto);
 
   /**
    * Get all the authors.
    *
-   * @param firstName the first name.
-   * @param lastName the last name.
-   * @param pageable the pagination information.
-   * @return the list of entities.
+   * @param firstName the first name
+   * @param lastName the last name
+   * @param pageable the pagination information
+   * @return the list of entities
    */
   Page<AuthorDto> findAll(String firstName, String lastName, Pageable pageable);
 
   /**
    * Get by "id" author.
    *
-   * @param id the id of the entity.
-   * @return the entity.
+   * @param id the id of the entity
+   * @return the entity
    */
   Optional<AuthorDto> findOne(Long id);
 
   /**
    * Delete the "id" author.
    *
-   * @param id the id of the entity.
+   * @param id the id of the entity
    */
   void delete(Long id);
 

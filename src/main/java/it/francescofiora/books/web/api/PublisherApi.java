@@ -119,8 +119,8 @@ public class PublisherApi extends AbstractApi {
   /**
    * {@code GET  /publishers/:id} : get the "id" publisher.
    *
-   * @param id the id of the publisherDto to retrieve
-   * @return the {@link ResponseEntity} with the publisherDto
+   * @param id the id of the publisher to retrieve
+   * @return the {@link ResponseEntity} with the publisher
    */
   @Operation(summary = "Searches publisher by 'id'", description = "Searches publisher by 'id'",
       tags = {TAG})
@@ -140,7 +140,7 @@ public class PublisherApi extends AbstractApi {
   /**
    * {@code DELETE  /publishers/:id} : delete the "id" publisher.
    *
-   * @param id the id of the publisherDto to delete
+   * @param id the id of the publisher to delete
    * @return the {@link ResponseEntity}
    */
   @Operation(summary = "Delete publisher by 'id'", description = "Delete an publisher by 'id'",

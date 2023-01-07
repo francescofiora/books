@@ -136,7 +136,7 @@ public class UserApi extends AbstractApi {
   /**
    * {@code DELETE  /users/:id} : delete the "id" user.
    *
-   * @param id the id of the userDto to delete
+   * @param id the id of the user to delete
    * @return the {@link ResponseEntity}
    */
   @Operation(summary = "Delete user by 'id'", description = "Delete an user by 'id'", tags = {TAG})
