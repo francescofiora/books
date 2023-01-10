@@ -2,6 +2,7 @@ package it.francescofiora.books.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,7 @@ public abstract class BaseUserDto implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
-  @Schema(description = "User Name", example = "John", required = true)
+  @Schema(description = "User Name", example = "John", requiredMode = RequiredMode.REQUIRED)
   @JsonProperty("username")
   @NotBlank
   @Size(min = 2)
@@ -46,7 +47,7 @@ public abstract class BaseUserDto implements Serializable {
   @NotNull
   private Boolean credentialsNonExpired;
 
-  @Schema(required = true)
+  @Schema(requiredMode = RequiredMode.REQUIRED)
   @JsonProperty("roles")
   @NotEmpty
   @Valid

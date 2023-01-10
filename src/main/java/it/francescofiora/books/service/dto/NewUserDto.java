@@ -1,6 +1,7 @@
 package it.francescofiora.books.service.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import java.util.Objects;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -18,7 +19,7 @@ public class NewUserDto extends BaseUserDto {
 
   private static final long serialVersionUID = 1L;
 
-  @Schema(description = "Password", required = true)
+  @Schema(description = "Password", requiredMode = RequiredMode.REQUIRED)
   @NotBlank
   @Size(min = 8)
   private String password;

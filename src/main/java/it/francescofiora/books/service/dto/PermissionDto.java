@@ -2,6 +2,7 @@ package it.francescofiora.books.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import it.francescofiora.books.service.util.DtoUtils;
 import java.io.Serializable;
 import java.util.Objects;
@@ -22,19 +23,20 @@ public class PermissionDto implements DtoIdentifier, Serializable {
 
   private static final long serialVersionUID = 1L;
 
-  @Schema(description = "Unique identifier", example = "1", required = true)
+  @Schema(description = "Unique identifier", example = "1", requiredMode = RequiredMode.REQUIRED)
   @JsonProperty("id")
   @NotNull
   private Long id;
 
-  @Schema(description = "Permission's Name", example = "book_read", required = true)
+  @Schema(description = "Permission's Name", example = "book_read",
+      requiredMode = RequiredMode.REQUIRED)
   @JsonProperty("name")
   @NotBlank
   @Size(max = 100)
   private String name;
 
   @Schema(description = "Description of the Permission", example = "Book read permission",
-      required = true)
+      requiredMode = RequiredMode.REQUIRED)
   @JsonProperty("description")
   @NotBlank
   private String description;

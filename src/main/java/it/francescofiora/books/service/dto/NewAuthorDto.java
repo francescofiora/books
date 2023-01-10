@@ -2,6 +2,7 @@ package it.francescofiora.books.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.validation.constraints.NotBlank;
@@ -20,13 +21,13 @@ public class NewAuthorDto implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
-  @Schema(description = "First Name", example = "John", required = true)
+  @Schema(description = "First Name", example = "John", requiredMode = RequiredMode.REQUIRED)
   @JsonProperty("firstName")
   @NotBlank
   @Size(min = 2)
   private String firstName;
 
-  @Schema(description = "Last Name", example = "Smith", required = true)
+  @Schema(description = "Last Name", example = "Smith", requiredMode = RequiredMode.REQUIRED)
   @JsonProperty("lastName")
   @NotBlank
   @Size(min = 2)

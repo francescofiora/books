@@ -2,6 +2,7 @@ package it.francescofiora.books.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import it.francescofiora.books.service.util.DtoUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -24,18 +25,19 @@ public class TitleDto extends BaseTitleDto implements Serializable, DtoIdentifie
 
   private static final long serialVersionUID = 1L;
 
-  @Schema(description = "Unique Title identifier", example = "1", required = true)
+  @Schema(description = "Unique Title identifier", example = "1",
+      requiredMode = RequiredMode.REQUIRED)
   @JsonProperty("id")
   @NotNull
   private Long id;
 
-  @Schema(required = true)
+  @Schema(requiredMode = RequiredMode.REQUIRED)
   @JsonProperty("publisher")
   @NotNull
   @Valid
   private PublisherDto publisher = new PublisherDto();
 
-  @Schema(required = true)
+  @Schema(requiredMode = RequiredMode.REQUIRED)
   @JsonProperty("authors")
   @NotEmpty
   @Valid

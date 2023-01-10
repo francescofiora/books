@@ -2,6 +2,7 @@ package it.francescofiora.books.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,21 +24,21 @@ import lombok.ToString;
 public class NewRoleDto implements Serializable {
 
   private static final long serialVersionUID = 1L;
-  
-  @Schema(description = "Role's Name", example = "book_read", required = true)
+
+  @Schema(description = "Role's Name", example = "book_read", requiredMode = RequiredMode.REQUIRED)
   @JsonProperty("name")
   @NotBlank
   @Size(max = 100)
   private String name;
 
   @Schema(description = "Description of the Role", example = "Book read permission",
-      required = true)
+      requiredMode = RequiredMode.REQUIRED)
   @JsonProperty("description")
   @NotBlank
   @Size(max = 255)
   private String description;
-  
-  @Schema(required = true)
+
+  @Schema(requiredMode = RequiredMode.REQUIRED)
   @JsonProperty("permissions")
   @NotEmpty
   @Valid
