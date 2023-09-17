@@ -1,7 +1,6 @@
 package it.francescofiora.books.web.errors;
 
 import it.francescofiora.books.web.util.HeaderUtil;
-import java.util.stream.Collectors;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -50,7 +49,7 @@ public class GlobalControllerExceptionHandler {
     final var result = ex.getBindingResult();
     final var fieldErrors = result.getFieldErrors().stream()
         .map(f -> String.format(FORMAT_FIELD, f.getObjectName(), f.getField(), f.getCode()))
-        .collect(Collectors.toList());
+        .toList();
 
     return createBadRequest(HeaderUtil.createFailureAlert(
         getSimpleName(ex.getTarget()) + ALERT_BAD_REQUEST, fieldErrors, ex.getMessage()));

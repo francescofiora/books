@@ -3,7 +3,6 @@ package it.francescofiora.books.domain;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -75,8 +74,7 @@ public class User extends AbstractDomain implements UserDetails {
     // @formatter:off
     return roles.stream()
         .flatMap(role -> role.getPermissions().stream())
-        .map(permission -> new SimpleGrantedAuthority(permission.getName()))
-        .collect(Collectors.toList());
+        .map(permission -> new SimpleGrantedAuthority(permission.getName())).toList();
     // @formatter:on
   }
 

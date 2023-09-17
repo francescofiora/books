@@ -91,8 +91,8 @@ https://localhost:8081/swagger-ui.html
     ./gradlew clean build
 
 # Technologies used
-- [Gradle 7.0](https://gradle.org/)
-- [Java 11](https://openjdk.java.net/projects/jdk/11/)
+- [Gradle 7.4](https://gradle.org/)
+- [Java 17](https://openjdk.java.net/projects/jdk/17/)
 - [Spring Boot 2.7](https://spring.io/projects/spring-boot)
 - [Spring Security](https://spring.io/projects/spring-security)
 - [Swagger OpeApi 3.0](https://swagger.io/specification/)

@@ -9,8 +9,8 @@ plugins {
   id 'org.sonarqube' version '3.3'
  }
 
-sourceCompatibility = 1.11
-targetCompatibility = 1.11
+sourceCompatibility = 1.17
+targetCompatibility = 1.17
 
 repositories {
   mavenLocal()
@@ -131,5 +131,5 @@ jacocoTestReport {
 }
 
 wrapper {
-    gradleVersion = "7.0"
+    gradleVersion = "7.4"
 }

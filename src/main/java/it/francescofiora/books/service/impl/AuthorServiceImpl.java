@@ -11,7 +11,6 @@ import it.francescofiora.books.service.mapper.TitleMapper;
 import it.francescofiora.books.web.errors.BadRequestAlertException;
 import it.francescofiora.books.web.errors.NotFoundAlertException;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
@@ -105,6 +104,6 @@ public class AuthorServiceImpl implements AuthorService {
     }
     var author = authorOpt.get();
     return new PageImpl<>(
-        titleMapper.toDto(author.getTitles().stream().collect(Collectors.toList())));
+        titleMapper.toDto(author.getTitles().stream().toList()));
   }
 }

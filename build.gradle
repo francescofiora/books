@@ -11,8 +11,8 @@ plugins {
   id 'com.google.cloud.tools.jib' version '3.3.1'
  }
 
-sourceCompatibility = 1.11
-targetCompatibility = 1.11
+sourceCompatibility = 1.17
+targetCompatibility = 1.17
 
 repositories {
   mavenLocal()
@@ -164,5 +164,5 @@ pitest {
 }
 
 wrapper {
-    gradleVersion = "7.0"
+    gradleVersion = "7.4"
 }
