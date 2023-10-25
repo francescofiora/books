@@ -11,11 +11,15 @@ import it.francescofiora.books.itt.util.ContainerGenerator;
 import java.io.File;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.ssl.SSLContexts;
-import org.apache.http.ssl.TrustStrategy;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.client5.http.impl.io.BasicHttpClientConnectionManager;
+import org.apache.hc.client5.http.socket.ConnectionSocketFactory;
+import org.apache.hc.client5.http.socket.PlainConnectionSocketFactory;
+import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
+import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
+import org.apache.hc.core5.http.config.RegistryBuilder;
+import org.apache.hc.core5.ssl.SSLContexts;
+import org.apache.hc.core5.ssl.TrustStrategy;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,11 +54,13 @@ class ApiSslTest extends AbstractTestContainer {
   private static RestTemplate getRestTemplateSsl() throws Exception {
     TrustStrategy acceptingTrustStrategy = (x509Certificates, s) -> true;
     var sslContext = SSLContexts.custom().loadTrustMaterial(null, acceptingTrustStrategy).build();
-    var csf = new SSLConnectionSocketFactory(sslContext, new NoopHostnameVerifier());
-    var restTemplate = new RestTemplate();
-    restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory(
-        HttpClientBuilder.create().setSSLSocketFactory(csf).build()));
-    return restTemplate;
+    var sslsf = new SSLConnectionSocketFactory(sslContext, new NoopHostnameVerifier());
+    var socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
+        .register("https", sslsf).register("http", new PlainConnectionSocketFactory()).build();
+    var connectionManager = new BasicHttpClientConnectionManager(socketFactoryRegistry);
+    var client = HttpClients.custom().setConnectionManager(connectionManager).build();
+    var factory = new HttpComponentsClientHttpRequestFactory(client);
+    return new RestTemplate(factory);
   }
 
   /**

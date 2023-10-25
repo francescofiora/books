@@ -2,9 +2,9 @@ package it.francescofiora.books.web.errors;
 
 import io.swagger.v3.oas.annotations.Hidden;
 import it.francescofiora.books.web.util.HeaderUtil;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Map;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;

@@ -1,7 +1,7 @@
 version: "3"
 services:
   books-mysql:
-    image: mysql:8.0.27
+    image: mysql:8.1.0
     environment:
       MYSQL_ROOT_PASSWORD: strong_pwd
     volumes:
@@ -11,7 +11,7 @@ services:
       - "3306:3306"
 
   books-myadmin:
-    image: phpmyadmin/phpmyadmin:5.1.1
+    image: phpmyadmin/phpmyadmin:5.2.1
     environment:
       - PMA_HOST=books-mysql
       - PMA_USER=root

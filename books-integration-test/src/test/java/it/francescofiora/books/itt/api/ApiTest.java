@@ -31,6 +31,7 @@ class ApiTest extends AbstractTestContainer {
   private static StartStopContainers containers = new StartStopContainers();
   private static ContainerGenerator containerGenerator = new ContainerGenerator(false);
   private static Long userId;
+  private static Long userReaderId;
 
   /**
    * Configuration before all tests.
@@ -55,6 +56,7 @@ class ApiTest extends AbstractTestContainer {
     bookApi.withUsername(USER_ADMIN).withPassword(PASSWORD);
 
     userId = createUser(USER_TEST, PASSWORD_TEST, List.of("ROLE_BOOK_ADMIN"));
+    userReaderId = createUser(USER_READER_TEST, PASSWORD_TEST, List.of("ROLE_BOOK_READ"));
   }
 
   @Test
@@ -69,6 +71,35 @@ class ApiTest extends AbstractTestContainer {
     var result = bookApi.performGet(PERMISSION_URL);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
     checkRoleAndPermissionList(new JSONArray(result.getBody()));
+  }
+
+  @Test
+  void testForbidden() {
+    bookApi.withUsername(USER_TEST).withPassword(PASSWORD_TEST);
+    assertThrows(HttpClientErrorException.class, () -> bookApi.performGet(PERMISSION_URL));
+    assertThrows(HttpClientErrorException.class, () -> bookApi.performGet(ROLE_URL));
+
+    bookApi.withUsername(USER_READER_TEST).withPassword(PASSWORD_TEST);
+    assertThrows(HttpClientErrorException.class, () -> bookApi.performGet(PERMISSION_URL));
+    assertThrows(HttpClientErrorException.class, () -> bookApi.performGet(ROLE_URL));
+    assertThrows(HttpClientErrorException.class,
+        () -> bookApi.performPost(AUTHOR_URL, createAuthor().toString()));
+    assertThrows(HttpClientErrorException.class,
+        () -> bookApi.performPost(PUBLISHER_URL, createPublisher().toString()));
+  }
+
+  @Test
+  void testUserReader() {
+    bookApi.withUsername(USER_READER_TEST).withPassword(PASSWORD_TEST);
+
+    var result = bookApi.performGet(AUTHOR_URL);
+    assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+    result = bookApi.performGet(PUBLISHER_URL);
+    assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+    result = bookApi.performGet(TITLE_URL);
+    assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
   }
 
   @Test
@@ -241,6 +272,9 @@ class ApiTest extends AbstractTestContainer {
     bookApi.withUsername(USER_ADMIN).withPassword(PASSWORD);
 
     var voidResult = bookApi.performDelete("/api/v1/users/" + userId);
+    assertThat(voidResult.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+
+    voidResult = bookApi.performDelete("/api/v1/users/" + userReaderId);
     assertThat(voidResult.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
 
     containers.stopAndCloseAll();

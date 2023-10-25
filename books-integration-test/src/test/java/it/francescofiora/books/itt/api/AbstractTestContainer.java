@@ -37,6 +37,7 @@ public abstract class AbstractTestContainer {
   public static final String BOOK_ADMIN = "bookAdmin";
 
   public static final String USER_TEST = "username";
+  public static final String USER_READER_TEST = "userRead";
   public static final String PASSWORD_TEST = "mypassword";
 
   public static final String PASSWORD = "password";
