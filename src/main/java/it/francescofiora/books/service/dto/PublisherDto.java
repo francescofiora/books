@@ -1,8 +1,9 @@
 package it.francescofiora.books.service.dto;
 
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import it.francescofiora.books.service.util.DtoUtils;
 import jakarta.validation.constraints.NotNull;
 import java.util.Objects;
@@ -20,7 +21,7 @@ public class PublisherDto extends NewPublisherDto implements DtoIdentifier {
 
   private static final long serialVersionUID = 1L;
 
-  @Schema(description = "Unique identifier", example = "1", requiredMode = RequiredMode.REQUIRED)
+  @Schema(description = "Unique identifier", example = "1", requiredMode = REQUIRED)
   @JsonProperty("id")
   @NotNull
   private Long id;

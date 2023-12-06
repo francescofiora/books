@@ -51,6 +51,6 @@ class CustomErrorControllerTest {
 
     response = ex.handleError(request);
     assertThat(response.getHeaders().get("X-error"))
-        .contains("500 INTERNAL_SERVER_ERROR - Message");
+        .contains("500 INTERNAL_SERVER_ERROR - Message ");
   }
 }

@@ -1,8 +1,9 @@
 package it.francescofiora.books.service.dto;
 
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
@@ -21,8 +22,7 @@ public class NewPublisherDto implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
-  @Schema(description = "Publisher Name", example = "Publisher Ltd",
-      requiredMode = RequiredMode.REQUIRED)
+  @Schema(description = "Publisher Name", example = "Publisher Ltd", requiredMode = REQUIRED)
   @JsonProperty("publisherName")
   @NotBlank
   @Size(min = 2)

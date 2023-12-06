@@ -1,8 +1,9 @@
 package it.francescofiora.books.service.dto;
 
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import it.francescofiora.books.service.util.DtoUtils;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
@@ -25,19 +26,18 @@ public class UpdatebleTitleDto extends BaseTitleDto implements Serializable, Dto
 
   private static final long serialVersionUID = 1L;
 
-  @Schema(description = "Unique Title identifier", example = "1",
-      requiredMode = RequiredMode.REQUIRED)
+  @Schema(description = "Unique Title identifier", example = "1", requiredMode = REQUIRED)
   @JsonProperty("id")
   @NotNull
   private Long id;
 
-  @Schema(requiredMode = RequiredMode.REQUIRED)
+  @Schema(requiredMode = REQUIRED)
   @JsonProperty("publisher")
   @NotNull
   @Valid
   private RefPublisherDto publisher = new RefPublisherDto();
 
-  @Schema(requiredMode = RequiredMode.REQUIRED)
+  @Schema(requiredMode = REQUIRED)
   @JsonProperty("authors")
   @NotEmpty
   @Valid

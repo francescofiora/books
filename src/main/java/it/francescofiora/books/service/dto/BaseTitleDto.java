@@ -1,8 +1,9 @@
 package it.francescofiora.books.service.dto;
 
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import it.francescofiora.books.domain.enumeration.Language;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -18,24 +19,23 @@ import lombok.Setter;
 @Setter
 public abstract class BaseTitleDto {
 
-  @Schema(description = "Book's Name", example = "My prefer Book",
-      requiredMode = RequiredMode.REQUIRED)
+  @Schema(description = "Book's Name", example = "My prefer Book", requiredMode = REQUIRED)
   @JsonProperty("name")
   @NotBlank
   @Size(min = 3, max = 20)
   private String name;
 
-  @Schema(description = "Edition Number", requiredMode = RequiredMode.REQUIRED)
+  @Schema(description = "Edition Number", requiredMode = REQUIRED)
   @JsonProperty("editionNumber")
   @NotNull
   private Long editionNumber;
 
-  @Schema(description = "Language", requiredMode = RequiredMode.REQUIRED)
+  @Schema(description = "Language", requiredMode = REQUIRED)
   @JsonProperty("language")
   @NotNull
   private Language language;
 
-  @Schema(description = "Year of copyright", example = "2020", requiredMode = RequiredMode.REQUIRED)
+  @Schema(description = "Year of copyright", example = "2020", requiredMode = REQUIRED)
   @JsonProperty("copyright")
   @NotNull
   private Integer copyright;
@@ -44,7 +44,7 @@ public abstract class BaseTitleDto {
   @JsonProperty("imageFile")
   private String imageFile;
 
-  @Schema(description = "Price", example = "10", requiredMode = RequiredMode.REQUIRED)
+  @Schema(description = "Price", example = "10", requiredMode = REQUIRED)
   @JsonProperty("price")
   @NotNull
   @Positive

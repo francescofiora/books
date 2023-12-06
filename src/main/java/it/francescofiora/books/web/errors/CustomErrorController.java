@@ -1,5 +1,9 @@
 package it.francescofiora.books.web.errors;
 
+import static org.springframework.boot.web.error.ErrorAttributeOptions.Include.BINDING_ERRORS;
+import static org.springframework.boot.web.error.ErrorAttributeOptions.Include.EXCEPTION;
+import static org.springframework.boot.web.error.ErrorAttributeOptions.Include.MESSAGE;
+
 import io.swagger.v3.oas.annotations.Hidden;
 import it.francescofiora.books.web.util.HeaderUtil;
 import jakarta.servlet.RequestDispatcher;
@@ -44,30 +48,32 @@ public class CustomErrorController implements ErrorController {
     }
   }
 
+  protected void appendMsg(StringBuilder sb, Map<String, Object> map, String[] names) {
+    for (var name : names) {
+      var msg = map.get(name);
+      if (msg != null) {
+        sb.append(msg.toString() + " ");
+      }
+    }
+  }
+
   /**
    * Return the error in JSON format.
    *
    * @param request rest request
    * @return handle Error
    */
+  @SuppressWarnings("squid:S3752")
   @RequestMapping(value = "{$errorPath}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Void> handleError(HttpServletRequest request) {
     var status = getStatus(request);
-    var map = getErrorAttributes(request, ErrorAttributeOptions.defaults());
+    var map =
+        getErrorAttributes(request, ErrorAttributeOptions.of(MESSAGE, EXCEPTION, BINDING_ERRORS));
 
     var sb = new StringBuilder();
     sb.append(status + " - ");
-    final var error = map.get("error");
-    if (error != null) {
-      sb.append(error.toString() + " ");
-    }
-    final var message = map.get("message");
-    if (message != null) {
-      sb.append(message.toString());
-    }
-
+    appendMsg(sb, map, new String[] {"exception", "error", "message"});
     var path = String.valueOf(map.get("path"));
-
     return ResponseEntity.status(status)
         .headers(HeaderUtil.createFailureAlert(status.toString(), path, sb.toString())).build();
   }
