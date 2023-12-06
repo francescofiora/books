@@ -2,7 +2,7 @@ version: "3"
 services:
 
   sonarqube-books:
-    image: sonarqube:8.9.7-community
+    image: sonarqube:9.4.0-community
     environment:
       - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
     ports:
