@@ -1,7 +1,7 @@
 plugins {
   id 'java'
   id 'eclipse-wtp'
-  id 'org.springframework.boot' version '3.1.0'
+  id 'org.springframework.boot' version '3.1.6'
   id 'io.spring.dependency-management' version '1.1.3'
   id 'checkstyle'
   id 'jacoco'
@@ -134,8 +134,8 @@ checkstyle {
 }
 tasks.withType(Checkstyle) {
   reports {
-    xml.enabled = false
-    html.enabled = true
+    xml.required = false
+    html.required = true
   }
 }
 checkstyleMain {
@@ -150,10 +150,11 @@ test {
 jacocoTestReport {
   dependsOn test
   reports {
-    xml.enabled true
-    csv.enabled false
-    html.destination file("${buildDir}/reports/jacoco/test")
-    xml.destination  file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+    xml.required = true
+    csv.required = false
+    html.required = true
+    html.outputLocation = file("${buildDir}/reports/jacoco/test")
+    xml.outputLocation = file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
   }
 }
 
