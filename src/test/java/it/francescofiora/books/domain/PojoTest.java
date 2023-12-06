@@ -22,7 +22,7 @@ class PojoTest {
   @Test
   void ensureExpectedCount() {
     var classes = PojoClassFactory.getPojoClasses(POJO_PACKAGE, new FilterPackageInfo());
-    assertThat(classes.size()).isEqualTo(EXPECTED_CLASS_COUNT);
+    assertThat(classes).hasSize(EXPECTED_CLASS_COUNT);
   }
 
   @Test
