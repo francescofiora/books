@@ -43,7 +43,7 @@ Scan project
 
     ./gradlew sonarqube \
     -Dsonar.projectKey=yourProjectKey \
-    -Dsonar.login=yourAuthenticationToken
+    -Dsonar.token=yourAuthenticationToken
 
 ### Reports
     build/reports/checkstyle/main.html
@@ -91,9 +91,9 @@ https://localhost:8081/swagger-ui.html
     ./gradlew clean build
 
 # Technologies used
-- [Gradle 7.4](https://gradle.org)
+- [Gradle 7.5](https://gradle.org)
 - [Java 17](https://openjdk.java.net/projects/jdk/17)
-- [Spring Boot 3.1](https://spring.io/projects/spring-boot)
+- [Spring Boot 3.2](https://spring.io/projects/spring-boot)
 - [Spring Security](https://spring.io/projects/spring-security)
 - [Swagger OpeApi 3.0](https://swagger.io/specification)
 - [Mapstruct 1.5](https://mapstruct.org)
@@ -101,13 +101,13 @@ https://localhost:8081/swagger-ui.html
 - [Spring Data JPA](https://projects.spring.io/spring-data-jpa)
 - [Mysql connector 8.0](https://www.mysql.com/products/connector)
 - [HsqlDb](http://hsqldb.org)
-- [Liquibase](https://www.liquibase.com)
-- [LogBack 1.4](https://logback.qos.ch)
+- [Liquibase 4.26](https://www.liquibase.com)
+- [LogBack 1.5](https://logback.qos.ch)
 - [Mockito](https://site.mockito.org)
 - [JUnit 5](https://junit.org/junit5)
 - [OpenPojo 0.9](https://github.com/OpenPojo)
 - [CheckStyle 8.44](https://checkstyle.sourceforge.io)
 - [Owasp Dependency Check 7.4](https://owasp.org/www-project-dependency-check)
 - [Jacoco 0.8](https://www.jacoco.org)
-- [Pitest 1.7](https://pitest.org)
+- [Pitest 1.15](https://pitest.org)
 - [TestContainers 1.19](https://www.testcontainers.org)
