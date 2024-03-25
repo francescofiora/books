@@ -6,7 +6,6 @@ plugins {
   id 'checkstyle'
   id 'jacoco'
   id 'org.owasp.dependencycheck' version '7.4.4'
-  id 'org.sonarqube' version '4.4.1.3373'
  }
 
 sourceCompatibility = 1.17
@@ -25,6 +24,7 @@ def lombok_version = property('lombok.version')
 def logback_version = property('logback.version')
 def apache_httpclient_version = property('apache-httpclient.version')
 def testcontainers_version = property('testcontainers.version')
+def cucumber_version = property('cucumber.version')
 
 dependencies {
 
@@ -48,6 +48,11 @@ dependencies {
 
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
   testImplementation 'org.springframework.security:spring-security-test'
+
+  testImplementation "io.cucumber:cucumber-java:${cucumber_version}"
+  testImplementation "io.cucumber:cucumber-junit-platform-engine:${cucumber_version}"
+  testImplementation 'org.junit.platform:junit-platform-suite:1.10.2'
+
   testImplementation "org.projectlombok:lombok:${lombok_version}"
 
   testImplementation "org.testcontainers:junit-jupiter"
@@ -65,14 +70,6 @@ defaultTasks "bootRun"
 springBoot {
   mainClass.set("it.francescofiora.books.itt.Application")
   buildInfo()
-}
-
-sonarqube {
-  properties {
-    property "sonar.sourceEncoding", "UTF-8"
-    property 'sonar.core.codeCoveragePlugin', 'jacoco'
-    property 'sonar.coverage.jacoco.xmlReportPaths', "${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml"
-  }
 }
 
 sourceSets {

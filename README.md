@@ -4,7 +4,6 @@ Yes, yet another tutorial with "book, author and publisher" as entities.
 
 ### Topics covered
 - Spring Boot Rest Api
-- SSL connections
 - Swagger UI for visualizing APIs
 - Error Handling
 - Basic Authentication
@@ -16,9 +15,7 @@ Yes, yet another tutorial with "book, author and publisher" as entities.
     - EndPoints using WebMvcTest
     - POJOs and DTOs using OpenPojo
     - End to End Test with TestRestTemplate
-    - Integration test using TestContainers
-- JMX
-- Eclipse support
+    - Integration test using TestContainers and Cucumber
 
 # Getting Started
 ### Compile
@@ -111,3 +108,4 @@ https://localhost:8081/swagger-ui.html
 - [Jacoco 0.8](https://www.jacoco.org)
 - [Pitest 1.15](https://pitest.org)
 - [TestContainers 1.19](https://www.testcontainers.org)
+- [Cucumber 7.15](https://cucumber.io)
