@@ -6,4 +6,4 @@ build/
 .settings/
 gradle/
 /.gitattributes
-
+.idea/

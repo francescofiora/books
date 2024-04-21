@@ -30,7 +30,7 @@ Yes, yet another tutorial with "book, author and publisher" as entities.
 ### SonarQube
 Run SonarQube
 
-    docker-compose -f docker/docker-compose-sonar.yml up
+    docker compose -f docker/docker-compose-sonar.yml up
 
  - Sonarqube (http://localhost:9000/)
 
@@ -53,13 +53,12 @@ Scan project
 ### Using Docker for tests
 There is a docker compose file to run MySql and phpMyAdmin.
 
-    docker-compose -f docker/docker-compose.yml up
+    docker compose -f docker/docker-compose.yml up
  - phpMyAdmin (http://localhost:8080/)
 
 # How to execute
 - gradle: ./gradlew bootRun
 - fat jar: java -jar ./build/libs/books-1.0-SNAPSHOT.jar
-- Eclipse: import "Existing Gradle project" and "Run Application"
 
 ### Run the application with JMX support
     java -Dendpoints.jmx.enabled=true \
@@ -80,7 +79,7 @@ https://localhost:8081/swagger-ui.html
 
 ### Manual tests - execute all applications with Docker
 
-    docker-compose -f docker/docker-compose-all.yml up
+    docker compose -f docker/docker-compose-all.yml up
 
 ### Integration Test
 
