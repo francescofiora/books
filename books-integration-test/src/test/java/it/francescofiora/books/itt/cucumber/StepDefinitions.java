@@ -69,10 +69,23 @@ public class StepDefinitions extends AbstractTestContainer {
     // @formatter:on
     containers.add(bookApi);
 
-    bookApi.withUsername(USER_ADMIN).withPassword(PASSWORD);
+    setUser(USER_ADMIN, PASSWORD);
 
     userId = createUser(USER_TEST, PASSWORD_TEST, List.of("ROLE_BOOK_ADMIN"));
     userReaderId = createUser(USER_READER_TEST, PASSWORD_TEST, List.of("ROLE_BOOK_READ"));
+  }
+
+  private static void setUser(String user, String password) {
+    try {
+      var signin = new JSONObject();
+      signin.put("username", user);
+      signin.put("password", password);
+      var result = bookApi.performLogin(signin.toString());
+      var tokenObj = new JSONObject(result.getBody());
+      bookApi.setToken(tokenObj.getString("token"));
+    } catch (JSONException e) {
+      throw new IllegalArgumentException(e);
+    }
   }
 
   private static Long createUser(String user, String password, List<String> listRole)
@@ -100,7 +113,7 @@ public class StepDefinitions extends AbstractTestContainer {
    */
   @Given("the admin user")
   public void givenTheAdminUser() {
-    bookApi.withUsername(ROLE_ADMIN).withPassword(PASSWORD);
+    setUser(ROLE_ADMIN, PASSWORD);
   }
 
   /**
@@ -108,7 +121,7 @@ public class StepDefinitions extends AbstractTestContainer {
    */
   @Given("the book admin user")
   public void givenTheBookAdminUser() {
-    bookApi.withUsername(USER_TEST).withPassword(PASSWORD_TEST);
+    setUser(USER_TEST, PASSWORD_TEST);
   }
 
   /**
@@ -116,7 +129,7 @@ public class StepDefinitions extends AbstractTestContainer {
    */
   @Given("the reader user")
   public void givenTheReaderUser() {
-    bookApi.withUsername(USER_READER_TEST).withPassword(PASSWORD_TEST);
+    setUser(USER_READER_TEST, PASSWORD_TEST);
   }
 
   /**
@@ -364,7 +377,7 @@ public class StepDefinitions extends AbstractTestContainer {
    */
   @AfterAll
   public static void endAll() {
-    bookApi.withUsername(USER_ADMIN).withPassword(PASSWORD);
+    setUser(USER_ADMIN, PASSWORD);
 
     var voidResult = bookApi.performDelete("/api/v1/users/" + userId);
     assertThat(voidResult.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);

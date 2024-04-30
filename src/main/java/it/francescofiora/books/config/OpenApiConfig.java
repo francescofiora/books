@@ -1,9 +1,10 @@
 package it.francescofiora.books.config;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.models.Components;
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.parameters.Parameter;
 import it.francescofiora.books.web.filter.EndPointFilter;
@@ -15,23 +16,17 @@ import org.springframework.context.annotation.Configuration;
  * Open Api Configuration.
  */
 @Configuration
+@OpenAPIDefinition(
+    info = @Info(
+        title = "Books Demo App",
+        description = "This is a sample Spring Boot RESTful service"))
+@SecurityScheme(
+    name = "Bearer Authentication",
+    type = SecuritySchemeType.HTTP,
+    bearerFormat = "JWT",
+    scheme = "bearer"
+)
 public class OpenApiConfig {
-
-  /**
-   * Custom OpenAPI component.
-   *
-   * @return OpenAPI Bean
-   */
-  @Bean
-  public OpenAPI customOpenApi() {
-    // @formatter:off
-    return new OpenAPI()
-        .components(new Components())
-        .info(new Info()
-            .title("Books Demo App")
-            .description("This is a sample Spring Boot RESTful service"));
-    // @formatter:on
-  }
 
   /**
    * Custom GlobalHeaders component.

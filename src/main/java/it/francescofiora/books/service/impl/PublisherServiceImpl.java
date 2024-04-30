@@ -49,7 +49,7 @@ public class PublisherServiceImpl implements PublisherService {
   public void update(PublisherDto publisherDto) {
     log.debug("Request to save Publisher : {}", publisherDto);
     var publisherOpt = publisherRepository.findById(publisherDto.getId());
-    if (!publisherOpt.isPresent()) {
+    if (publisherOpt.isEmpty()) {
       final var id = String.valueOf(publisherDto.getId());
       throw new NotFoundAlertException(ENTITY_NAME, id,
           String.format(NotFoundAlertException.MSG_NOT_FOUND_WITH_ID, ENTITY_NAME, id));

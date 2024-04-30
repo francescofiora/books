@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.francescofiora.books.service.TitleService;
 import it.francescofiora.books.service.dto.NewTitleDto;
@@ -35,6 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Tag(name = "title", description = "Title Rest API")
 @RequestMapping("/api/v1")
+@SecurityRequirement(name = "Bearer Authentication")
 public class TitleApi extends AbstractApi {
 
   private static final String ENTITY_NAME = "TitleDto";

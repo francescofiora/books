@@ -74,7 +74,7 @@ public abstract class AbstractTestContainer {
     for (int i = 0; i < list.length(); i++) {
       var item = list.getJSONObject(i);
       var id = item.getLong(ID);
-      assertThat(id).isNotNull();
+      assertThat(id).isGreaterThan(0);
       var name = item.getString(NAME);
       assertThat(name).isNotNull();
       var description = item.getString(DESCRIPTION);

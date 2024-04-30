@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.francescofiora.books.service.RoleService;
 import it.francescofiora.books.service.dto.NewRoleDto;
@@ -35,6 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Tag(name = "role", description = "Role Rest API")
 @RequestMapping("/api/v1")
+@SecurityRequirement(name = "Bearer Authentication")
 public class RoleApi extends AbstractApi {
 
   private static final String ENTITY_NAME = "RoleDto";
@@ -42,7 +44,7 @@ public class RoleApi extends AbstractApi {
 
   private final RoleService roleService;
 
-  protected RoleApi(RoleService roleService) {
+  public RoleApi(RoleService roleService) {
     super(ENTITY_NAME);
     this.roleService = roleService;
   }

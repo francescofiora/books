@@ -8,8 +8,10 @@ import it.francescofiora.books.domain.User;
 import it.francescofiora.books.repository.PermissionRepository;
 import it.francescofiora.books.repository.RoleRepository;
 import it.francescofiora.books.repository.UserRepository;
+import it.francescofiora.books.service.dto.AuthenticationDto;
 import it.francescofiora.books.service.dto.RefPermissionDto;
 import it.francescofiora.books.service.dto.RefRoleDto;
+import it.francescofiora.books.service.dto.SigninDto;
 import it.francescofiora.books.util.UserUtils;
 import it.francescofiora.books.web.api.AbstractApi;
 import it.francescofiora.books.web.util.HeaderUtil;
@@ -105,48 +107,64 @@ public class AbstractTestEndToEnd {
 
   protected void testUnauthorized(String path) {
     var result = unauthorizedGet(path, String.class);
-    assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+    assertThat(result.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
 
-    result = unauthorizedGetWrongUser(path, String.class);
-    assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+    result = unauthorizedGetWrongToken(path, String.class);
+    assertThat(result.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
   }
 
   protected <T> ResponseEntity<T> unauthorizedGet(String path, Class<T> responseType) {
     return restTemplate.getForEntity(AbstractApi.createUri(getPath(path)), responseType);
   }
 
-  protected <T> ResponseEntity<T> unauthorizedGetWrongUser(String path, Class<T> responseType) {
-    var headers = new HttpHeaders();
-    headers.setBasicAuth("wrong_user", "wrong_password");
-    var request = new HttpEntity<>(headers);
+  protected <T> ResponseEntity<T> unauthorizedGetWrongToken(String path, Class<T> responseType) {
+    var request = new HttpEntity<>(createHttpHeaders("wrong"));
     return restTemplate.exchange(getPath(path), HttpMethod.GET, request, responseType);
   }
 
-  protected <T> ResponseEntity<T> performGet(String username, String path, Class<T> responseType) {
-    var request = new HttpEntity<>(createHttpHeaders(username));
+  protected <T> ResponseEntity<T> performGet(String token, String path, Class<T> responseType) {
+    var request = new HttpEntity<>(createHttpHeaders(token));
     return restTemplate.exchange(getPath(path), HttpMethod.GET, request, responseType);
   }
 
-  protected <T> ResponseEntity<T> performGet(String username, String path,
+  protected <T> ResponseEntity<T> performGet(String token, String path,
       MultiValueMap<String, String> pageable, Class<T> responseType) {
-    var request = new HttpEntity<>(createHttpHeaders(username));
+    var request = new HttpEntity<>(createHttpHeaders(token));
     var uri = UriComponentsBuilder.fromHttpUrl(getPath(path)).queryParams(pageable).build();
     return restTemplate.exchange(uri.toUriString(), HttpMethod.GET, request, responseType);
   }
 
-  protected ResponseEntity<Void> performDelete(String username, String path) {
-    var request = new HttpEntity<>(createHttpHeaders(username));
+  protected ResponseEntity<Void> performDelete(String token, String path) {
+    var request = new HttpEntity<>(createHttpHeaders(token));
     return restTemplate.exchange(getPath(path), HttpMethod.DELETE, request, Void.class);
   }
 
-  protected <T> ResponseEntity<Void> performPost(String username, String path, T body) {
-    var request = new HttpEntity<>(body, createHttpHeaders(username));
+  protected <T> ResponseEntity<Void> performPost(String token, String path, T body) {
+    var request = new HttpEntity<>(body, createHttpHeaders(token));
     return restTemplate.postForEntity(AbstractApi.createUri(getPath(path)), request, Void.class);
   }
 
-  protected <T> ResponseEntity<Void> performPut(String username, String path, T body) {
-    var request = new HttpEntity<>(body, createHttpHeaders(username));
+  protected <T> ResponseEntity<Void> performPut(String token, String path, T body) {
+    var request = new HttpEntity<>(body, createHttpHeaders(token));
     return restTemplate.exchange(getPath(path), HttpMethod.PUT, request, Void.class);
+  }
+
+  protected AuthenticationDto getToken(String username) {
+    var result = performLogin(username, UserUtils.PASSWORD);
+    assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+    assertThat(result.getBody()).isNotNull();
+    assertThat(result.getBody().getToken()).isNotNull();
+    checkHeaders(result.getHeaders(), "AuthenticationDto.get", "token");
+    return result.getBody();
+  }
+
+  protected ResponseEntity<AuthenticationDto> performLogin(String username, String password) {
+    var signinDto = new SigninDto();
+    signinDto.setUsername(username);
+    signinDto.setPassword(password);
+    var request = new HttpEntity<>(signinDto, new HttpHeaders());
+    return restTemplate.postForEntity(AbstractApi.createUri(getPath("/api/v1/auth/login")),
+        request, AuthenticationDto.class);
   }
 
   private void checkHeaders(HttpHeaders headers, String alert, String param) {
@@ -155,8 +173,8 @@ public class AbstractTestEndToEnd {
     assertThat(headers.get(HeaderUtil.X_PARAMS)).contains(param);
   }
 
-  protected <T> Long createAndReturnId(String username, String path, T body, String alert) {
-    var result = performPost(username, path, body);
+  protected <T> Long createAndReturnId(String token, String path, T body, String alert) {
+    var result = performPost(token, path, body);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     assertThat(result.getHeaders()).containsKeys(HeaderUtil.X_ALERT, HttpHeaders.LOCATION,
         HeaderUtil.X_PARAMS);
@@ -167,50 +185,50 @@ public class AbstractTestEndToEnd {
     return id;
   }
 
-  protected <T> void assertCreateNotFound(String username, String path, T body, String alert,
+  protected <T> void assertCreateNotFound(String token, String path, T body, String alert,
       String param) {
-    var result = performPost(username, path, body);
+    var result = performPost(token, path, body);
     checkHeadersError(result.getHeaders(), alert, param);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
   }
 
-  protected <T> void assertCreateBadRequest(String username, String path, T body, String alert,
+  protected <T> void assertCreateBadRequest(String token, String path, T body, String alert,
       String param) {
-    var result = performPost(username, path, body);
+    var result = performPost(token, path, body);
     checkHeadersError(result.getHeaders(), alert, param);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
   }
 
-  protected <T> void update(String username, String path, T body, String alert, String param) {
-    var result = performPut(username, path, body);
+  protected <T> void update(String token, String path, T body, String alert, String param) {
+    var result = performPut(token, path, body);
     checkHeaders(result.getHeaders(), alert, param);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
   }
 
-  protected <T> void assertUpdateNotFound(String username, String path, T body, String alert,
+  protected <T> void assertUpdateNotFound(String token, String path, T body, String alert,
       String param) {
-    var result = performPut(username, path, body);
+    var result = performPut(token, path, body);
     checkHeadersError(result.getHeaders(), alert, param);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
   }
 
-  protected <T> void assertUpdateBadRequest(String username, String path, T body, String alert,
+  protected <T> void assertUpdateBadRequest(String token, String path, T body, String alert,
       String param) {
-    var result = performPut(username, path, body);
+    var result = performPut(token, path, body);
     checkHeadersError(result.getHeaders(), alert, param);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
   }
 
-  private void checkHeadersError(HttpHeaders headers, String alert, String param) {
+  protected void checkHeadersError(HttpHeaders headers, String alert, String param) {
     assertThat(headers).containsKeys(HeaderUtil.X_ALERT, HeaderUtil.X_ERROR, HeaderUtil.X_PARAMS);
     assertThat(headers.get(HeaderUtil.X_ALERT)).contains(alert);
     assertThat(headers.get(HeaderUtil.X_ERROR)).isNotEmpty();
     assertThat(headers.get(HeaderUtil.X_PARAMS)).contains(param);
   }
 
-  protected <T> T get(String username, String path, Class<T> responseType, String alert,
+  protected <T> T get(String token, String path, Class<T> responseType, String alert,
       String param) {
-    var result = performGet(username, path, responseType);
+    var result = performGet(token, path, responseType);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
     checkHeaders(result.getHeaders(), alert, param);
     var value = result.getBody();
@@ -218,9 +236,9 @@ public class AbstractTestEndToEnd {
     return value;
   }
 
-  protected <T> T get(String username, String path, MultiValueMap<String, String> pageable,
+  protected <T> T get(String token, String path, MultiValueMap<String, String> pageable,
       Class<T> responseType, String alert, String param) {
-    var result = performGet(username, path, pageable, responseType);
+    var result = performGet(token, path, pageable, responseType);
     checkHeaders(result.getHeaders(), alert, param);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
     var value = result.getBody();
@@ -228,35 +246,35 @@ public class AbstractTestEndToEnd {
     return value;
   }
 
-  protected <T> void assertGetNotFound(String username, String path, Class<T> responseType,
+  protected <T> void assertGetNotFound(String token, String path, Class<T> responseType,
       String alert, String param) {
-    var result = performGet(username, path, responseType);
+    var result = performGet(token, path, responseType);
     checkHeadersError(result.getHeaders(), alert, param);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
   }
 
-  protected <T> void assertGetNotFound(String username, String path,
+  protected <T> void assertGetNotFound(String token, String path,
       MultiValueMap<String, String> pageable, Class<T> responseType, String alert, String param) {
-    var result = performGet(username, path, pageable, responseType);
+    var result = performGet(token, path, pageable, responseType);
     checkHeadersError(result.getHeaders(), alert, param);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
   }
 
-  protected <T> void assertGetBadRequest(String username, String path, Class<T> responseType,
+  protected <T> void assertGetBadRequest(String token, String path, Class<T> responseType,
       String alert, String param) {
-    var result = performGet(username, path, responseType);
+    var result = performGet(token, path, responseType);
     checkHeadersError(result.getHeaders(), alert, param);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
   }
 
-  protected void delete(String username, String path, String alert, String param) {
-    var result = performDelete(username, path);
+  protected void delete(String token, String path, String alert, String param) {
+    var result = performDelete(token, path);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     checkHeaders(result.getHeaders(), alert, param);
   }
 
-  protected void assertDeleteBadRequest(String username, String path, String alert, String param) {
-    var result = performDelete(username, path);
+  protected void assertDeleteBadRequest(String token, String path, String alert, String param) {
+    var result = performDelete(token, path);
     checkHeadersError(result.getHeaders(), alert, param);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
   }
@@ -266,10 +284,10 @@ public class AbstractTestEndToEnd {
     return Long.valueOf(url.substring(url.lastIndexOf('/') + 1));
   }
 
-  private HttpHeaders createHttpHeaders(String username) {
+  private HttpHeaders createHttpHeaders(String token) {
     var headers = new HttpHeaders();
-    if (username != null) {
-      headers.setBasicAuth(username, UserUtils.PASSWORD);
+    if (token != null) {
+      headers.add("Authorization", "Bearer " + token);
     }
     return headers;
   }

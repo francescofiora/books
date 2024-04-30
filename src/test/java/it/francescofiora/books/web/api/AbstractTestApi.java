@@ -11,6 +11,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import it.francescofiora.books.service.JwtService;
 import it.francescofiora.books.util.UserUtils;
 import java.io.UnsupportedEncodingException;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,6 +30,7 @@ import org.springframework.test.web.servlet.ResultActions;
 public abstract class AbstractTestApi {
 
   protected static final String USER = "user";
+  protected static final String TOKEN = "TOKEN";
 
   @Autowired
   private MockMvc mvc;
@@ -37,11 +39,17 @@ public abstract class AbstractTestApi {
   private ObjectMapper mapper;
 
   @MockBean
-  private UserDetailsService userDetailsService;
+  private JwtService jwtService;
+
+  @MockBean
+  private UserDetailsService userService;
 
   @BeforeEach
   void setUp() {
-    given(userDetailsService.loadUserByUsername(USER)).willReturn(UserUtils.createUserBookReader());
+    given(jwtService.extractUserName(TOKEN)).willReturn(USER);
+    var userDetail = UserUtils.createUserBookReader();
+    given(userService.loadUserByUsername(USER)).willReturn(userDetail);
+    given(jwtService.isTokenValid(TOKEN, userDetail)).willReturn(true);
   }
 
   protected String writeValueAsString(Object value) throws JsonProcessingException {
@@ -103,7 +111,7 @@ public abstract class AbstractTestApi {
 
   private HttpHeaders createHttpHeaders() {
     var headers = new HttpHeaders();
-    headers.setBasicAuth(USER, UserUtils.PASSWORD);
+    headers.add("Authorization", "Bearer " + TOKEN);
     return headers;
   }
 }

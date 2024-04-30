@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
 
   private void validateRefRoleDto(List<RefRoleDto> refRoleDtoList) {
     for (var roleDto : refRoleDtoList) {
-      if (!roleRepository.findById(roleDto.getId()).isPresent()) {
+      if (roleRepository.findById(roleDto.getId()).isEmpty()) {
         final var id = String.valueOf(roleDto.getId());
         throw new NotFoundAlertException(RoleService.ENTITY_NAME, id, String
             .format(NotFoundAlertException.MSG_NOT_FOUND_WITH_ID, RoleService.ENTITY_NAME, id));
@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
   public void update(UserDto userDto) {
     log.debug("Request to update User : {}", userDto);
     var userOpt = userRepository.findById(userDto.getId());
-    if (!userOpt.isPresent()) {
+    if (userOpt.isEmpty()) {
       var id = String.valueOf(userDto.getId());
       throw new NotFoundAlertException(ENTITY_NAME, id,
           String.format(NotFoundAlertException.MSG_NOT_FOUND_WITH_ID, ENTITY_NAME, id));

@@ -28,15 +28,6 @@ class ConfigTest {
   }
 
   @Test
-  void testOpenApiConfig() {
-    var openApi = new OpenApiConfig().customOpenApi();
-
-    assertThat(openApi.getInfo().getTitle()).isEqualTo("Books Demo App");
-    assertThat(openApi.getInfo().getDescription())
-        .isEqualTo("This is a sample Spring Boot RESTful service");
-  }
-
-  @Test
   void testCustomGlobalHeaders() {
     var operationCustomizer = new OpenApiConfig().customGlobalHeaders();
 

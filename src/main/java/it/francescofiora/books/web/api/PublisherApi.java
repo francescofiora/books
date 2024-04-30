@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.francescofiora.books.service.PublisherService;
 import it.francescofiora.books.service.dto.NewPublisherDto;
@@ -34,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Tag(name = "publisher", description = "Publisher Rest API")
 @RequestMapping("/api/v1")
+@SecurityRequirement(name = "Bearer Authentication")
 public class PublisherApi extends AbstractApi {
 
   private static final String ENTITY_NAME = "PublisherDto";

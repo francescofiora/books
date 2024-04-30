@@ -46,7 +46,7 @@ public class TitleServiceImpl implements TitleService {
   private final PublisherRepository publisherRepository;
 
   private void validateRefPublisherDto(RefPublisherDto refPubDto) {
-    if (!publisherRepository.findById(refPubDto.getId()).isPresent()) {
+    if (publisherRepository.findById(refPubDto.getId()).isEmpty()) {
       final var id = String.valueOf(refPubDto.getId());
       throw new NotFoundAlertException(PublisherService.ENTITY_NAME, id, String
           .format(NotFoundAlertException.MSG_NOT_FOUND_WITH_ID, PublisherService.ENTITY_NAME, id));
@@ -55,7 +55,7 @@ public class TitleServiceImpl implements TitleService {
 
   private void validateRefAuthorDto(List<RefAuthorDto> refAuthorDtoList) {
     for (var authorDto : refAuthorDtoList) {
-      if (!authorRepository.findById(authorDto.getId()).isPresent()) {
+      if (authorRepository.findById(authorDto.getId()).isEmpty()) {
         final var id = String.valueOf(authorDto.getId());
         throw new NotFoundAlertException(AuthorService.ENTITY_NAME, id, String
             .format(NotFoundAlertException.MSG_NOT_FOUND_WITH_ID, AuthorService.ENTITY_NAME, id));
@@ -78,7 +78,7 @@ public class TitleServiceImpl implements TitleService {
   public void update(UpdatebleTitleDto titleDto) {
     log.debug("Request to update Title : {}", titleDto);
     var titleOpt = titleRepository.findById(titleDto.getId());
-    if (!titleOpt.isPresent()) {
+    if (titleOpt.isEmpty()) {
       final var id = String.valueOf(titleDto.getId());
       throw new NotFoundAlertException(ENTITY_NAME, id,
           String.format(NotFoundAlertException.MSG_NOT_FOUND_WITH_ID, ENTITY_NAME, id));

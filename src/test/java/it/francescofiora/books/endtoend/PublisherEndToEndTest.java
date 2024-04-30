@@ -44,77 +44,80 @@ class PublisherEndToEndTest extends AbstractTestEndToEnd {
   @Test
   void testCreate() {
     var newPublisherDto = TestUtils.createNewPublisherDto();
+    var auth = getToken(UserUtils.BOOK_ADMIN);
     var publisherId =
-        createAndReturnId(UserUtils.BOOK_ADMIN, PUBLISHERS_URI, newPublisherDto, ALERT_CREATED);
+        createAndReturnId(auth.getToken(), PUBLISHERS_URI, newPublisherDto, ALERT_CREATED);
 
     final var publishersIdUri = String.format(PUBLISHERS_ID_URI, publisherId);
 
-    var actual = get(UserUtils.BOOK_ADMIN, publishersIdUri, PublisherDto.class, ALERT_GET,
+    var actual = get(auth.getToken(), publishersIdUri, PublisherDto.class, ALERT_GET,
         String.valueOf(publisherId));
     assertThat(actual.getPublisherName()).isEqualTo(newPublisherDto.getPublisherName());
 
     var publisherDto = TestUtils.createPublisherDto(publisherId);
-    update(UserUtils.BOOK_ADMIN, publishersIdUri, publisherDto, ALERT_UPDATED,
+    update(auth.getToken(), publishersIdUri, publisherDto, ALERT_UPDATED,
         String.valueOf(publisherId));
 
-    actual = get(UserUtils.BOOK_ADMIN, publishersIdUri, PublisherDto.class, ALERT_GET,
+    actual = get(auth.getToken(), publishersIdUri, PublisherDto.class, ALERT_GET,
         String.valueOf(publisherId));
     assertThat(actual).isEqualTo(publisherDto);
     assertThat(actual.getPublisherName()).isEqualTo(publisherDto.getPublisherName());
 
     var publishers =
-        get(UserUtils.BOOK_ADMIN, PUBLISHERS_URI, PublisherDto[].class, ALERT_GET, PARAM_PAGE_20);
+        get(auth.getToken(), PUBLISHERS_URI, PublisherDto[].class, ALERT_GET, PARAM_PAGE_20);
     assertThat(publishers).isNotEmpty();
     var option =
         Stream.of(publishers).filter(publisher -> publisher.getId().equals(publisherId)).findAny();
     assertThat(option).isPresent().contains(publisherDto);
 
     var pageRequest = TestUtils.createPageRequestAsMap(0, 10);
-    publishers = get(UserUtils.BOOK_ADMIN, PUBLISHERS_URI, pageRequest, PublisherDto[].class,
+    publishers = get(auth.getToken(), PUBLISHERS_URI, pageRequest, PublisherDto[].class,
         ALERT_GET, PARAM_PAGE_10);
     assertThat(publishers).isNotEmpty();
     option =
         Stream.of(publishers).filter(publisher -> publisher.getId().equals(publisherId)).findAny();
     assertThat(option).isPresent().contains(publisherDto);
 
-    delete(UserUtils.BOOK_ADMIN, publishersIdUri, ALERT_DELETED, String.valueOf(publisherId));
+    delete(auth.getToken(), publishersIdUri, ALERT_DELETED, String.valueOf(publisherId));
 
-    assertGetNotFound(UserUtils.BOOK_ADMIN, publishersIdUri, PublisherDto.class, ALERT_NOT_FOUND,
+    assertGetNotFound(auth.getToken(), publishersIdUri, PublisherDto.class, ALERT_NOT_FOUND,
         String.valueOf(publisherId));
   }
 
   @Test
   void testGetBadRequest() {
-    assertGetBadRequest(UserUtils.BOOK_ADMIN, PUBLISHERS_URI + "/999999999999999999999999",
+    var auth = getToken(UserUtils.BOOK_ADMIN);
+    assertGetBadRequest(auth.getToken(), PUBLISHERS_URI + "/999999999999999999999999",
         String.class, "id.badRequest", PARAM_NOT_VALID_LONG);
   }
 
   @Test
   void testUpdateBadRequest() {
-    assertUpdateBadRequest(UserUtils.BOOK_ADMIN, String.format(PUBLISHERS_ID_URI, 1L),
+    var auth = getToken(UserUtils.BOOK_ADMIN);
+    assertUpdateBadRequest(auth.getToken(), String.format(PUBLISHERS_ID_URI, 1L),
         TestUtils.createPublisherDto(null), ALERT_BAD_REQUEST, PARAM_ID_NOT_NULL);
 
-    var id = createAndReturnId(UserUtils.BOOK_ADMIN, PUBLISHERS_URI,
+    var id = createAndReturnId(auth.getToken(), PUBLISHERS_URI,
         TestUtils.createNewPublisherDto(), ALERT_CREATED);
 
-    assertUpdateBadRequest(UserUtils.BOOK_ADMIN, String.format(PUBLISHERS_ID_URI, id + 1),
+    assertUpdateBadRequest(auth.getToken(), String.format(PUBLISHERS_ID_URI, id + 1),
         TestUtils.createPublisherDto(id), ALERT_BAD_REQUEST, String.valueOf(id));
 
     final var path = String.format(PUBLISHERS_ID_URI, id + 1);
 
     var publisherDto = TestUtils.createPublisherDto(id);
     publisherDto.setPublisherName(null);
-    assertUpdateBadRequest(UserUtils.BOOK_ADMIN, path, publisherDto, ALERT_BAD_REQUEST,
+    assertUpdateBadRequest(auth.getToken(), path, publisherDto, ALERT_BAD_REQUEST,
         PARAM_NAME_NOT_BLANK);
 
     publisherDto = TestUtils.createPublisherDto(id);
     publisherDto.setPublisherName("");
-    assertUpdateBadRequest(UserUtils.BOOK_ADMIN, path, publisherDto, ALERT_BAD_REQUEST,
+    assertUpdateBadRequest(auth.getToken(), path, publisherDto, ALERT_BAD_REQUEST,
         PARAM_NAME_NOT_BLANK);
 
     publisherDto = TestUtils.createPublisherDto(id);
     publisherDto.setPublisherName("  ");
-    assertUpdateBadRequest(UserUtils.BOOK_ADMIN, path, publisherDto, ALERT_BAD_REQUEST,
+    assertUpdateBadRequest(auth.getToken(), path, publisherDto, ALERT_BAD_REQUEST,
         PARAM_NAME_NOT_BLANK);
   }
 }

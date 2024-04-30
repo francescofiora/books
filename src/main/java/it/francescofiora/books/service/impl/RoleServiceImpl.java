@@ -54,7 +54,7 @@ public class RoleServiceImpl implements RoleService {
 
   private void validateRefPermissionDto(List<RefPermissionDto> refPermDtoList) {
     for (var permissionDto : refPermDtoList) {
-      if (!permissionRepository.findById(permissionDto.getId()).isPresent()) {
+      if (permissionRepository.findById(permissionDto.getId()).isEmpty()) {
         final var id = String.valueOf(permissionDto.getId());
         throw new NotFoundAlertException(PERMISSION_ENTITY_NAME, id, String
             .format(NotFoundAlertException.MSG_NOT_FOUND_WITH_ID, PERMISSION_ENTITY_NAME, id));
@@ -76,7 +76,7 @@ public class RoleServiceImpl implements RoleService {
   public void updateRole(RoleDto roleDto) {
     log.debug("Request to update Role : {}", roleDto);
     var roleOpt = roleRepository.findById(roleDto.getId());
-    if (!roleOpt.isPresent()) {
+    if (roleOpt.isEmpty()) {
       var id = String.valueOf(roleDto.getId());
       throw new NotFoundAlertException(ENTITY_NAME, id,
           String.format(NotFoundAlertException.MSG_NOT_FOUND_WITH_ID, ENTITY_NAME, id));
@@ -110,7 +110,7 @@ public class RoleServiceImpl implements RoleService {
   public void deleteRole(Long id) {
     log.debug("Request to delete Role : {}", id);
     var users = userRepository.findOneWithRolesRelationships(id);
-    if (!users.isEmpty()) {
+    if (users.isPresent()) {
       throw new BadRequestAlertException(ENTITY_NAME, String.valueOf(id),
           "Almost a User is using this role");
     }

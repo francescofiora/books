@@ -57,7 +57,8 @@ class RoleEndToEndTest extends AbstractTestEndToEnd {
   void testCreateBadRequest() {
     var newRoleDto =
         UserUtils.createNewRoleDto(UserUtils.ROLE_BOOK_READ, UserUtils.ROLE_BOOK_READ_DESCR);
-    assertCreateBadRequest(UserUtils.ROLE_ADMIN, ROLES_URI, newRoleDto, ALERT_NEW_BAD_REQUEST,
+    var auth = getToken(UserUtils.ROLE_ADMIN);
+    assertCreateBadRequest(auth.getToken(), ROLES_URI, newRoleDto, ALERT_NEW_BAD_REQUEST,
         PARAM_NEW_PERMISSIONS_NOT_NULL);
   }
 
@@ -68,20 +69,23 @@ class RoleEndToEndTest extends AbstractTestEndToEnd {
     var refPermDto = new RefPermissionDto();
     refPermDto.setId(ID_NOT_FOUND);
     newRoleDto.setPermissions(List.of(refPermDto));
-    assertCreateNotFound(UserUtils.ROLE_ADMIN, ROLES_URI, newRoleDto, ALERT_PERMISSION_NOT_FOUND,
+    var auth = getToken(UserUtils.ROLE_ADMIN);
+    assertCreateNotFound(auth.getToken(), ROLES_URI, newRoleDto, ALERT_PERMISSION_NOT_FOUND,
         String.valueOf(ID_NOT_FOUND));
   }
 
   @Test
   void testGetPermissions() {
+    var auth = getToken(UserUtils.ROLE_ADMIN);
     var permissions =
-        get(UserUtils.ROLE_ADMIN, PERMISSIONS_URI, PermissionDto[].class, ALERT_GET, PARAM_PAGE_20);
+        get(auth.getToken(), PERMISSIONS_URI, PermissionDto[].class, ALERT_GET, PARAM_PAGE_20);
     assertThat(permissions).isNotEmpty();
   }
 
   @Test
   void testGetPermissionsBadRequest() {
-    assertGetBadRequest(UserUtils.ROLE_ADMIN, PERMISSIONS_URI + "?sort=badField",
+    var auth = getToken(UserUtils.ROLE_ADMIN);
+    assertGetBadRequest(auth.getToken(), PERMISSIONS_URI + "?sort=badField",
         PermissionDto[].class, ".badRequest", "badField");
   }
 
@@ -92,41 +96,39 @@ class RoleEndToEndTest extends AbstractTestEndToEnd {
     var newRoleDto =
         UserUtils.createNewRoleDto(UserUtils.ROLE_BOOK_READ, UserUtils.ROLE_BOOK_READ_DESCR);
     newRoleDto.getPermissions().add(refPermDto);
-    var roleId = createAndReturnId(UserUtils.ROLE_ADMIN, ROLES_URI, newRoleDto, ALERT_CREATED);
+    var auth = getToken(UserUtils.ROLE_ADMIN);
+    var roleId = createAndReturnId(auth.getToken(), ROLES_URI, newRoleDto, ALERT_CREATED);
 
     final var rolesIdUri = String.format(ROLES_ID_URI, roleId);
 
-    var actual =
-        get(UserUtils.ROLE_ADMIN, rolesIdUri, RoleDto.class, ALERT_GET, String.valueOf(roleId));
+    var actual = get(auth.getToken(), rolesIdUri, RoleDto.class, ALERT_GET, String.valueOf(roleId));
     assertThat(actual.getName()).isEqualTo(newRoleDto.getName());
     assertThat(actual.getDescription()).isEqualTo(newRoleDto.getDescription());
     assertThat(actual.getPermissions()).isNotNull().hasSize(1);
     assertThat(actual.getPermissions().get(0).getId()).isEqualTo(refPermDto.getId());
 
     var roleDto = createRoleDto(roleId, refPermDto);
-    update(UserUtils.ROLE_ADMIN, rolesIdUri, roleDto, ALERT_UPDATED, String.valueOf(roleId));
+    update(auth.getToken(), rolesIdUri, roleDto, ALERT_UPDATED, String.valueOf(roleId));
 
-    actual =
-        get(UserUtils.ROLE_ADMIN, rolesIdUri, RoleDto.class, ALERT_GET, String.valueOf(roleId));
+    actual = get(auth.getToken(), rolesIdUri, RoleDto.class, ALERT_GET, String.valueOf(roleId));
     assertThat(actual).isEqualTo(roleDto);
     assertThat(actual.getName()).isEqualTo(roleDto.getName());
     assertThat(actual.getDescription()).isEqualTo(roleDto.getDescription());
 
-    var roles = get(UserUtils.ROLE_ADMIN, ROLES_URI, RoleDto[].class, ALERT_GET, PARAM_PAGE_20);
+    var roles = get(auth.getToken(), ROLES_URI, RoleDto[].class, ALERT_GET, PARAM_PAGE_20);
     assertThat(roles).isNotEmpty();
     var option = Stream.of(roles).filter(role -> role.getId().equals(roleId)).findAny();
     assertThat(option).isPresent().contains(roleDto);
 
     var pageRequest = TestUtils.createPageRequestAsMap(0, 10);
-    roles = get(UserUtils.ROLE_ADMIN, ROLES_URI, pageRequest, RoleDto[].class, ALERT_GET,
-        PARAM_PAGE_10);
+    roles = get(auth.getToken(), ROLES_URI, pageRequest, RoleDto[].class, ALERT_GET, PARAM_PAGE_10);
     assertThat(roles).isNotEmpty();
     option = Stream.of(roles).filter(role -> role.getId().equals(roleId)).findAny();
     assertThat(option).isPresent().contains(roleDto);
 
-    delete(UserUtils.ROLE_ADMIN, rolesIdUri, ALERT_DELETED, String.valueOf(roleId));
+    delete(auth.getToken(), rolesIdUri, ALERT_DELETED, String.valueOf(roleId));
 
-    assertGetNotFound(UserUtils.ROLE_ADMIN, rolesIdUri, RoleDto.class, ALERT_NOT_FOUND,
+    assertGetNotFound(auth.getToken(), rolesIdUri, RoleDto.class, ALERT_NOT_FOUND,
         String.valueOf(roleId));
   }
 
@@ -138,7 +140,8 @@ class RoleEndToEndTest extends AbstractTestEndToEnd {
 
   @Test
   void testGetBadRequest() {
-    assertGetBadRequest(UserUtils.ROLE_ADMIN, ROLES_URI + "/999999999999999999999999", String.class,
+    var auth = getToken(UserUtils.ROLE_ADMIN);
+    assertGetBadRequest(auth.getToken(), ROLES_URI + "/999999999999999999999999", String.class,
         "id.badRequest", PARAM_NOT_VALID_LONG);
   }
 
@@ -148,16 +151,17 @@ class RoleEndToEndTest extends AbstractTestEndToEnd {
 
     // id
     var roleDto = createRoleDto(null, refPermDto);
-    assertUpdateBadRequest(UserUtils.ROLE_ADMIN, String.format(ROLES_ID_URI, 1L), roleDto,
+    var auth = getToken(UserUtils.ROLE_ADMIN);
+    assertUpdateBadRequest(auth.getToken(), String.format(ROLES_ID_URI, 1L), roleDto,
         ALERT_BAD_REQUEST, PARAM_ID_NOT_NULL);
 
     var newRoleDto =
         UserUtils.createNewRoleDto(UserUtils.ROLE_BOOK_READ, UserUtils.ROLE_BOOK_READ_DESCR);
     newRoleDto.getPermissions().add(refPermDto);
-    var id = createAndReturnId(UserUtils.ROLE_ADMIN, ROLES_URI, newRoleDto, ALERT_CREATED);
+    var id = createAndReturnId(auth.getToken(), ROLES_URI, newRoleDto, ALERT_CREATED);
 
     roleDto = createRoleDto(id, refPermDto);
-    assertUpdateBadRequest(UserUtils.ROLE_ADMIN, String.format(ROLES_ID_URI, (id + 1)), roleDto,
+    assertUpdateBadRequest(auth.getToken(), String.format(ROLES_ID_URI, (id + 1)), roleDto,
         ALERT_BAD_REQUEST, String.valueOf(id));
 
     final var path = String.format(ROLES_ID_URI, id);
@@ -165,47 +169,45 @@ class RoleEndToEndTest extends AbstractTestEndToEnd {
     // username
     roleDto = createRoleDto(id, refPermDto);
     roleDto.setName(null);
-    assertUpdateBadRequest(UserUtils.ROLE_ADMIN, path, roleDto, ALERT_BAD_REQUEST,
-        PARAM_NAME_NOT_BLANK);
+    assertUpdateBadRequest(auth.getToken(), path, roleDto, ALERT_BAD_REQUEST, PARAM_NAME_NOT_BLANK);
 
     roleDto = createRoleDto(id, refPermDto);
     roleDto.setName("");
-    assertUpdateBadRequest(UserUtils.ROLE_ADMIN, path, roleDto, ALERT_BAD_REQUEST,
-        PARAM_NAME_NOT_BLANK);
+    assertUpdateBadRequest(auth.getToken(), path, roleDto, ALERT_BAD_REQUEST, PARAM_NAME_NOT_BLANK);
 
     roleDto = createRoleDto(id, refPermDto);
     roleDto.setName("  ");
-    assertUpdateBadRequest(UserUtils.ROLE_ADMIN, path, roleDto, ALERT_BAD_REQUEST,
-        PARAM_NAME_NOT_BLANK);
+    assertUpdateBadRequest(auth.getToken(), path, roleDto, ALERT_BAD_REQUEST, PARAM_NAME_NOT_BLANK);
 
     // description
     roleDto = createRoleDto(id, refPermDto);
     roleDto.setDescription(null);
-    assertUpdateBadRequest(UserUtils.ROLE_ADMIN, path, roleDto, ALERT_BAD_REQUEST,
+    assertUpdateBadRequest(auth.getToken(), path, roleDto, ALERT_BAD_REQUEST,
         PARAM_DESCRIPTION_NOT_BLANK);
 
     roleDto = createRoleDto(id, refPermDto);
     roleDto.setDescription("");
-    assertUpdateBadRequest(UserUtils.ROLE_ADMIN, path, roleDto, ALERT_BAD_REQUEST,
+    assertUpdateBadRequest(auth.getToken(), path, roleDto, ALERT_BAD_REQUEST,
         PARAM_DESCRIPTION_NOT_BLANK);
 
     roleDto = createRoleDto(id, refPermDto);
     roleDto.setDescription("   ");
-    assertUpdateBadRequest(UserUtils.ROLE_ADMIN, path, roleDto, ALERT_BAD_REQUEST,
+    assertUpdateBadRequest(auth.getToken(), path, roleDto, ALERT_BAD_REQUEST,
         PARAM_DESCRIPTION_NOT_BLANK);
 
     // roles
     roleDto = UserUtils.createRoleDto(id);
-    assertUpdateBadRequest(UserUtils.ROLE_ADMIN, path, roleDto, ALERT_BAD_REQUEST,
+    assertUpdateBadRequest(auth.getToken(), path, roleDto, ALERT_BAD_REQUEST,
         PARAM_PERMISSIONS_NOT_NULL);
   }
 
   @Test
   void testDeleteBadRequest() {
-    var roles = get(UserUtils.ROLE_ADMIN, ROLES_URI, RoleDto[].class, ALERT_GET, PARAM_PAGE_20);
+    var auth = getToken(UserUtils.ROLE_ADMIN);
+    var roles = get(auth.getToken(), ROLES_URI, RoleDto[].class, ALERT_GET, PARAM_PAGE_20);
 
     final var rolesIdUri = String.format(ROLES_ID_URI, roles[0].getId());
-    assertDeleteBadRequest(UserUtils.ROLE_ADMIN, rolesIdUri, ALERT_BAD_REQUEST,
+    assertDeleteBadRequest(auth.getToken(), rolesIdUri, ALERT_BAD_REQUEST,
         String.valueOf(roles[0].getId()));
   }
 }

@@ -2,7 +2,7 @@ package it.francescofiora.books.itt.container;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -15,30 +15,29 @@ import org.testcontainers.containers.GenericContainer;
 /**
  * Container of a SpringAplication.
  */
-@Getter
 public class SpringAplicationContainer extends GenericContainer<SpringAplicationContainer> {
-  private String username;
-  private String password;
 
-  private RestTemplate rest = new RestTemplate();
+  @Setter
+  private String token;
+
+  private final RestTemplate rest = new RestTemplate();
 
   public SpringAplicationContainer(String dockerImageName) {
     super(dockerImageName);
   }
 
-  public SpringAplicationContainer withUsername(final String username) {
-    this.username = username;
-    return self();
-  }
-
-  public SpringAplicationContainer withPassword(final String password) {
-    this.password = password;
-    return self();
-  }
-
-  public SpringAplicationContainer withRestTemplate(final RestTemplate rest) {
-    this.rest = rest;
-    return self();
+  /**
+   * Perform Login.
+   *
+   * @param jsonBody the json body
+   * @return the token
+   */
+  public ResponseEntity<String> performLogin(final String jsonBody) {
+    var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    var request = new HttpEntity<>(jsonBody, headers);
+    var path = "/api/v1/auth/login";
+    return rest.postForEntity(createUri(getHttpPath(path)), request, String.class);
   }
 
   /**
@@ -49,13 +48,12 @@ public class SpringAplicationContainer extends GenericContainer<SpringAplication
   public HttpHeaders createHttpHeaders() {
     var headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
-    headers.setBasicAuth(getUsername(), getPassword());
+    headers.add("Authorization", "Bearer " + token);
     return headers;
   }
 
   public String getHttpPath(String path) {
-    var http = "true".equals(super.getEnvMap().get("SSL_ENABLED")) ? "https" : "http";
-    return http + "://" + getHost() + ":" + getFirstMappedPort() + path;
+    return "http://" + getHost() + ":" + getFirstMappedPort() + path;
   }
 
   public Long createAndReturnId(String path, String jsonBody) {

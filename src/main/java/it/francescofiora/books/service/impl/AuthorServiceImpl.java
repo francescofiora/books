@@ -51,7 +51,7 @@ public class AuthorServiceImpl implements AuthorService {
   public void update(AuthorDto authorDto) {
     log.debug("Request to update Author : {}", authorDto);
     var authorOpt = authorRepository.findById(authorDto.getId());
-    if (!authorOpt.isPresent()) {
+    if (authorOpt.isEmpty()) {
       var id = String.valueOf(authorDto.getId());
       throw new NotFoundAlertException(ENTITY_NAME, id,
           String.format(NotFoundAlertException.MSG_NOT_FOUND_WITH_ID, ENTITY_NAME, id));
@@ -98,7 +98,7 @@ public class AuthorServiceImpl implements AuthorService {
   public Page<TitleDto> findTitlesByAuthorId(Pageable pageable, Long id) {
     log.debug("Request to get Titles by Author id: {}", id);
     var authorOpt = authorRepository.findById(id);
-    if (!authorOpt.isPresent()) {
+    if (authorOpt.isEmpty()) {
       throw new NotFoundAlertException(ENTITY_NAME, String.valueOf(id),
           String.format(NotFoundAlertException.MSG_NOT_FOUND_WITH_ID, ENTITY_NAME, id));
     }

@@ -6,7 +6,7 @@ Yes, yet another tutorial with "book, author and publisher" as entities.
 - Spring Boot Rest Api
 - Swagger UI for visualizing APIs
 - Error Handling
-- Basic Authentication
+- JSON Web Token Authentication
 - Mapper for POJO<->DTO 
 - Logging
 - Testing
@@ -70,7 +70,7 @@ There is a docker compose file to run MySql and phpMyAdmin.
     jconsole service:jmx:rmi:///jndi/rmi://localhost:9999/jmxrmi
 
 # API documentation
-https://localhost:8081/swagger-ui.html
+http://localhost:8081/swagger-ui.html
 
 ## System Integration Test environment
 

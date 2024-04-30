@@ -27,7 +27,6 @@ spring:
   jpa:
     properties:
       hibernate:
-        dialect: ${HIBERNATE_DIALECT:org.hibernate.dialect.MySQLDialect}
         format_sql: true
         id:
           new_generator_mappings: false
@@ -35,3 +34,7 @@ spring:
     user: ${DATASOURCE_ADMIN_USERNAME:jadmin}
     password: ${DATASOURCE_ADMIN_PASSWORD:moresecret}
     change-log: classpath:changelog/db.changelog.sql
+
+token:
+  signing:
+    key: 7b5ad75aaaf34bfcb867a4c269d8ec4918bfc70d21f8920cac

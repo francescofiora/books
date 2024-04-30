@@ -63,18 +63,20 @@ class UserEndToEndTest extends AbstractTestEndToEnd {
 
   @Test
   void testCreateBadRequest() {
+    var auth = getToken(UserUtils.USER_ADMIN);
     var newUserDto = UserUtils.createNewUserDto();
-    assertCreateBadRequest(UserUtils.USER_ADMIN, USERS_URI, newUserDto, ALERT_NEW_BAD_REQUEST,
+    assertCreateBadRequest(auth.getToken(), USERS_URI, newUserDto, ALERT_NEW_BAD_REQUEST,
         PARAM_NEW_ROLES_NOT_NULL);
   }
 
   @Test
   void testCreateNotFound() {
+    var auth = getToken(UserUtils.USER_ADMIN);
     var newUserDto = UserUtils.createNewUserDto();
     var refRoleDto = new RefRoleDto();
     refRoleDto.setId(ID_NOT_FOUND);
     newUserDto.setRoles(List.of(refRoleDto));
-    assertCreateNotFound(UserUtils.USER_ADMIN, USERS_URI, newUserDto, ALERT_ROLE_NOT_FOUND,
+    assertCreateNotFound(auth.getToken(), USERS_URI, newUserDto, ALERT_ROLE_NOT_FOUND,
         String.valueOf(ID_NOT_FOUND));
   }
 
@@ -84,61 +86,61 @@ class UserEndToEndTest extends AbstractTestEndToEnd {
 
     var newUserDto = UserUtils.createNewUserDto();
     newUserDto.getRoles().add(refRoleDto);
-    var userId = createAndReturnId(UserUtils.USER_ADMIN, USERS_URI, newUserDto, ALERT_CREATED);
+    var auth = getToken(UserUtils.USER_ADMIN);
+    var userId = createAndReturnId(auth.getToken(), USERS_URI, newUserDto, ALERT_CREATED);
 
     final var usersIdUri = String.format(USERS_ID_URI, userId);
 
-    var actual =
-        get(UserUtils.USER_ADMIN, usersIdUri, UserDto.class, ALERT_GET, String.valueOf(userId));
+    var actual = get(auth.getToken(), usersIdUri, UserDto.class, ALERT_GET, String.valueOf(userId));
     assertThat(actual.getUsername()).isEqualTo(newUserDto.getUsername());
 
     var userDto = createUserDto(userId, refRoleDto);
-    update(UserUtils.USER_ADMIN, usersIdUri, userDto, ALERT_UPDATED, String.valueOf(userId));
+    update(auth.getToken(), usersIdUri, userDto, ALERT_UPDATED, String.valueOf(userId));
 
-    actual =
-        get(UserUtils.USER_ADMIN, usersIdUri, UserDto.class, ALERT_GET, String.valueOf(userId));
+    actual = get(auth.getToken(), usersIdUri, UserDto.class, ALERT_GET, String.valueOf(userId));
     assertThat(actual).isEqualTo(userDto);
     assertThat(actual.getUsername()).isEqualTo(userDto.getUsername());
 
-    var users = get(UserUtils.USER_ADMIN, USERS_URI, UserDto[].class, ALERT_GET, PARAM_PAGE_20);
+    var users = get(auth.getToken(), USERS_URI, UserDto[].class, ALERT_GET, PARAM_PAGE_20);
     assertThat(users).isNotEmpty();
     var option = Stream.of(users).filter(user -> user.getId().equals(userId)).findAny();
     assertThat(option).isPresent().contains(userDto);
 
     var pageRequest = TestUtils.createPageRequestAsMap(0, 10);
-    users = get(UserUtils.USER_ADMIN, USERS_URI, pageRequest, UserDto[].class, ALERT_GET,
-        PARAM_PAGE_10);
+    users = get(auth.getToken(), USERS_URI, pageRequest, UserDto[].class, ALERT_GET, PARAM_PAGE_10);
     assertThat(users).isNotEmpty();
     option = Stream.of(users).filter(user -> user.getId().equals(userId)).findAny();
     assertThat(option).isPresent().contains(userDto);
 
-    delete(UserUtils.USER_ADMIN, usersIdUri, ALERT_DELETED, String.valueOf(userId));
+    delete(auth.getToken(), usersIdUri, ALERT_DELETED, String.valueOf(userId));
 
-    assertGetNotFound(UserUtils.USER_ADMIN, usersIdUri, UserDto.class, ALERT_NOT_FOUND,
+    assertGetNotFound(auth.getToken(), usersIdUri, UserDto.class, ALERT_NOT_FOUND,
         String.valueOf(userId));
   }
 
   @Test
   void testGetBadRequest() {
-    assertGetBadRequest(UserUtils.USER_ADMIN, USERS_URI + "/999999999999999999999999", String.class,
+    var auth = getToken(UserUtils.USER_ADMIN);
+    assertGetBadRequest(auth.getToken(), USERS_URI + "/999999999999999999999999", String.class,
         "id.badRequest", PARAM_NOT_VALID_LONG);
   }
 
   @Test
   void testUpdateBadRequest() {
     var refRoleDto = getRefRoleDto(UserUtils.ROLE_BOOK_ADMIN);
+    var auth = getToken(UserUtils.USER_ADMIN);
 
     // id
     var userDto = createUserDto(null, refRoleDto);
-    assertUpdateBadRequest(UserUtils.USER_ADMIN, String.format(USERS_ID_URI, 1L), userDto,
+    assertUpdateBadRequest(auth.getToken(), String.format(USERS_ID_URI, 1L), userDto,
         ALERT_BAD_REQUEST, PARAM_ID_NOT_NULL);
 
     var newUserDto = UserUtils.createNewUserDto();
     newUserDto.getRoles().add(refRoleDto);
-    var id = createAndReturnId(UserUtils.USER_ADMIN, USERS_URI, newUserDto, ALERT_CREATED);
+    var id = createAndReturnId(auth.getToken(), USERS_URI, newUserDto, ALERT_CREATED);
 
     userDto = createUserDto(id, refRoleDto);
-    assertUpdateBadRequest(UserUtils.USER_ADMIN, String.format(USERS_ID_URI, (id + 1)), userDto,
+    assertUpdateBadRequest(auth.getToken(), String.format(USERS_ID_URI, (id + 1)), userDto,
         ALERT_BAD_REQUEST, String.valueOf(id));
 
     final var path = String.format(USERS_ID_URI, id);
@@ -146,46 +148,46 @@ class UserEndToEndTest extends AbstractTestEndToEnd {
     // username
     userDto = createUserDto(id, refRoleDto);
     userDto.setUsername(null);
-    assertUpdateBadRequest(UserUtils.USER_ADMIN, path, userDto, ALERT_BAD_REQUEST,
+    assertUpdateBadRequest(auth.getToken(), path, userDto, ALERT_BAD_REQUEST,
         PARAM_USERNAME_NOT_BLANK);
 
     userDto = createUserDto(id, refRoleDto);
     userDto.setUsername("");
-    assertUpdateBadRequest(UserUtils.USER_ADMIN, path, userDto, ALERT_BAD_REQUEST,
+    assertUpdateBadRequest(auth.getToken(), path, userDto, ALERT_BAD_REQUEST,
         PARAM_USERNAME_NOT_BLANK);
 
     userDto = createUserDto(id, refRoleDto);
     userDto.setUsername("  ");
-    assertUpdateBadRequest(UserUtils.USER_ADMIN, path, userDto, ALERT_BAD_REQUEST,
+    assertUpdateBadRequest(auth.getToken(), path, userDto, ALERT_BAD_REQUEST,
         PARAM_USERNAME_NOT_BLANK);
 
     // accountNonExpired
     userDto = createUserDto(id, refRoleDto);
     userDto.setAccountNonExpired(null);
-    assertUpdateBadRequest(UserUtils.USER_ADMIN, path, userDto, ALERT_BAD_REQUEST,
+    assertUpdateBadRequest(auth.getToken(), path, userDto, ALERT_BAD_REQUEST,
         PARAM_ACCOUNT_NOT_EXPIRED_NOT_NULL);
 
     // accountNonLocked
     userDto = createUserDto(id, refRoleDto);
     userDto.setAccountNonLocked(null);
-    assertUpdateBadRequest(UserUtils.USER_ADMIN, path, userDto, ALERT_BAD_REQUEST,
+    assertUpdateBadRequest(auth.getToken(), path, userDto, ALERT_BAD_REQUEST,
         PARAM_NOT_LOCKED_NOT_NULL);
 
     // credentialsNonExpired
     userDto = createUserDto(id, refRoleDto);
     userDto.setCredentialsNonExpired(null);
-    assertUpdateBadRequest(UserUtils.USER_ADMIN, path, userDto, ALERT_BAD_REQUEST,
+    assertUpdateBadRequest(auth.getToken(), path, userDto, ALERT_BAD_REQUEST,
         PARAM_CREDENTIAL_NOT_EXPIRED_NOT_NULL);
 
     // enabled
     userDto = createUserDto(id, refRoleDto);
     userDto.setEnabled(null);
-    assertUpdateBadRequest(UserUtils.USER_ADMIN, path, userDto, ALERT_BAD_REQUEST,
+    assertUpdateBadRequest(auth.getToken(), path, userDto, ALERT_BAD_REQUEST,
         PARAM_ENABLED_NOT_NULL);
 
     // roles
     userDto = UserUtils.createUserDto(id);
-    assertUpdateBadRequest(UserUtils.USER_ADMIN, path, userDto, ALERT_BAD_REQUEST,
+    assertUpdateBadRequest(auth.getToken(), path, userDto, ALERT_BAD_REQUEST,
         PARAM_ROLES_NOT_NULL);
   }
 }
