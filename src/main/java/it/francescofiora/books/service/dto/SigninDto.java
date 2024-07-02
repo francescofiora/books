@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 import lombok.Getter;
@@ -20,6 +21,7 @@ import lombok.ToString;
 @ToString(callSuper = true, includeFieldNames = true)
 public class SigninDto implements Serializable {
 
+  @Serial
   private static final long serialVersionUID = 1L;
 
   @Schema(description = "User Name", example = "John", requiredMode = REQUIRED)

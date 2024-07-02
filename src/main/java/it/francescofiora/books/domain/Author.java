@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,6 +25,7 @@ import lombok.ToString;
 @Table(name = "author")
 public class Author extends AbstractDomain implements Serializable {
 
+  @Serial
   private static final long serialVersionUID = 1L;
 
   @Id

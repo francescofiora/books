@@ -29,7 +29,7 @@ public class GlobalControllerExceptionHandler {
   @ExceptionHandler(BadRequestAlertException.class)
   public ResponseEntity<Void> handleBadRequest(BadRequestAlertException ex) {
 
-    return createBadRequest(HeaderUtil.createFailureAlert(ex.getEntityName() + ALERT_BAD_REQUEST,
+    return createBadRequest(HeaderUtil.createAlert(ex.getEntityName() + ALERT_BAD_REQUEST,
         ex.getParam(), ex.getMessage()));
   }
 
@@ -51,7 +51,7 @@ public class GlobalControllerExceptionHandler {
         .map(f -> String.format(FORMAT_FIELD, f.getObjectName(), f.getField(), f.getCode()))
         .toList();
 
-    return createBadRequest(HeaderUtil.createFailureAlert(
+    return createBadRequest(HeaderUtil.createAlert(
         getSimpleName(ex.getTarget()) + ALERT_BAD_REQUEST, fieldErrors, ex.getMessage()));
   }
 
@@ -77,7 +77,7 @@ public class GlobalControllerExceptionHandler {
     final var entityName = ex.getName();
 
     return createBadRequest(
-        HeaderUtil.createFailureAlert(entityName + ALERT_BAD_REQUEST, fieldError, ex.getMessage()));
+        HeaderUtil.createAlert(entityName + ALERT_BAD_REQUEST, fieldError, ex.getMessage()));
   }
 
   /**
@@ -90,7 +90,7 @@ public class GlobalControllerExceptionHandler {
   public ResponseEntity<Void> handleNotFound(NotFoundAlertException ex) {
 
     return ResponseEntity.notFound()
-        .headers(HeaderUtil.createFailureAlert(ex.getEntityName() + ALERT_NOT_FOUND,
+        .headers(HeaderUtil.createAlert(ex.getEntityName() + ALERT_NOT_FOUND,
             ex.getErrorKey(), ex.getMessage()))
         .build();
   }
@@ -105,6 +105,6 @@ public class GlobalControllerExceptionHandler {
   public ResponseEntity<Void> handlePropertyReferenceException(PropertyReferenceException ex) {
 
     return createBadRequest(
-        HeaderUtil.createFailureAlert(ALERT_BAD_REQUEST, ex.getPropertyName(), ex.getMessage()));
+        HeaderUtil.createAlert(ALERT_BAD_REQUEST, ex.getPropertyName(), ex.getMessage()));
   }
 }

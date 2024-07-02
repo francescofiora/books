@@ -12,6 +12,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import java.io.Serial;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -32,6 +33,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @ToString(callSuper = true, includeFieldNames = true, exclude = {"password"})
 public class User extends AbstractDomain implements UserDetails {
 
+  @Serial
   private static final long serialVersionUID = 1L;
 
   @Id

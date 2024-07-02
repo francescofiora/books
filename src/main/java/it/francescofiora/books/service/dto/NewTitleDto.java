@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ import lombok.ToString;
 @ToString(callSuper = true, includeFieldNames = true)
 public class NewTitleDto extends BaseTitleDto implements Serializable {
 
+  @Serial
   private static final long serialVersionUID = 1L;
 
   @Schema(requiredMode = REQUIRED)

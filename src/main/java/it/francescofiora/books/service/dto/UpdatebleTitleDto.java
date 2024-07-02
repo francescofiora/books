@@ -8,6 +8,7 @@ import it.francescofiora.books.service.util.DtoUtils;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,7 @@ import lombok.ToString;
 @ToString(callSuper = true, includeFieldNames = true)
 public class UpdatebleTitleDto extends BaseTitleDto implements Serializable, DtoIdentifier {
 
+  @Serial
   private static final long serialVersionUID = 1L;
 
   @Schema(description = "Unique Title identifier", example = "1", requiredMode = REQUIRED)

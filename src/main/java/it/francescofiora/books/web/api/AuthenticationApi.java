@@ -35,10 +35,10 @@ public class AuthenticationApi extends AbstractApi {
   }
 
   /**
-   * {@code POST  /authors} : Sign-in and create a new token.
+   * Sign-in and create a new token.
    *
    * @param signinDto the sign-in
-   * @return the {@link ResponseEntity}
+   * @return the Response
    */
   @Operation(summary = "Sign-in", description = "Sign-in and create a new token",
       tags = {TAG})
@@ -50,7 +50,7 @@ public class AuthenticationApi extends AbstractApi {
     var result = authenticationService.signin(signinDto);
     return ResponseEntity
         .ok()
-        .headers(HeaderUtil.createEntityGetAlert(ENTITY_NAME, "token"))
+        .headers(HeaderUtil.createAlert(ENTITY_NAME + HeaderUtil.GET, "token"))
         .body(result);
   }
 }

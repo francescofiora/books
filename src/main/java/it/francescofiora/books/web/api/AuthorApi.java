@@ -50,10 +50,10 @@ public class AuthorApi extends AbstractApi {
   }
 
   /**
-   * {@code POST  /authors} : Create a new author.
+   * Create a new author.
    *
    * @param authorDto the author to create
-   * @return the {@link ResponseEntity}
+   * @return the Response
    */
   @Operation(summary = "Add new Author", description = "Add a new Author to the system",
       tags = {TAG})
@@ -68,11 +68,11 @@ public class AuthorApi extends AbstractApi {
   }
 
   /**
-   * {@code PUT  /authors:id} : Updates an existing author.
+   * Updates an existing author.
    *
    * @param authorDto the author to update
    * @param id the id of the author to update
-   * @return the {@link ResponseEntity}
+   * @return the Response
    */
   @Operation(summary = "Update Author", description = "Update an Author to the system",
       tags = {TAG})
@@ -83,8 +83,8 @@ public class AuthorApi extends AbstractApi {
   @PreAuthorize(AUTHORIZE_BOOK_UPDATE)
   public ResponseEntity<Void> updateAuthor(
       @Parameter(description = "Author to update") @Valid @RequestBody AuthorDto authorDto,
-      @Parameter(description = "The id of the author to update", required = true,
-          example = "1") @PathVariable("id") Long id) {
+      @Parameter(description = "The id of the author to update", required = true, example = "1")
+      @PathVariable("id") Long id) {
     if (!id.equals(authorDto.getId())) {
       throw new BadRequestAlertException(ENTITY_NAME, String.valueOf(authorDto.getId()),
           "Invalid id");
@@ -94,12 +94,12 @@ public class AuthorApi extends AbstractApi {
   }
 
   /**
-   * {@code GET  /authors} : get all the authors.
+   * Get all the authors.
    *
    * @param firstName the first name
    * @param lastName the last name
    * @param pageable the pagination information
-   * @return the {@link ResponseEntity} with the list of authors
+   * @return the list of authors
    */
   @Operation(summary = "Searches authors",
       description = "By passing in the appropriate options, "
@@ -113,20 +113,20 @@ public class AuthorApi extends AbstractApi {
   @GetMapping("/authors")
   @PreAuthorize(AUTHORIZE_BOOK_READ)
   public ResponseEntity<List<AuthorDto>> getAllAuthors(
-      @Parameter(description = "First Name", example = "John",
-          in = ParameterIn.QUERY) @RequestParam(required = false) String firstName,
-      @Parameter(description = "Last Name", example = "Smith",
-          in = ParameterIn.QUERY) @RequestParam(required = false) String lastName,
-      @Parameter(example = "{\n  \"page\": 0,  \"size\": 10}",
-          in = ParameterIn.QUERY) Pageable pageable) {
+      @Parameter(description = "First Name", example = "John", in = ParameterIn.QUERY)
+      @RequestParam(value = "firstName", required = false) String firstName,
+      @Parameter(description = "Last Name", example = "Smith", in = ParameterIn.QUERY)
+      @RequestParam(value = "lastName", required = false) String lastName,
+      @Parameter(example = "{\n  \"page\": 0,  \"size\": 10}", in = ParameterIn.QUERY)
+      Pageable pageable) {
     return getResponse(authorService.findAll(firstName, lastName, pageable));
   }
 
   /**
-   * {@code GET  /authors/:id} : get the "id" author.
+   * Get the author by id.
    *
    * @param id the id of the author to retrieve
-   * @return the {@link ResponseEntity} with the author
+   * @return the author
    */
   @Operation(summary = "Searches author by 'id'", description = "Searches author by 'id'",
       tags = {TAG})
@@ -137,16 +137,17 @@ public class AuthorApi extends AbstractApi {
       @ApiResponse(responseCode = "404", description = "Not found")})
   @GetMapping("/authors/{id}")
   @PreAuthorize(AUTHORIZE_BOOK_READ)
-  public ResponseEntity<AuthorDto> getAuthor(@Parameter(description = "The id of the author to get",
-      required = true, example = "1") @PathVariable("id") Long id) {
+  public ResponseEntity<AuthorDto> getAuthor(
+      @Parameter(description = "The id of the author to get", required = true, example = "1")
+      @PathVariable("id") Long id) {
     return getResponse(authorService.findOne(id), id);
   }
 
   /**
-   * {@code GET  /authors/:id/titles} : get titles the "id" author.
+   * Get titles by author Id.
    *
    * @param id the id of the author of the titles to retrieve
-   * @return the {@link ResponseEntity} with the list of the titles of author
+   * @return the list of the titles of author
    */
   @Operation(summary = "Searches titles of the by author 'id'",
       description = "Searches titles by author 'id'", tags = {TAG})
@@ -159,16 +160,16 @@ public class AuthorApi extends AbstractApi {
   @GetMapping("/authors/{id}/titles")
   @PreAuthorize(AUTHORIZE_BOOK_READ)
   public ResponseEntity<List<TitleDto>> getTitlesByAuthor(Pageable pageable,
-      @Parameter(description = "The id of the author", required = true,
-          example = "1") @PathVariable("id") Long id) {
+      @Parameter(description = "The id of the author", required = true, example = "1")
+      @PathVariable("id") Long id) {
     return getResponse("TitleDto", authorService.findTitlesByAuthorId(pageable, id));
   }
 
   /**
-   * {@code DELETE  /authors/:id} : delete the "id" author.
+   * Delete the author by id.
    *
    * @param id the id of the author to delete
-   * @return the {@link ResponseEntity}
+   * @return the Response
    */
   @Operation(summary = "Delete author by 'id'", description = "Delete an author by 'id'",
       tags = {TAG})
@@ -177,8 +178,8 @@ public class AuthorApi extends AbstractApi {
   @DeleteMapping("/authors/{id}")
   @PreAuthorize(AUTHORIZE_BOOK_UPDATE)
   public ResponseEntity<Void> deleteAuthor(
-      @Parameter(description = "The id of the author to delete", required = true,
-          example = "1") @PathVariable Long id) {
+      @Parameter(description = "The id of the author to delete", required = true, example = "1")
+      @PathVariable Long id) {
     authorService.delete(id);
     return deleteResponse(id);
   }

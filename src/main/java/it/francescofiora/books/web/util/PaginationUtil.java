@@ -29,7 +29,7 @@ public final class PaginationUtil {
     var uriBuilder = ServletUriComponentsBuilder.fromCurrentRequest();
     var pageNumber = page.getNumber();
     var pageSize = page.getSize();
-    var headers = HeaderUtil.createEntityGetAlert(entityName, pageNumber + " " + pageSize);
+    var headers = HeaderUtil.createAlert(entityName + HeaderUtil.GET, pageNumber + " " + pageSize);
     headers.add(HEADER_X_TOTAL_COUNT, Long.toString(page.getTotalElements()));
     var link = new StringBuilder();
     if (pageNumber < page.getTotalPages() - 1) {

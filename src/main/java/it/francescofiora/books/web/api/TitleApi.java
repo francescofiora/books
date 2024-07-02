@@ -50,10 +50,10 @@ public class TitleApi extends AbstractApi {
   }
 
   /**
-   * {@code POST  /titles} : Create a new title.
+   * Create a new title.
    *
    * @param titleDto the title to create
-   * @return the {@link ResponseEntity}
+   * @return the Response
    */
   @Operation(summary = "Add new Title", description = "Add a new Title to the system", tags = {TAG})
   @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Title created"),
@@ -67,11 +67,11 @@ public class TitleApi extends AbstractApi {
   }
 
   /**
-   * {@code PUT  /titles:id} : Updates an existing title.
+   * Updates an existing title.
    *
    * @param titleDto the title to update
    * @param id the id of the title to update
-   * @return the {@link ResponseEntity}
+   * @return the Response
    */
   @Operation(summary = "Update Title", description = "Update an Title to the system", tags = {TAG})
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Title updated"),
@@ -81,8 +81,8 @@ public class TitleApi extends AbstractApi {
   @PreAuthorize(AUTHORIZE_BOOK_UPDATE)
   public ResponseEntity<Void> updateTitle(
       @Parameter(description = "Title to update") @Valid @RequestBody UpdatebleTitleDto titleDto,
-      @Parameter(description = "The id of the title to update", required = true,
-          example = "1") @PathVariable("id") Long id) {
+      @Parameter(description = "The id of the title to update", required = true, example = "1")
+      @PathVariable("id") Long id) {
     if (!id.equals(titleDto.getId())) {
       throw new BadRequestAlertException(ENTITY_NAME, String.valueOf(titleDto.getId()),
           "Invalid id");
@@ -92,11 +92,11 @@ public class TitleApi extends AbstractApi {
   }
 
   /**
-   * {@code GET  /titles} : get all the titles.
+   * Get all the titles.
    *
    * @param name the name
    * @param pageable the pagination information
-   * @return the {@link ResponseEntity} with the list of titles
+   * @return the list of titles
    */
   @Operation(summary = "Searches titles",
       description = "By passing in the appropriate options, "
@@ -110,18 +110,18 @@ public class TitleApi extends AbstractApi {
   @GetMapping("/titles")
   @PreAuthorize(AUTHORIZE_BOOK_READ)
   public ResponseEntity<List<TitleDto>> getAllTitles(
-      @Parameter(description = "Book's Name", example = "My prefer Book",
-          in = ParameterIn.QUERY) @RequestParam(required = false) String name,
-      @Parameter(example = "{\n  \"page\": 0,  \"size\": 10}",
-          in = ParameterIn.QUERY) Pageable pageable) {
+      @Parameter(description = "Book's Name", example = "My prefer Book", in = ParameterIn.QUERY)
+      @RequestParam(value = "name", required = false) String name,
+      @Parameter(example = "{\n  \"page\": 0,  \"size\": 10}", in = ParameterIn.QUERY)
+      Pageable pageable) {
     return getResponse(titleService.findAll(name, pageable));
   }
 
   /**
-   * {@code GET  /titles/:id} : get the "id" title.
+   * Get the title by id.
    *
    * @param id the id of the title to retrieve
-   * @return the {@link ResponseEntity} with the title
+   * @return the title
    */
   @Operation(summary = "Searches title by 'id'", description = "Searches title by 'id'",
       tags = {TAG})
@@ -132,15 +132,17 @@ public class TitleApi extends AbstractApi {
       @ApiResponse(responseCode = "404", description = "Not found")})
   @GetMapping("/titles/{id}")
   @PreAuthorize(AUTHORIZE_BOOK_READ)
-  public ResponseEntity<TitleDto> getTitle(@PathVariable Long id) {
+  public ResponseEntity<TitleDto> getTitle(
+      @Parameter(description = "The id of the title to get", required = true, example = "1")
+      @PathVariable("id") Long id) {
     return getResponse(titleService.findOne(id), id);
   }
 
   /**
-   * {@code DELETE  /titles/:id} : delete the "id" title.
+   * Delete the title by id.
    *
    * @param id the id of the title to delete
-   * @return the {@link ResponseEntity}
+   * @return the Response
    */
   @Operation(summary = "Delete title by 'id'", description = "Delete an title by 'id'",
       tags = {TAG})
@@ -148,7 +150,9 @@ public class TitleApi extends AbstractApi {
       @ApiResponse(responseCode = "400", description = "Bad input parameter")})
   @DeleteMapping("/titles/{id}")
   @PreAuthorize(AUTHORIZE_BOOK_UPDATE)
-  public ResponseEntity<Void> deleteTitle(@PathVariable Long id) {
+  public ResponseEntity<Void> deleteTitle(
+      @Parameter(description = "The id of the title to delete", required = true, example = "1")
+      @PathVariable("id") Long id) {
     titleService.delete(id);
     return deleteResponse(id);
   }

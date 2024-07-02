@@ -50,10 +50,10 @@ public class RoleApi extends AbstractApi {
   }
 
   /**
-   * {@code GET  /permissions} : get all the permissions.
+   * Get all the permissions.
    *
    * @param pageable the pagination information
-   * @return the {@link ResponseEntity} with the list of permissions
+   * @return the list of permissions
    */
   @Operation(summary = "Searches permissions",
       description = "By passing in the appropriate options, "
@@ -66,16 +66,17 @@ public class RoleApi extends AbstractApi {
       @ApiResponse(responseCode = "400", description = "Bad input parameter")})
   @GetMapping("/permissions")
   @PreAuthorize(AUTHORIZE_ROLE_READ)
-  public ResponseEntity<List<PermissionDto>> getAllPermissions(@Parameter(
-      example = "{\n  \"page\": 0,  \"size\": 10}", in = ParameterIn.QUERY) Pageable pageable) {
+  public ResponseEntity<List<PermissionDto>> getAllPermissions(
+      @Parameter(example = "{\n  \"page\": 0,  \"size\": 10}", in = ParameterIn.QUERY)
+      Pageable pageable) {
     return getResponse(roleService.findPermissions(pageable));
   }
 
   /**
-   * {@code POST  /roles} : Create a new role.
+   * Create a new role.
    *
    * @param roleDto the role to create
-   * @return the {@link ResponseEntity}
+   * @return the Response
    */
   @Operation(summary = "Add new Role", description = "Add a new Role to the system", tags = {TAG})
   @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Role created"),
@@ -89,11 +90,11 @@ public class RoleApi extends AbstractApi {
   }
 
   /**
-   * {@code PUT  /roles:id} : Updates an existing role.
+   * Updates an existing role.
    *
    * @param roleDto the role to update
    * @param id the id of the role to update
-   * @return the {@link ResponseEntity}
+   * @return the Response
    */
   @Operation(summary = "Update Role", description = "Update an Role to the system", tags = {TAG})
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Role updated"),
@@ -103,8 +104,8 @@ public class RoleApi extends AbstractApi {
   @PreAuthorize(AUTHORIZE_ROLE_UPDATE)
   public ResponseEntity<Void> updateRole(
       @Parameter(description = "Role to update") @Valid @RequestBody RoleDto roleDto,
-      @Parameter(description = "The id of the role to update", required = true,
-          example = "1") @PathVariable("id") Long id) {
+      @Parameter(description = "The id of the role to update", required = true, example = "1")
+      @PathVariable("id") Long id) {
     if (!id.equals(roleDto.getId())) {
       throw new BadRequestAlertException(ENTITY_NAME, String.valueOf(roleDto.getId()),
           "Invalid id");
@@ -114,12 +115,12 @@ public class RoleApi extends AbstractApi {
   }
 
   /**
-   * {@code GET  /roles} : get all the roles.
+   * Get all the roles.
    *
    * @param name the name
    * @param description the description
    * @param pageable the pagination information
-   * @return the {@link ResponseEntity} with the list of roles
+   * @return the list of roles
    */
   @Operation(summary = "Searches roles",
       description = "By passing in the appropriate options, "
@@ -133,20 +134,21 @@ public class RoleApi extends AbstractApi {
   @GetMapping("/roles")
   @PreAuthorize(AUTHORIZE_ROLE_READ)
   public ResponseEntity<List<RoleDto>> getAllRoles(
-      @Parameter(description = "Role's Name", example = "book_read",
-          in = ParameterIn.QUERY) @RequestParam(required = false) String name,
+      @Parameter(description = "Role's Name", example = "book_read", in = ParameterIn.QUERY)
+      @RequestParam(value = "name", required = false) String name,
       @Parameter(description = "Description of the Role", example = "Read books",
-          in = ParameterIn.QUERY) @RequestParam(required = false) String description,
-      @Parameter(example = "{\n  \"page\": 0,  \"size\": 10}",
-          in = ParameterIn.QUERY) Pageable pageable) {
+          in = ParameterIn.QUERY)
+      @RequestParam(value = "description", required = false) String description,
+      @Parameter(example = "{\n  \"page\": 0,  \"size\": 10}", in = ParameterIn.QUERY)
+      Pageable pageable) {
     return getResponse(roleService.findRoles(name, description, pageable));
   }
 
   /**
-   * {@code GET  /roles/:id} : get the "id" role.
+   * Get the role by id.
    *
    * @param id the id of the role to retrieve
-   * @return the {@link ResponseEntity} with the role
+   * @return the role
    */
   @Operation(summary = "Searches role by 'id'", description = "Searches role by 'id'", tags = {TAG})
   @ApiResponses(value = {
@@ -156,24 +158,26 @@ public class RoleApi extends AbstractApi {
       @ApiResponse(responseCode = "404", description = "Not found")})
   @GetMapping("/roles/{id}")
   @PreAuthorize(AUTHORIZE_ROLE_READ)
-  public ResponseEntity<RoleDto> getRole(@Parameter(description = "The id of the role to get",
-      required = true, example = "1") @PathVariable("id") Long id) {
+  public ResponseEntity<RoleDto> getRole(
+      @Parameter(description = "The id of the role to get", required = true, example = "1")
+      @PathVariable("id") Long id) {
     return getResponse(roleService.findOneRole(id), id);
   }
 
   /**
-   * {@code DELETE  /roles/:id} : delete the "id" role.
+   * Delete the role by id.
    *
    * @param id the id of the role to delete
-   * @return the {@link ResponseEntity}
+   * @return the Response
    */
   @Operation(summary = "Delete role by 'id'", description = "Delete an role by 'id'", tags = {TAG})
   @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "Role deleted"),
       @ApiResponse(responseCode = "400", description = "Bad input parameter")})
   @DeleteMapping("/roles/{id}")
   @PreAuthorize(AUTHORIZE_ROLE_UPDATE)
-  public ResponseEntity<Void> deleteRole(@Parameter(description = "The id of the role to delete",
-      required = true, example = "1") @PathVariable Long id) {
+  public ResponseEntity<Void> deleteRole(
+      @Parameter(description = "The id of the role to delete", required = true, example = "1")
+      @PathVariable("id") Long id) {
     roleService.deleteRole(id);
     return deleteResponse(id);
   }

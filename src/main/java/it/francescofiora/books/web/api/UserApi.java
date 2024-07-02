@@ -49,10 +49,10 @@ public class UserApi extends AbstractApi {
   }
 
   /**
-   * {@code POST  /users} : Create a new user.
+   * Create a new user.
    *
    * @param userDto the user to create
-   * @return the {@link ResponseEntity}
+   * @return the Response
    */
   @Operation(summary = "Add new User", description = "Add a new User to the system", tags = {TAG})
   @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "User created"),
@@ -66,11 +66,11 @@ public class UserApi extends AbstractApi {
   }
 
   /**
-   * {@code PUT  /users:id} : Updates an existing user.
+   * Updates an existing user.
    *
    * @param userDto the user to update
    * @param id the id of the user to update
-   * @return the {@link ResponseEntity}
+   * @return the Response
    */
   @Operation(summary = "Update User", description = "Update an User to the system", tags = {TAG})
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "User updated"),
@@ -80,8 +80,8 @@ public class UserApi extends AbstractApi {
   @PreAuthorize(AUTHORIZE_USER_UPDATE)
   public ResponseEntity<Void> updateUser(
       @Parameter(description = "User to update") @Valid @RequestBody UserDto userDto,
-      @Parameter(description = "The id of the user to update", required = true,
-          example = "1") @PathVariable("id") Long id) {
+      @Parameter(description = "The id of the user to update", required = true, example = "1")
+      @PathVariable("id") Long id) {
     if (!id.equals(userDto.getId())) {
       throw new BadRequestAlertException(ENTITY_NAME, String.valueOf(userDto.getId()),
           "Invalid id");
@@ -91,11 +91,11 @@ public class UserApi extends AbstractApi {
   }
 
   /**
-   * {@code GET  /users} : get all the users.
+   * Get all the users.
    *
    * @param username the username
    * @param pageable the pagination information
-   * @return the {@link ResponseEntity} with the list of users
+   * @return the list of users
    */
   @Operation(summary = "Searches users",
       description = "By passing in the appropriate options, "
@@ -109,18 +109,18 @@ public class UserApi extends AbstractApi {
   @GetMapping("/users")
   @PreAuthorize(AUTHORIZE_USER_READ)
   public ResponseEntity<List<UserDto>> getAllUsers(
-      @Parameter(description = "User Name", example = "user",
-          in = ParameterIn.QUERY) @RequestParam(required = false) String username,
-      @Parameter(example = "{\n  \"page\": 0,  \"size\": 10}",
-          in = ParameterIn.QUERY) Pageable pageable) {
+      @Parameter(description = "User Name", example = "user", in = ParameterIn.QUERY)
+      @RequestParam(value = "username", required = false) String username,
+      @Parameter(example = "{\n  \"page\": 0,  \"size\": 10}", in = ParameterIn.QUERY)
+      Pageable pageable) {
     return getResponse(userService.findAll(username, pageable));
   }
 
   /**
-   * {@code GET  /users/:id} : get the "id" user.
+   * Get the user by id.
    *
    * @param id the id of the user to retrieve
-   * @return the {@link ResponseEntity} with the user
+   * @return the user
    */
   @Operation(summary = "Searches user by 'id'", description = "Searches user by 'id'", tags = {TAG})
   @ApiResponses(value = {
@@ -130,24 +130,26 @@ public class UserApi extends AbstractApi {
       @ApiResponse(responseCode = "404", description = "Not found")})
   @GetMapping("/users/{id}")
   @PreAuthorize(AUTHORIZE_USER_READ)
-  public ResponseEntity<UserDto> getUser(@Parameter(description = "The id of the user to get",
-      required = true, example = "1") @PathVariable("id") Long id) {
+  public ResponseEntity<UserDto> getUser(
+      @Parameter(description = "The id of the user to get", required = true, example = "1")
+      @PathVariable("id") Long id) {
     return getResponse(userService.findOne(id), id);
   }
 
   /**
-   * {@code DELETE  /users/:id} : delete the "id" user.
+   * Delete the user by id.
    *
    * @param id the id of the user to delete
-   * @return the {@link ResponseEntity}
+   * @return the Response
    */
   @Operation(summary = "Delete user by 'id'", description = "Delete an user by 'id'", tags = {TAG})
   @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "User deleted"),
       @ApiResponse(responseCode = "400", description = "Bad input parameter")})
   @DeleteMapping("/users/{id}")
   @PreAuthorize(AUTHORIZE_USER_UPDATE)
-  public ResponseEntity<Void> deleteUser(@Parameter(description = "The id of the user to delete",
-      required = true, example = "1") @PathVariable Long id) {
+  public ResponseEntity<Void> deleteUser(
+      @Parameter(description = "The id of the user to delete", required = true, example = "1")
+      @PathVariable("id") Long id) {
     userService.delete(id);
     return deleteResponse(id);
   }

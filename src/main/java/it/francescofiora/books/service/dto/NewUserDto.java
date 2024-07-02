@@ -5,6 +5,7 @@ import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import java.io.Serial;
 import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +19,7 @@ import lombok.ToString;
 @ToString(callSuper = true, includeFieldNames = true)
 public class NewUserDto extends BaseUserDto {
 
+  @Serial
   private static final long serialVersionUID = 1L;
 
   @Schema(description = "Password", requiredMode = REQUIRED)

@@ -8,6 +8,7 @@ import it.francescofiora.books.service.util.DtoUtils;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 import lombok.Getter;
@@ -22,6 +23,7 @@ import lombok.ToString;
 @ToString(callSuper = true, includeFieldNames = true)
 public class PermissionDto implements DtoIdentifier, Serializable {
 
+  @Serial
   private static final long serialVersionUID = 1L;
 
   @Schema(description = "Unique identifier", example = "1", requiredMode = REQUIRED)

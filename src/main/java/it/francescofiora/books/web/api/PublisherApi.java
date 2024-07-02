@@ -49,10 +49,10 @@ public class PublisherApi extends AbstractApi {
   }
 
   /**
-   * {@code POST  /publishers} : Create a new publisher.
+   * Create a new publisher.
    *
    * @param publisherDto the publisher to create
-   * @return the {@link ResponseEntity}
+   * @return the Response
    */
   @Operation(summary = "Add new Publisher", description = "Add a new Publisher to the system",
       tags = {TAG})
@@ -67,11 +67,11 @@ public class PublisherApi extends AbstractApi {
   }
 
   /**
-   * {@code PUT  /publishers:id} : Updates an existing publisher.
+   * Updates an existing publisher.
    *
    * @param publisherDto the publisher to update
    * @param id the id of the publisher to update
-   * @return the {@link ResponseEntity}
+   * @return the Response
    */
   @Operation(summary = "Update Publisher", description = "Update an Publisher to the system",
       tags = {TAG})
@@ -82,8 +82,8 @@ public class PublisherApi extends AbstractApi {
   @PreAuthorize(AUTHORIZE_BOOK_UPDATE)
   public ResponseEntity<Void> updatePublisher(
       @Parameter(description = "Publisher to update") @Valid @RequestBody PublisherDto publisherDto,
-      @Parameter(description = "The id of the publisher to update", required = true,
-          example = "1") @PathVariable("id") Long id) {
+      @Parameter(description = "The id of the publisher to update", required = true, example = "1")
+      @PathVariable("id") Long id) {
     if (!id.equals(publisherDto.getId())) {
       throw new BadRequestAlertException(ENTITY_NAME, String.valueOf(publisherDto.getId()),
           "Invalid id");
@@ -93,11 +93,11 @@ public class PublisherApi extends AbstractApi {
   }
 
   /**
-   * {@code GET  /publishers} : get all the publishers.
+   * Get all the publishers.
    *
    * @param publisherName the publisher name
    * @param pageable the pagination information
-   * @return the {@link ResponseEntity} with the list of publishers
+   * @return the list of publishers
    */
   @Operation(summary = "Searches publishers",
       description = "By passing in the appropriate options, "
@@ -111,18 +111,18 @@ public class PublisherApi extends AbstractApi {
   @GetMapping("/publishers")
   @PreAuthorize(AUTHORIZE_BOOK_READ)
   public ResponseEntity<List<PublisherDto>> getAllPublishers(
-      @Parameter(description = "Publisher Name", example = "Publisher Ltd",
-          in = ParameterIn.QUERY) @RequestParam(required = false) String publisherName,
-      @Parameter(example = "{\n  \"page\": 0,  \"size\": 10}",
-          in = ParameterIn.QUERY) Pageable pageable) {
+      @Parameter(description = "Publisher Name", example = "Publisher Ltd", in = ParameterIn.QUERY)
+      @RequestParam(value = "publisherName", required = false) String publisherName,
+      @Parameter(example = "{\n  \"page\": 0,  \"size\": 10}", in = ParameterIn.QUERY)
+      Pageable pageable) {
     return getResponse(publisherService.findAll(publisherName, pageable));
   }
 
   /**
-   * {@code GET  /publishers/:id} : get the "id" publisher.
+   * Get the publisher by id.
    *
    * @param id the id of the publisher to retrieve
-   * @return the {@link ResponseEntity} with the publisher
+   * @return the publisher
    */
   @Operation(summary = "Searches publisher by 'id'", description = "Searches publisher by 'id'",
       tags = {TAG})
@@ -134,16 +134,16 @@ public class PublisherApi extends AbstractApi {
   @GetMapping("/publishers/{id}")
   @PreAuthorize(AUTHORIZE_BOOK_READ)
   public ResponseEntity<PublisherDto> getPublisher(
-      @Parameter(description = "The id of the publisher to get", required = true,
-          example = "1") @PathVariable("id") Long id) {
+      @Parameter(description = "The id of the publisher to get", required = true, example = "1")
+      @PathVariable("id") Long id) {
     return getResponse(publisherService.findOne(id), id);
   }
 
   /**
-   * {@code DELETE  /publishers/:id} : delete the "id" publisher.
+   * Delete the publisher by id.
    *
    * @param id the id of the publisher to delete
-   * @return the {@link ResponseEntity}
+   * @return the Response
    */
   @Operation(summary = "Delete publisher by 'id'", description = "Delete an publisher by 'id'",
       tags = {TAG})
@@ -152,8 +152,8 @@ public class PublisherApi extends AbstractApi {
   @DeleteMapping("/publishers/{id}")
   @PreAuthorize(AUTHORIZE_BOOK_UPDATE)
   public ResponseEntity<Void> deletePublisher(
-      @Parameter(description = "The id of the publisher to delete", required = true,
-          example = "1") @PathVariable Long id) {
+      @Parameter(description = "The id of the publisher to delete", required = true, example = "1")
+      @PathVariable("id") Long id) {
     publisherService.delete(id);
     return deleteResponse(id);
   }

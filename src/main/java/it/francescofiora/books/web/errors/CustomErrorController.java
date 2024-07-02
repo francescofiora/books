@@ -52,7 +52,7 @@ public class CustomErrorController implements ErrorController {
     for (var name : names) {
       var msg = map.get(name);
       if (msg != null) {
-        sb.append(msg.toString() + " ");
+        sb.append(msg).append(" ");
       }
     }
   }
@@ -71,10 +71,10 @@ public class CustomErrorController implements ErrorController {
         getErrorAttributes(request, ErrorAttributeOptions.of(MESSAGE, EXCEPTION, BINDING_ERRORS));
 
     var sb = new StringBuilder();
-    sb.append(status + " - ");
+    sb.append(status).append(" - ");
     appendMsg(sb, map, new String[] {"exception", "error", "message"});
     var path = String.valueOf(map.get("path"));
     return ResponseEntity.status(status)
-        .headers(HeaderUtil.createFailureAlert(status.toString(), path, sb.toString())).build();
+        .headers(HeaderUtil.createAlert(status.toString(), path, sb.toString())).build();
   }
 }

@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,7 @@ import lombok.ToString;
 @ToString(callSuper = true, includeFieldNames = true)
 public abstract class BaseUserDto implements Serializable {
 
+  @Serial
   private static final long serialVersionUID = 1L;
 
   @Schema(description = "User Name", example = "John", requiredMode = REQUIRED)
