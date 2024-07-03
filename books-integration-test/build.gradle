@@ -41,6 +41,7 @@ dependencies {
   implementation platform("org.testcontainers:testcontainers-bom:${testcontainers_version}")
 
   implementation "org.testcontainers:testcontainers"
+  implementation 'org.testcontainers:mysql'
 
   implementation "org.projectlombok:lombok:${lombok_version}"
   annotationProcessor "org.projectlombok:lombok:${lombok_version}"
@@ -55,8 +56,7 @@ dependencies {
   testImplementation "org.projectlombok:lombok:${lombok_version}"
 
   testImplementation "org.testcontainers:junit-jupiter"
-  testImplementation 'org.testcontainers:mysql'
-  
+
   testAnnotationProcessor "org.projectlombok:lombok:${lombok_version}"
 }
 

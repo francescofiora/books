@@ -12,7 +12,7 @@ import org.testcontainers.containers.GenericContainer;
 @Slf4j
 public class StartStopContainers {
 
-  private List<GenericContainer<?>> containers = new ArrayList<>();
+  private final List<GenericContainer<?>> containers = new ArrayList<>();
 
   /**
    * Add new container to the list.

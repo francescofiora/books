@@ -11,7 +11,12 @@ import io.cucumber.java.en.When;
 import it.francescofiora.books.itt.api.AbstractTestContainer;
 import it.francescofiora.books.itt.container.SpringAplicationContainer;
 import it.francescofiora.books.itt.container.StartStopContainers;
+import it.francescofiora.books.itt.context.AuthorContext;
+import it.francescofiora.books.itt.context.PublisherContext;
+import it.francescofiora.books.itt.context.RoleContext;
+import it.francescofiora.books.itt.context.TitleContext;
 import it.francescofiora.books.itt.util.ContainerGenerator;
+import it.francescofiora.books.itt.util.UtilTests;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
@@ -31,21 +36,17 @@ public class StepDefinitions extends AbstractTestContainer {
   private static final String DATASOURCE_URL = "jdbc:mysql://book-mysql:3306/books";
 
   private static SpringAplicationContainer bookApi;
-  private static StartStopContainers containers = new StartStopContainers();
-  private static ContainerGenerator containerGenerator = new ContainerGenerator();
+  private static final StartStopContainers containers = new StartStopContainers();
+  private static final ContainerGenerator containerGenerator = new ContainerGenerator();
 
   private static Long userId;
   private static Long userReaderId;
   private static ResponseEntity<String> resultString;
   private static ResponseEntity<Void> resultVoid;
-  private static JSONObject role;
-  private static JSONObject author;
-  private static JSONObject publisher;
-  private static JSONObject title;
-  private static Long roleId;
-  private static Long authorId;
-  private static Long publisherId;
-  private static Long titleId;
+  private static final RoleContext roleContext = new RoleContext();
+  private static final AuthorContext authorContext = new AuthorContext();
+  private static final PublisherContext publisherContext = new PublisherContext();
+  private static final TitleContext titleContext = new TitleContext();
 
   /**
    * Start all containers.
@@ -92,9 +93,9 @@ public class StepDefinitions extends AbstractTestContainer {
       throws JSONException {
     var result = bookApi.performGet(ROLE_URL);
     assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
-    var mapRole = listToMap(new JSONArray(result.getBody()), NAME);
+    var mapRole = UtilTests.listToMap(new JSONArray(result.getBody()), NAME);
 
-    var roles = createRefs(mapRole, listRole);
+    var roles = UtilTests.createRefs(mapRole, listRole);
 
     var newUser = new JSONObject();
     newUser.put("roles", roles);
@@ -195,13 +196,13 @@ public class StepDefinitions extends AbstractTestContainer {
   public void thenForbiddenGetBy(final String entity) {
     switch (entity) {
       case "Role" -> assertThrows(HttpClientErrorException.class,
-          () -> bookApi.performGet(ROLE_URL + "/" + roleId));
+          () -> bookApi.performGet(ROLE_URL + "/" + roleContext.getRoleId()));
       case "Author" -> assertThrows(HttpClientErrorException.class,
-          () -> bookApi.performGet(AUTHOR_URL + "/" + authorId));
+          () -> bookApi.performGet(AUTHOR_URL + "/" + authorContext.getAuthorId()));
       case "Publisher" -> assertThrows(HttpClientErrorException.class,
-          () -> bookApi.performGet(PUBLISHER_URL + "/" + publisherId));
+          () -> bookApi.performGet(PUBLISHER_URL + "/" + publisherContext.getPublisherId()));
       case "Title" -> assertThrows(HttpClientErrorException.class,
-          () -> bookApi.performGet(TITLE_URL + "/" + titleId));
+          () -> bookApi.performGet(TITLE_URL + "/" + titleContext.getTitleId()));
       default -> throw new IllegalArgumentException("Unexpected value: " + entity);
     }
   }
@@ -214,10 +215,11 @@ public class StepDefinitions extends AbstractTestContainer {
   @Then("^should be able to get that (\\w+)$")
   public void thenGet(final String entity) {
     resultString = switch (entity) {
-      case "Role" -> bookApi.performGet(ROLE_URL + "/" + roleId);
-      case "Author" -> bookApi.performGet(AUTHOR_URL + "/" + authorId);
-      case "Publisher" -> bookApi.performGet(PUBLISHER_URL + "/" + publisherId);
-      case "Title" -> bookApi.performGet(TITLE_URL + "/" + titleId);
+      case "Role" -> bookApi.performGet(ROLE_URL + "/" + roleContext.getRoleId());
+      case "Author" -> bookApi.performGet(AUTHOR_URL + "/" + authorContext.getAuthorId());
+      case "Publisher" ->
+          bookApi.performGet(PUBLISHER_URL + "/" + publisherContext.getPublisherId());
+      case "Title" -> bookApi.performGet(TITLE_URL + "/" + titleContext.getTitleId());
       default -> throw new IllegalArgumentException("Unexpected value: " + entity);
     };
   }
@@ -230,10 +232,11 @@ public class StepDefinitions extends AbstractTestContainer {
   @When("^delete the (\\w+)$")
   public void thenDelete(final String entity) {
     resultVoid = switch (entity) {
-      case "Role" -> bookApi.performDelete(ROLE_URL + "/" + roleId);
-      case "Author" -> bookApi.performDelete(AUTHOR_URL + "/" + authorId);
-      case "Publisher" -> bookApi.performDelete(PUBLISHER_URL + "/" + publisherId);
-      case "Title" -> bookApi.performDelete(TITLE_URL + "/" + titleId);
+      case "Role" -> bookApi.performDelete(ROLE_URL + "/" + roleContext.getRoleId());
+      case "Author" -> bookApi.performDelete(AUTHOR_URL + "/" + authorContext.getAuthorId());
+      case "Publisher" ->
+          bookApi.performDelete(PUBLISHER_URL + "/" + publisherContext.getPublisherId());
+      case "Title" -> bookApi.performDelete(TITLE_URL + "/" + titleContext.getTitleId());
       default -> throw new IllegalArgumentException("Unexpected value: " + entity);
     };
   }
@@ -250,23 +253,23 @@ public class StepDefinitions extends AbstractTestContainer {
     switch (entity) {
       case "Role":
         var roleFromGet = new JSONObject(resultString.getBody());
-        checkRole(roleFromGet, role);
-        role = roleFromGet;
+        checkRole(roleFromGet, roleContext.getRole());
+        roleContext.setRole(roleFromGet);
         break;
       case "Author":
         var authorFromGet = new JSONObject(resultString.getBody());
-        checkAuthor(authorFromGet, author);
-        author = authorFromGet;
+        checkAuthor(authorFromGet, authorContext.getAuthor());
+        authorContext.setAuthor(authorFromGet);
         break;
       case "Publisher":
         var publisherFromGet = new JSONObject(resultString.getBody());
-        checkPublisher(publisherFromGet, publisher);
-        publisher = publisherFromGet;
+        checkPublisher(publisherFromGet, publisherContext.getPublisher());
+        publisherContext.setPublisher(publisherFromGet);
         break;
       case "Title":
         var titleFromGet = new JSONObject(resultString.getBody());
-        checkTitle(titleFromGet, title);
-        title = titleFromGet;
+        checkTitle(titleFromGet, titleContext.getTitle());
+        titleContext.setTitle(titleFromGet);
         break;
       default:
         throw new IllegalArgumentException("Unexpected value: " + entity);
@@ -282,9 +285,9 @@ public class StepDefinitions extends AbstractTestContainer {
   public void thenForbiddenCreate(final String entity) {
     switch (entity) {
       case "Author" -> assertThrows(HttpClientErrorException.class,
-          () -> bookApi.performPost(AUTHOR_URL, createAuthor().toString()));
+          () -> bookApi.performPost(AUTHOR_URL, UtilTests.createAuthor().toString()));
       case "Publisher" -> assertThrows(HttpClientErrorException.class,
-          () -> bookApi.performPost(PUBLISHER_URL, createPublisher().toString()));
+          () -> bookApi.performPost(PUBLISHER_URL, UtilTests.createPublisher().toString()));
       default -> throw new IllegalArgumentException("Unexpected value: " + entity);
     }
   }
@@ -298,39 +301,41 @@ public class StepDefinitions extends AbstractTestContainer {
   @When("^create a new (\\w+)$")
   public void thenCreate(final String entity) throws JSONException {
     switch (entity) {
-      case "Role" -> roleId = createRole();
-      case "Author" -> authorId = createTheAuthor();
-      case "Publisher" -> publisherId = createThePublisher();
-      case "Title" -> titleId = createTheTitle();
+      case "Role" -> roleContext.setRoleId(createRole());
+      case "Author" -> authorContext.setAuthorId(createTheAuthor());
+      case "Publisher" -> publisherContext.setPublisherId(createThePublisher());
+      case "Title" -> titleContext.setTitleId(createTheTitle());
       default -> throw new IllegalArgumentException("Unexpected value: " + entity);
     }
   }
 
   private Long createThePublisher() throws JSONException {
-    publisher = createPublisher();
-    return bookApi.createAndReturnId(PUBLISHER_URL, publisher.toString());
+    publisherContext.setPublisher(UtilTests.createPublisher());
+    return bookApi.createAndReturnId(PUBLISHER_URL, publisherContext.getPublisher().toString());
   }
 
   private Long createTheAuthor() throws JSONException {
-    author = createAuthor();
-    return bookApi.createAndReturnId(AUTHOR_URL, author.toString());
+    authorContext.setAuthor(UtilTests.createAuthor());
+    return bookApi.createAndReturnId(AUTHOR_URL, authorContext.getAuthor().toString());
   }
 
   private Long createTheTitle() throws JSONException {
-    title = createTitle();
-    title.put("publisher", createRef(publisherId));
-    title.put("authors", createRefs(List.of(authorId)));
+    var title = UtilTests.createTitle();
+    title.put("publisher", UtilTests.createRef(publisherContext.getPublisherId()));
+    title.put("authors", UtilTests.createRefs(List.of(authorContext.getAuthorId())));
+    titleContext.setTitle(title);
     return bookApi.createAndReturnId(TITLE_URL, title.toString());
   }
 
   private Long createRole() throws JSONException {
-    var mapPermission = listToMap(new JSONArray(resultString.getBody()), NAME);
-    var permissions =
-        createRefs(mapPermission, List.of("OP_ROLE_READ", "OP_USER_READ", "OP_BOOK_READ"));
-    role = new JSONObject();
+    var mapPermission = UtilTests.listToMap(new JSONArray(resultString.getBody()), NAME);
+    var permissions = UtilTests
+        .createRefs(mapPermission, List.of("OP_ROLE_READ", "OP_USER_READ", "OP_BOOK_READ"));
+    var role = new JSONObject();
     role.put("permissions", permissions);
     role.put(NAME, "newRole");
     role.put(DESCRIPTION, "New Role");
+    roleContext.setRole(role);
 
     return bookApi.createAndReturnId(ROLE_URL, role.toString());
   }
@@ -345,27 +350,33 @@ public class StepDefinitions extends AbstractTestContainer {
   public void whenUpdate(final String entity) throws JSONException {
     switch (entity) {
       case "Role":
-        role.put(NAME, "updateRole");
-        role.put(DESCRIPTION, "Update Role");
-        resultVoid = bookApi.performPut(ROLE_URL + "/" + roleId, role.toString());
+        roleContext.getRole().put(NAME, "updateRole");
+        roleContext.getRole().put(DESCRIPTION, "Update Role");
+        resultVoid = bookApi.performPut(
+            ROLE_URL + "/" + roleContext.getRoleId(), roleContext.getRole().toString());
         break;
       case "Author":
-        author.put(FIRST_NAME, "Updatename");
-        author.put(LAST_NAME, "Updatelast");
-        resultVoid = bookApi.performPut(AUTHOR_URL + "/" + authorId, author.toString());
+        authorContext.getAuthor().put(FIRST_NAME, "Updatename");
+        authorContext.getAuthor().put(LAST_NAME, "Updatelast");
+        resultVoid = bookApi.performPut(
+            AUTHOR_URL + "/" + authorContext.getAuthorId(), authorContext.getAuthor().toString());
         break;
       case "Publisher":
-        publisher.put(PUBLISHER_NAME, "Update Publisher Name");
-        resultVoid = bookApi.performPut(PUBLISHER_URL + "/" + publisherId, publisher.toString());
+        publisherContext.getPublisher().put(PUBLISHER_NAME, "Update Publisher Name");
+        resultVoid = bookApi.performPut(
+            PUBLISHER_URL + "/" + publisherContext.getPublisherId(),
+            publisherContext.getPublisher().toString());
         break;
       case "Title":
-        title.put(NAME, "Title Name Update");
-        title.put(EDITION_NUMBER, 20L);
-        title.put(LANGUAGE, "ITALIAN");
-        title.put(COPYRIGHT, 2001);
-        title.put(IMAGE_FILE, "image file update");
-        title.put(PRICE, 60);
-        resultVoid = bookApi.performPut(TITLE_URL + "/" + titleId, title.toString());
+        titleContext.getTitle().put(NAME, "Title Name Update");
+        titleContext.getTitle().put(EDITION_NUMBER, 20L);
+        titleContext.getTitle().put(LANGUAGE, "ITALIAN");
+        titleContext.getTitle().put(COPYRIGHT, 2001);
+        titleContext.getTitle().put(IMAGE_FILE, "image file update");
+        titleContext.getTitle().put(PRICE, 60);
+        resultVoid =
+            bookApi.performPut(
+                TITLE_URL + "/" + titleContext.getTitleId(), titleContext.getTitle().toString());
         break;
       default:
         throw new IllegalArgumentException("Unexpected value: " + entity);
