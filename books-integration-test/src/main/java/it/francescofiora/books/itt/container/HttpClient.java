@@ -10,20 +10,23 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-import org.testcontainers.containers.GenericContainer;
 
 /**
- * Container of a SpringAplication.
+ * Http Client.
  */
-public class SpringAplicationContainer extends GenericContainer<SpringAplicationContainer> {
+public class HttpClient {
 
   @Setter
   private String token;
 
+  private final String host;
+  private final Integer firstMappedPort;
+
   private final RestTemplate rest = new RestTemplate();
 
-  public SpringAplicationContainer(String dockerImageName) {
-    super(dockerImageName);
+  public HttpClient(String host, Integer firstMappedPort) {
+    this.host = host;
+    this.firstMappedPort = firstMappedPort;
   }
 
   /**
@@ -53,7 +56,7 @@ public class SpringAplicationContainer extends GenericContainer<SpringAplication
   }
 
   public String getHttpPath(String path) {
-    return "http://" + getHost() + ":" + getFirstMappedPort() + path;
+    return "http://" + host + ":" + firstMappedPort + path;
   }
 
   public Long createAndReturnId(String path, String jsonBody) {

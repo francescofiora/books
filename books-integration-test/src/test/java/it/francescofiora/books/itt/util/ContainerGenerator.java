@@ -1,7 +1,7 @@
 package it.francescofiora.books.itt.util;
 
-import it.francescofiora.books.itt.container.SpringAplicationContainer;
 import lombok.RequiredArgsConstructor;
+import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.containers.Network;
 
@@ -17,7 +17,6 @@ public class ContainerGenerator {
   public static final String MYSQL_PASSWORD_ADMIN = "secret";
 
   public static final String BOOK_MYSQL = "book-mysql";
-  public static final String BOOK_API = "book-api";
 
   /**
    * Create MySql Container.
@@ -26,17 +25,15 @@ public class ContainerGenerator {
    */
   public MySQLContainer<?> createMySqlContainer() {
     // @formatter:off
-    var mysql = new MySQLContainer<>("mysql:8.0.27")
+    return new MySQLContainer<>("mysql:8.0.27")
         .withNetwork(network)
         .withNetworkAliases(BOOK_MYSQL)
         .withUsername(MYSQL_USER_ADMIN).withPassword(MYSQL_PASSWORD_ADMIN)
         .withDatabaseName("books");
     // @formatter:on
-
-    return mysql;
   }
 
-  public SpringAplicationContainer createSpringAplicationContainer(String dockerImageName) {
-    return new SpringAplicationContainer(dockerImageName).withNetwork(network);
+  public GenericContainer<?> createSpringAplicationContainer(String dockerImageName) {
+    return new GenericContainer<>(dockerImageName).withNetwork(network);
   }
 }

@@ -108,6 +108,68 @@ public final class UtilTests {
   }
 
   /**
+   * Create Publisher.
+   *
+   * @return JSONObject
+   */
+  public static JSONObject createPublisher() {
+    var newPublisher = new JSONObject();
+    try {
+      newPublisher.put(PUBLISHER_NAME, "Publisher Name");
+    } catch (JSONException e) {
+      throw new JsonException(e.getMessage());
+    }
+    return newPublisher;
+  }
+
+  /**
+   * Update the Publisher.
+   *
+   * @param publisher the publisher
+   */
+  public static void updatePublisher(JSONObject publisher) {
+    try {
+      publisher.put(PUBLISHER_NAME, "Update Publisher Name");
+    } catch (JSONException e) {
+      throw new JsonException(e.getMessage());
+    }
+  }
+
+  /**
+   * Create Role.
+   *
+   * @param mapPermission Map of all permissions
+   * @return the Role
+   */
+  public static JSONObject createRole(Map<String, JSONObject> mapPermission) {
+    var permissions = UtilTests
+        .createRefs(mapPermission, List.of("OP_ROLE_READ", "OP_USER_READ", "OP_BOOK_READ"));
+    var role = new JSONObject();
+    try {
+      role.put("permissions", permissions);
+      role.put(NAME, "newRole");
+      role.put(DESCRIPTION, "New Role");
+    } catch (JSONException e) {
+      throw new JsonException(e.getMessage());
+    }
+    return  role;
+  }
+
+  /**
+   * Update the Role.
+   *
+   * @param role the role
+   */
+  public static void updateRole(JSONObject role) {
+    try {
+      role.put(NAME, "updateRole");
+      role.put(DESCRIPTION, "Update Role");
+    } catch (JSONException e) {
+      throw new JsonException(e.getMessage());
+    }
+  }
+
+  /**
    * Create Author.
    *
    * @return JSONObject
@@ -124,18 +186,17 @@ public final class UtilTests {
   }
 
   /**
-   * Create Publisher.
+   * Update the Author.
    *
-   * @return JSONObject
+   * @param author the author
    */
-  public static JSONObject createPublisher() {
-    var newPublisher = new JSONObject();
+  public static void updateAuthor(JSONObject author) {
     try {
-      newPublisher.put(PUBLISHER_NAME, "Publisher Name");
+      author.put(FIRST_NAME, "Updatename");
+      author.put(LAST_NAME, "Updatelast");
     } catch (JSONException e) {
       throw new JsonException(e.getMessage());
     }
-    return newPublisher;
   }
 
   /**
@@ -156,5 +217,23 @@ public final class UtilTests {
       throw new JsonException(e.getMessage());
     }
     return newTitle;
+  }
+
+  /**
+   * Update the Title.
+   *
+   * @param title the title
+   */
+  public static void updateTitle(JSONObject title) {
+    try {
+      title.put(NAME, "Title Name Update");
+      title.put(EDITION_NUMBER, 20L);
+      title.put(LANGUAGE, "ITALIAN");
+      title.put(COPYRIGHT, 2001);
+      title.put(IMAGE_FILE, "image file update");
+      title.put(PRICE, 60);
+    } catch (JSONException e) {
+      throw new JsonException(e.getMessage());
+    }
   }
 }
