@@ -1,14 +1,16 @@
 plugins {
   id 'java'
-  id 'org.springframework.boot' version '3.2.3'
-  id 'io.spring.dependency-management' version '1.1.4'
+  id 'org.springframework.boot' version '3.3.2'
+  id 'io.spring.dependency-management' version '1.1.6'
   id 'checkstyle'
   id 'jacoco'
-  id 'org.owasp.dependencycheck' version '7.4.4'
+  id 'org.owasp.dependencycheck' version '8.4.3'
  }
 
-sourceCompatibility = 1.17
-targetCompatibility = 1.17
+java {
+  sourceCompatibility = JavaVersion.VERSION_17
+  targetCompatibility = JavaVersion.VERSION_17
+}
 
 repositories {
   mavenLocal()
@@ -21,8 +23,8 @@ version '1.0-SNAPSHOT'
 def mysql_connector_version = property('mysql_connector.version')
 def lombok_version = property('lombok.version')
 def logback_version = property('logback.version')
-def apache_httpclient_version = property('apache-httpclient.version')
 def testcontainers_version = property('testcontainers.version')
+def junit_platform_suite_version = property('junit_platform_suite.version')
 def cucumber_version = property('cucumber.version')
 
 dependencies {
@@ -35,8 +37,6 @@ dependencies {
   implementation "ch.qos.logback:logback-classic:${logback_version}"
 
   implementation "mysql:mysql-connector-java:${mysql_connector_version}"
-
-  implementation "org.apache.httpcomponents.client5:httpclient5:${apache_httpclient_version}"
 
   implementation platform("org.testcontainers:testcontainers-bom:${testcontainers_version}")
 
@@ -51,7 +51,7 @@ dependencies {
 
   testImplementation "io.cucumber:cucumber-java:${cucumber_version}"
   testImplementation "io.cucumber:cucumber-junit-platform-engine:${cucumber_version}"
-  testImplementation 'org.junit.platform:junit-platform-suite:1.10.2'
+  testImplementation "org.junit.platform:junit-platform-suite:${junit_platform_suite_version}"
 
   testImplementation "org.projectlombok:lombok:${lombok_version}"
 
@@ -118,5 +118,5 @@ jacocoTestReport {
 }
 
 wrapper {
-    gradleVersion = "7.5"
+    gradleVersion = "8.5"
 }

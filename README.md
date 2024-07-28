@@ -57,8 +57,8 @@ There is a docker compose file to run MySql and phpMyAdmin.
  - phpMyAdmin (http://localhost:8080/)
 
 # How to execute
-- gradle: ./gradlew bootRun
-- fat jar: java -jar ./build/libs/books-1.0-SNAPSHOT.jar
+ - gradle: ./gradlew bootRun
+ - fat jar: java -jar ./build/libs/books-1.0-SNAPSHOT.jar
 
 ### Run the application with JMX support
     java -Dendpoints.jmx.enabled=true \
@@ -79,7 +79,7 @@ http://localhost:8081/swagger-ui.html
 
 ### Manual tests - execute all applications with Docker
 
-    docker compose -f docker/docker-compose-all.yml up
+    docker compose -f docker/docker-compose.yml -f docker/docker-compose-book.yml up
 
 ### Integration Test
 
@@ -87,9 +87,9 @@ http://localhost:8081/swagger-ui.html
     ./gradlew clean build
 
 # Technologies used
-- [Gradle 7.5](https://gradle.org)
+- [Gradle 8.5](https://gradle.org)
 - [Java 17](https://openjdk.java.net/projects/jdk/17)
-- [Spring Boot 3.2](https://spring.io/projects/spring-boot)
+- [Spring Boot 3.3](https://spring.io/projects/spring-boot)
 - [Spring Security](https://spring.io/projects/spring-security)
 - [Swagger OpeApi 3.0](https://swagger.io/specification)
 - [Mapstruct 1.5](https://mapstruct.org)
@@ -97,14 +97,14 @@ http://localhost:8081/swagger-ui.html
 - [Spring Data JPA](https://projects.spring.io/spring-data-jpa)
 - [Mysql connector 8.0](https://www.mysql.com/products/connector)
 - [HsqlDb](http://hsqldb.org)
-- [Liquibase 4.26](https://www.liquibase.com)
+- [Liquibase 4.29](https://www.liquibase.com)
 - [LogBack 1.5](https://logback.qos.ch)
 - [Mockito](https://site.mockito.org)
 - [JUnit 5](https://junit.org/junit5)
 - [OpenPojo 0.9](https://github.com/OpenPojo)
 - [CheckStyle 8.44](https://checkstyle.sourceforge.io)
-- [Owasp Dependency Check 7.4](https://owasp.org/www-project-dependency-check)
+- [Owasp Dependency Check 8.4](https://owasp.org/www-project-dependency-check)
 - [Jacoco 0.8](https://www.jacoco.org)
 - [Pitest 1.15](https://pitest.org)
-- [TestContainers 1.19](https://www.testcontainers.org)
-- [Cucumber 7.15](https://cucumber.io)
+- [TestContainers 1.20](https://www.testcontainers.org)
+- [Cucumber 7.18](https://cucumber.io)

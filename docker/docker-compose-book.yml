@@ -1,0 +1,10 @@
+services:
+
+  books-api:
+    image: francescofiora-book
+    environment:
+      - DATASOURCE_URL=jdbc:mysql://books-mysql:3306/books
+    ports:
+      - "8081:8081"
+    depends_on:
+      - books-mysql
