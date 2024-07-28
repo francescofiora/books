@@ -25,7 +25,7 @@ public class ContainerGenerator {
    */
   public MySQLContainer<?> createMySqlContainer() {
     // @formatter:off
-    return new MySQLContainer<>("mysql:8.0.27")
+    return new MySQLContainer<>("mysql:8.4.1")
         .withNetwork(network)
         .withNetworkAliases(BOOK_MYSQL)
         .withUsername(MYSQL_USER_ADMIN).withPassword(MYSQL_PASSWORD_ADMIN)
