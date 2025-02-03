@@ -16,10 +16,10 @@ import it.francescofiora.books.util.UserUtils;
 import java.io.UnsupportedEncodingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
@@ -38,10 +38,10 @@ public abstract class AbstractTestApi {
   @Autowired
   private ObjectMapper mapper;
 
-  @MockBean
+  @MockitoBean
   private JwtService jwtService;
 
-  @MockBean
+  @MockitoBean
   private UserDetailsService userService;
 
   @BeforeEach

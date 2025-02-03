@@ -130,7 +130,7 @@ public class AbstractTestEndToEnd {
   protected <T> ResponseEntity<T> performGet(String token, String path,
       MultiValueMap<String, String> pageable, Class<T> responseType) {
     var request = new HttpEntity<>(createHttpHeaders(token));
-    var uri = UriComponentsBuilder.fromHttpUrl(getPath(path)).queryParams(pageable).build();
+    var uri = UriComponentsBuilder.fromUriString(getPath(path)).queryParams(pageable).build();
     return restTemplate.exchange(uri.toUriString(), HttpMethod.GET, request, responseType);
   }
 
